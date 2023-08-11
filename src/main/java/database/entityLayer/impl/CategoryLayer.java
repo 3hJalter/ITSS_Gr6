@@ -13,14 +13,6 @@ public class CategoryLayer implements IEntityLayer {
     private static CategoryLayer instance;
     private List<Category> categoryList;
 
-    public List<Category> searchCategories(String keyword){
-        List<Category> list = new ArrayList<>();
-        for (Category category : categoryList) {
-            if (category.getCategoryName().contains(keyword)) list.add(category);
-        }
-        return list;
-    }
-
     private CategoryLayer() {
         try {
             DatabaseConnection connection = PostgresConnection.getInstance();
@@ -46,5 +38,13 @@ public class CategoryLayer implements IEntityLayer {
 
     public List<Category> getCategoryList() {
         return categoryList;
+    }
+
+    public List<Category> searchCategories(String keyword) {
+        List<Category> list = new ArrayList<>();
+        for (Category category : categoryList) {
+            if (category.getCategoryName().contains(keyword)) list.add(category);
+        }
+        return list;
     }
 }

@@ -1,0 +1,11 @@
+
+Respond<T> searchCategories(Request data) {
+    Respond validate = ValidationA.validate(data);
+    if (validate.getCode != ResponseMessage.SUCCESFULL) {
+        return new Respond<null, RespondMessageError>
+    } else {
+        IEntityLayer entityLayer = CategoryLayer.Instance;
+        List<Category> list = entityLayer. searchCategory(data.keyword);
+        return new Respond<list, RespondMessage.SUCCESSFULL);
+    }
+}

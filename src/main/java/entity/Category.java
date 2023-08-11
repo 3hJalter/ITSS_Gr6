@@ -10,8 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Category {
-    private int categoryId;
+    private Integer categoryId;
     private String categoryName;
-    private double price;
-    private float priceMultiple;
+    private Double price;
+    private Float priceMultiple;
 }

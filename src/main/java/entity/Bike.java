@@ -10,10 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bike {
-    private int bikeId;
+    private Integer bikeId;
     private String bikeName;
     private String status;
-    private int categoryId;
-    private int dockId;
+    private Integer categoryId;
+    private Integer dockId;
     private String image;
 }

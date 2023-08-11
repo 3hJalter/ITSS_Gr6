@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Dock {
-    private int dockId;
+    private Integer dockId;
     private String dockName;
     private String image;
     private String address;
