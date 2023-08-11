@@ -3,6 +3,7 @@ package database.entityLayer;
 import database.connection.DatabaseConnection;
 import database.connection.impl.PostgresConnection;
 import entity.Bike;
+import entity.EBike;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -10,25 +11,14 @@ import java.util.List;
 
 public class BikeLayer {
     private static BikeLayer instance;
-    private List<Bike> bikeList;
+
+    private ResultSet resultSet;
 
     private BikeLayer() {
         try {
-            this.bikeList = new ArrayList<>();
             DatabaseConnection connection = PostgresConnection.getInstance();
-            String sqlQuery = "SELECT * FROM Bike";
-            ResultSet resultSet = connection.query(sqlQuery);
-            while (resultSet.next()) {
-                Bike Bike = new Bike(resultSet.getInt("bike_id"),
-                        resultSet.getString("bike_name"),
-                        resultSet.getString("status"),
-                        resultSet.getInt("battery"),
-                        resultSet.getInt("category_id"),
-                        resultSet.getInt("bike_id"),
-                        resultSet.getString("image"));
-                assert false;
-                bikeList.add(Bike);
-            }
+            String sqlQuery = "SELECT * FROM bike";
+            this.resultSet = connection.query(sqlQuery);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,21 +32,16 @@ public class BikeLayer {
     }
 
     public List<Bike> getBikeList() {
-        return bikeList;
+        return getBikeFromResult();
     }
 
-    public List<Bike> getEBikeList() {
-        List<Bike> eBikeList = new ArrayList<>();
-        for (Bike bike : bikeList) {
-            if (bike.getBattery() == null) continue;
-            eBikeList.add(bike);
-        }
-        return eBikeList;
+    public List<EBike> getEBikeList() {
+        return getEBikeFromResult();
     }
 
     public List<Bike> getBikeByDockId(Integer id) {
         List<Bike> bikeList = new ArrayList<>();
-        for (Bike bike : this.bikeList) {
+        for (Bike bike : getBikeFromResult()) {
             if (!bike.getDockId().equals(id)) continue;
             bikeList.add(bike);
         }
@@ -65,7 +50,7 @@ public class BikeLayer {
 
     public List<Bike> getBikeByCategoryId(Integer id) {
         List<Bike> bikeList = new ArrayList<>();
-        for (Bike bike : this.bikeList) {
+        for (Bike bike : getBikeFromResult()) {
             if (!bike.getCategoryId().equals(id)) continue;
             bikeList.add(bike);
         }
@@ -73,10 +58,48 @@ public class BikeLayer {
     }
 
     public Bike getBikeById(Integer id){
-        for (Bike bike : bikeList) {
+        for (Bike bike : getBikeFromResult()) {
             if (bike.getBikeId().equals(id)) return bike;
         }
         return null;
     }
 
+    private List<Bike> getBikeFromResult(){
+        List<Bike> bikeList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                Bike Bike = new Bike(resultSet.getInt("bike_id"),
+                        resultSet.getString("bike_name"),
+                        resultSet.getString("status"),
+                        resultSet.getInt("category_id"),
+                        resultSet.getInt("bike_id"),
+                        resultSet.getString("image"));
+                assert false;
+                bikeList.add(Bike);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bikeList;
+    }
+
+    private List<EBike> getEBikeFromResult() {
+        List<EBike> eBikeList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                EBike eBike = new EBike(resultSet.getInt("bike_id"),
+                        resultSet.getString("bike_name"),
+                        resultSet.getString("status"),
+                        resultSet.getInt("battery"),
+                        resultSet.getInt("category_id"),
+                        resultSet.getInt("bike_id"),
+                        resultSet.getString("image"));
+                assert false;
+                eBikeList.add(eBike);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return eBikeList;
+    }
 }

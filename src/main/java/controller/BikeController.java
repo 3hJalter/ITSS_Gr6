@@ -2,6 +2,7 @@ package controller;
 
 import database.entityLayer.BikeLayer;
 import entity.Bike;
+import entity.EBike;
 import utils.response.Response;
 import utils.response.ResponseMessage;
 import utils.response.responseMessageImpl.BikeResponseMessage;
@@ -33,8 +34,8 @@ public class BikeController {
         return new Response<>(bikeList, BikeResponseMessage.SUCCESSFUL);
     }
 
-    public Response<List<Bike>> getEBikeList() {
-        List<Bike> bikeList = bikeLayer.getEBikeList();
+    public Response<List<EBike>> getEBikeList() {
+        List<EBike> bikeList = bikeLayer.getEBikeList();
         return new Response<>(bikeList, BikeResponseMessage.SUCCESSFUL);
     }
 

@@ -10,22 +10,14 @@ import java.util.List;
 
 public class CategoryLayer {
     private static CategoryLayer instance;
-    private List<Category> categoryList;
+    
+    private ResultSet resultSet;
 
     private CategoryLayer() {
         try {
             DatabaseConnection connection = PostgresConnection.getInstance();
             String sqlQuery = "SELECT * FROM category";
-            ResultSet resultSet = connection.query(sqlQuery);
-            while (resultSet.next()) {
-                Category category = new Category(resultSet.getInt("category_id"),
-                        resultSet.getString("category_name"),
-                        resultSet.getDouble("price"),
-                        resultSet.getFloat("price_multiple"));
-                assert false;
-                categoryList.add(category);
-            }
-            this.categoryList = new ArrayList<>();
+            resultSet = connection.query(sqlQuery);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,14 +32,31 @@ public class CategoryLayer {
 
 
     public List<Category> getCategoryList() {
-        return categoryList;
+        return getCategoryFromResult();
     }
 
     public List<Category> search(String keyword) {
         List<Category> list = new ArrayList<>();
-        for (Category category : categoryList) {
+        for (Category category : getCategoryFromResult()) {
             if (category.getCategoryName().contains(keyword)) list.add(category);
         }
         return list;
+    }
+
+    private List<Category> getCategoryFromResult(){
+        List<Category> categoryList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                Category category = new Category(resultSet.getInt("category_id"),
+                        resultSet.getString("category_name"),
+                        resultSet.getDouble("price"),
+                        resultSet.getFloat("price_multiple"));
+                assert false;
+                categoryList.add(category);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return categoryList;
     }
 }
