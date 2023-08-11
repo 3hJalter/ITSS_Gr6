@@ -36,14 +36,6 @@ public class CustomerLayer extends BaseLayer {
         return getCustomerFromJSON();
     }
 
-    public List<Customer> searchCustomer(String keyword) {
-        List<Customer> list = new ArrayList<>();
-        for (Customer customer : getCustomerFromJSON()) {
-            if (customer.getUsername().contains(keyword)) list.add(customer);
-        }
-        return list;
-    }
-
     public Customer getCustomerById(Integer id) {
         if (id == null) return null;
         for (Customer customer : getCustomerFromJSON()) {

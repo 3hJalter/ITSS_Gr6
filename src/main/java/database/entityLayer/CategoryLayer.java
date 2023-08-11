@@ -37,14 +37,6 @@ public class CategoryLayer extends BaseLayer {
         return getCategoryFromJSON();
     }
 
-    public List<Category> search(String keyword) {
-        List<Category> list = new ArrayList<>();
-        for (Category category : getCategoryFromJSON()) {
-            if (category.getCategoryName().contains(keyword)) list.add(category);
-        }
-        return list;
-    }
-
     public Category getCategoryById(Integer id) {
         if (id == null) return null;
         for (Category category : getCategoryFromJSON()) {

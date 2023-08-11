@@ -45,15 +45,6 @@ public class TransactionLayer extends BaseLayer {
         return getTransactionFromJSON();
     }
 
-
-    public Transaction getTransactionById(Integer id) {
-        if (id == null) return null;
-        for (Transaction transaction : getTransactionFromJSON()) {
-            if (transaction.getTransactionId().equals(id)) return transaction;
-        }
-        return null;
-    }
-
     public Transaction getActiveTransactionByCustomerId(Integer customerId) {
         if (customerId == null) return null;
         for (Transaction transaction : getTransactionFromJSON()) {
