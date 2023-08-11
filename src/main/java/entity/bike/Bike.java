@@ -14,7 +14,6 @@ import lombok.Setter;
 public class Bike {
     private Integer bikeId;
     private String bikeName;
-    private String status;
     private Category category;
     private Dock dock;
     private String image;
@@ -23,7 +22,6 @@ public class Bike {
         return "Bike{" +
                 "bikeId=" + bikeId +
                 ", bikeName='" + bikeName + '\'' +
-                ", status='" + status + '\'' +
                 ", category=" + category +
                 ", dock=" + dock +
                 ", image='" + image + '\'' +

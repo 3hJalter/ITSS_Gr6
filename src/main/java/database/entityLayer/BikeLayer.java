@@ -24,6 +24,8 @@ public class BikeLayer extends BaseLayer {
             jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            databaseConnection.closeConnection();
         }
     }
 
@@ -91,7 +93,6 @@ public class BikeLayer extends BaseLayer {
 
                 Bike bike = new Bike(bikeJson.getInt("bike_id"),
                         bikeJson.getString("bike_name"),
-                        bikeJson.getString("status"),
                         category,
                         dock,
                         bikeJson.getString("image"));
@@ -124,7 +125,6 @@ public class BikeLayer extends BaseLayer {
 
                 EBike eBike = new EBike(bikeJson.getInt("bike_id"),
                         bikeJson.getString("bike_name"),
-                        bikeJson.getString("status"),
                         bikeJson.getInt("battery"),
                         category,
                         dock,

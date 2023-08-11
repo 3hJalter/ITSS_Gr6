@@ -20,6 +20,8 @@ public class CategoryLayer extends BaseLayer {
             jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            databaseConnection.closeConnection();
         }
     }
 
@@ -56,7 +58,12 @@ public class CategoryLayer extends BaseLayer {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject categoryJson = jsonArray.getJSONObject(i);
-                Category category = new Category(categoryJson.getInt("category_id"), categoryJson.getString("category_name"), categoryJson.getDouble("price"), categoryJson.getDouble("price_multiple"));
+                Category category = new Category(categoryJson.getInt("category_id"),
+                        categoryJson.getString("category_name"),
+                        categoryJson.getLong("bike_price"),
+                        categoryJson.getDouble("deposit_rate"),
+                        categoryJson.getLong("rent_price"),
+                        categoryJson.getDouble("price_multiple"));
                 assert false;
                 categoryList.add(category);
             }

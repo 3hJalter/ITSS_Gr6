@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -14,9 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class Invoice {
     private Integer invoiceId;
+    private Transaction transaction;
     private Customer customer;
-    private Date startRent;
-    private Date endRent;
+    private Timestamp startRent;
+    private Timestamp endRent;
     private Long price;
     private Bike bike;
 }

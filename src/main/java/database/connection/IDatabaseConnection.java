@@ -6,6 +6,6 @@ import java.sql.ResultSet;
 public interface IDatabaseConnection {
     Connection getConnection();
     ResultSet getData(String sqlQuery);
-    void insertData(String sqlQuery);
+    int insertData(String sqlQuery);
     void closeConnection();
 }

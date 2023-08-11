@@ -4,9 +4,9 @@ import entity.Customer;
 import entity.Transaction;
 import entity.bike.Bike;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import utils.General;
+import utils.PriceMethod;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,6 +36,8 @@ public class TransactionLayer extends BaseLayer {
             jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            databaseConnection.closeConnection();
         }
     }
 
@@ -52,6 +54,15 @@ public class TransactionLayer extends BaseLayer {
         return null;
     }
 
+    public Transaction getActiveTransactionByCustomerId(Integer customerId) {
+        if (customerId == null) return null;
+        for (Transaction transaction : getTransactionFromJSON()) {
+            if (transaction.getCustomer().getCustomerId().equals(customerId)
+                    && transaction.getStatus().equals("active")) return transaction;
+        }
+        return null;
+    }
+
     private List<Transaction> getTransactionFromJSON() {
         List<Transaction> transactionList = new ArrayList<>();
         try {
@@ -60,8 +71,12 @@ public class TransactionLayer extends BaseLayer {
                 Customer customer = CustomerLayer.getInstance().getCustomerById(transactionJson.getInt("customer_id"));
                 Bike bike = BikeLayer.getInstance().getBikeById(transactionJson.getInt("bike_id"));
                 Timestamp createAt = Timestamp.valueOf(transactionJson.getString("create_at"));
-
-                Transaction transaction = new Transaction(transactionJson.getInt("transaction_id"), customer, createAt, transactionJson.getLong("deposit"), bike);
+                Transaction transaction = new Transaction(transactionJson.getInt("transaction_id"),
+                        customer,
+                        createAt,
+                        transactionJson.getLong("deposit"),
+                        bike,
+                        transactionJson.getString("status"));
                 assert false;
                 transactionList.add(transaction);
             }
@@ -71,17 +86,32 @@ public class TransactionLayer extends BaseLayer {
         return transactionList;
     }
 
-    public void createTransaction(Integer customerId, Long deposit, Integer bikeId) throws SQLException, JSONException {
+    public int createTransaction(Integer customerId, Integer bikeId) {
         try {
             databaseConnection.getConnection().setAutoCommit(false);
-            String sqlQuery = "INSERT INTO transaction (customer_id, create_at, deposit, bike_id)\n" + "VALUES (" + customerId + ", CURRENT_TIMESTAMP" + ", " + deposit + ", " + bikeId + ");";
-            databaseConnection.insertData(sqlQuery);
+            long deposit = PriceMethod.getDeposit(bikeId);
+            String sqlQuery = "INSERT INTO transaction (customer_id, create_at, deposit, bike_id, status)\n"
+                    + "VALUES ("
+                    + customerId
+                    + ", CURRENT_TIMESTAMP"
+                    + ", "
+                    + deposit
+                    + ", " + bikeId
+                    + ", 'active');";
+            int generatedId = databaseConnection.insertData(sqlQuery);
             databaseConnection.getConnection().commit();
             SetJsonArray();
+            return generatedId;
         } catch (Exception e) {
             e.printStackTrace();
+            return -1;
         } finally {
-            databaseConnection.getConnection().setAutoCommit(true);
+            try {
+                databaseConnection.getConnection().setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            databaseConnection.closeConnection();
         }
     }
 }

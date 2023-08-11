@@ -20,6 +20,8 @@ public class CustomerLayer extends BaseLayer {
             jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            databaseConnection.closeConnection();
         }
     }
 

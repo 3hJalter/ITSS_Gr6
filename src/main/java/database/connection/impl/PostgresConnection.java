@@ -23,7 +23,6 @@ public class PostgresConnection implements IDatabaseConnection {
         if (connection != null) return connection;
         try {
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            System.out.println("Connection to " + DB_URL + " successfully");
             return connection;
         } catch (Exception e) {
             System.out.println("Error when connecting to database");
@@ -44,7 +43,7 @@ public class PostgresConnection implements IDatabaseConnection {
     }
 
     @Override
-    public void insertData(String sqlQuery) {
+    public int insertData(String sqlQuery) {
         try {
             Connection connection = getConnection();
             if (connection != null) {
@@ -54,13 +53,15 @@ public class PostgresConnection implements IDatabaseConnection {
                 if (generatedKeys.next()) {
                     int generatedId = generatedKeys.getInt(1); // Assuming the first column is an auto-generated ID
                     System.out.println("Data inserted successfully with ID: " + generatedId);
+                    return generatedId;
                 }
-            } else {
-                System.out.println("Failed to get a valid database connection.");
             }
+            System.out.println("Failed to get a valid database connection.");
+            return -1;
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error when inserting data: " + e.getMessage());
+            return -1;
         }
     }
 
@@ -69,7 +70,6 @@ public class PostgresConnection implements IDatabaseConnection {
             try {
                 connection.close();
                 connection = null;
-                System.out.println("Close connection successfully");
             } catch (Exception e) {
                 e.printStackTrace();
             }

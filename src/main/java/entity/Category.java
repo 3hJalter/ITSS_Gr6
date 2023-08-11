@@ -12,14 +12,18 @@ import lombok.Setter;
 public class Category {
     private Integer categoryId;
     private String categoryName;
-    private Double price;
+    private Long bikePrice;
+    private Double depositRate;
+    private Long rentPrice;
     private Double priceMultiple;
 
     public String convertToString() {
         return "Category{" +
                 "categoryId=" + categoryId +
                 ", categoryName='" + categoryName + '\'' +
-                ", price=" + price +
+                ", bikePrice=" + bikePrice +
+                ", deposit=" + depositRate +
+                ", rentPrice=" + rentPrice +
                 ", priceMultiple=" + priceMultiple +
                 '}';
     }

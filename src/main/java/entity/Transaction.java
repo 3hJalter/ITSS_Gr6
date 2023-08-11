@@ -17,15 +17,17 @@ public class Transaction {
     private Customer customer;
     private Timestamp createdAt;
     private Long deposit;
-    private Bike bikeId;
+    private Bike bike;
+    private String status;
 
-    public String convertToTransaction(){
+    public String convertToString(){
         return "Transaction{" +
                 "transactionId=" + transactionId +
                 ", customer=" + customer +
                 ", createdAt=" + createdAt +
                 ", deposit=" + deposit +
-                ", bikeId=" + bikeId +
+                ", bike=" + bike +
+                ", status=" + status +
                 '}';
     }
 }

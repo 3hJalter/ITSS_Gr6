@@ -7,11 +7,11 @@ import utils.response.ResponseMessage;
 
 @Getter
 @AllArgsConstructor
-public enum CategoryResponseMessage implements ResponseMessage {
+public enum CustomerResponseMessage implements ResponseMessage {
 
-    CATEGORY_NOT_EXIST("400_CA0", "Category does not exist"),
-    CATEGORY_ID_IS_INVALID("400_CA1", "Category ID is invalid"),
-    SUCCESSFUL("200_CA0", "Successful");
+    CUSTOMER_NOT_EXIST("400_CU0", "Customer does not exist"),
+    CUSTOMER_ID_IS_INVALID("400_CU1", "Customer ID is invalid"),
+    SUCCESSFUL("200_CU0", "Successful");
     
     private final String code;
     private final String message;
