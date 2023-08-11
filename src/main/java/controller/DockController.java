@@ -1,13 +1,12 @@
 package controller;
 
-import database.entityLayer.impl.DockLayer;
+import database.entityLayer.DockLayer;
 import entity.Dock;
 import utils.response.Response;
 import utils.response.ResponseMessage;
 import utils.response.responseMessageImpl.DockResponseMessage;
 import validation.DockValidation;
 
-import javax.print.Doc;
 import java.util.List;
 
 public class DockController {
@@ -26,20 +25,20 @@ public class DockController {
     }
 
     public Response<List<Dock>> getDockList() {
-        List<Dock> dockList = dockLayer.getList();
+        List<Dock> dockList = dockLayer.getDockList();
         return new Response<>(dockList, DockResponseMessage.SUCCESSFUL);
     }
 
     public Response<List<Dock>> searchDock(String keyword) {
-        List<Dock> dockList = dockLayer.search(keyword);
+        List<Dock> dockList = dockLayer.searchDock(keyword);
         return new Response<>(dockList, DockResponseMessage.SUCCESSFUL);
     }
 
     public Response<Dock> getDockById(Integer id) {
-        ResponseMessage validateMessage = DockValidation.validate(id, null);
+        ResponseMessage validateMessage = DockValidation.validate(id);
         if (validateMessage != DockResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
-        Dock dock = dockLayer.getById(id);
+        Dock dock = dockLayer.getDockById(id);
         return new Response<>(dock, DockResponseMessage.SUCCESSFUL);
     }
 

@@ -8,7 +8,7 @@ import static utils.Config.*;
 
 public class PostgresConnection implements DatabaseConnection {
     private static PostgresConnection instance;
-    private Connection connection = null;
+    private Connection connection;
 
     public static PostgresConnection getInstance() {
         if (instance == null) {
@@ -46,6 +46,7 @@ public class PostgresConnection implements DatabaseConnection {
         if (connection != null)
             try {
                 connection.close();
+                connection = null;
                 System.out.println("Close connection successfully");
             } catch (Exception e) {
                 e.printStackTrace();

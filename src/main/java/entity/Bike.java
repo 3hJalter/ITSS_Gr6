@@ -13,6 +13,7 @@ public class Bike {
     private Integer bikeId;
     private String bikeName;
     private String status;
+    private Integer battery;
     private Integer categoryId;
     private Integer dockId;
     private String image;

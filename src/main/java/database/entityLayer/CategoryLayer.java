@@ -1,15 +1,14 @@
-package database.entityLayer.impl;
+package database.entityLayer;
 
 import database.connection.DatabaseConnection;
 import database.connection.impl.PostgresConnection;
-import database.entityLayer.IEntityLayer;
 import entity.Category;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryLayer implements IEntityLayer {
+public class CategoryLayer {
     private static CategoryLayer instance;
     private List<Category> categoryList;
 
@@ -40,7 +39,7 @@ public class CategoryLayer implements IEntityLayer {
     }
 
 
-    public List<Category> getList() {
+    public List<Category> getCategoryList() {
         return categoryList;
     }
 

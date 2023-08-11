@@ -1,16 +1,29 @@
 package controller;
 
+import database.entityLayer.CategoryLayer;
 import entity.Category;
 import utils.response.Response;
+import utils.response.responseMessageImpl.CategoryResponseMessage;
 
 import java.util.List;
 
 public class CategoryController {
+    private static CategoryController instance;
+    private static CategoryLayer categoryLayer;
 
-    public static Response<List<Category>> getCategoryList(){
-
-        return null;
+    CategoryController() {
+        categoryLayer = CategoryLayer.getInstance();
     }
 
+    public static CategoryController getInstance() {
+        if (instance == null) {
+            instance = new CategoryController();
+        }
+        return instance;
+    }
 
+    public Response<List<Category>> getCategoryList() {
+        List<Category> categoryList = categoryLayer.getCategoryList();
+        return new Response<>(categoryList, CategoryResponseMessage.SUCCESSFUL);
+    }
 }
