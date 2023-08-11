@@ -13,7 +13,7 @@ public class Bike {
     private Integer bikeId;
     private String bikeName;
     private String status;
-    private Integer categoryId;
-    private Integer dockId;
+    private Category category;
+    private Dock dock;
     private String image;
 }

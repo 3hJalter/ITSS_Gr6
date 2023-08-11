@@ -10,13 +10,13 @@ import lombok.Setter;
 public class EBike extends Bike {
     private Integer battery;
     public EBike(Integer bikeId, String bikeName, String status, Integer battery,
-                 Integer categoryId, Integer dockId, String image){
+                 Category category, Dock dock, String image){
         setBikeId(bikeId);
         setBikeName(bikeName);
         setStatus(status);
         this.battery = battery;
-        setCategoryId(categoryId);
-        setDockId(dockId);
+        setCategory(category);
+        setDock(dock);
         setImage(image);
     }
 }

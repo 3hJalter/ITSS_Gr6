@@ -43,6 +43,13 @@ public class CategoryLayer {
         return list;
     }
 
+    public Category getCategoryById(Integer id){
+        for (Category category : getCategoryFromResult()) {
+            if (category.getCategoryId().equals(id)) return category;
+        }
+        return null;
+    }
+
     private List<Category> getCategoryFromResult(){
         List<Category> categoryList = new ArrayList<>();
         try {
