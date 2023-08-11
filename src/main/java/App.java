@@ -22,7 +22,10 @@ public class App {
         Response<List<Dock>> response = dockController.searchDock("Dock");
         System.out.println(response.getMessage());
         List<Dock> dockList = response.getObject();
-        System.out.println(dockList.get(0).getDockName());
+        for (Dock dock : dockList) {
+            System.out.println(dock.getDockName());
+        }
+        System.out.println("--------------");
         Response<Dock> response1 = dockController.getDockById(1);
         String message = response1.getMessage();
         if (message.equals(DockResponseMessage.SUCCESSFUL.getMessage())) {
@@ -31,5 +34,6 @@ public class App {
             System.out.println(dock.getDockName());
             System.out.println(dock.getAddress());
         } else System.out.println(message);
+
     }
 }

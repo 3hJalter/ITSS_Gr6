@@ -6,6 +6,9 @@ import entity.Bike;
 import entity.Category;
 import entity.Dock;
 import entity.EBike;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import utils.General;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -15,12 +18,14 @@ public class BikeLayer {
     private static BikeLayer instance;
 
     private ResultSet resultSet;
+    private JSONArray jsonArray;
 
     private BikeLayer() {
         try {
             DatabaseConnection connection = PostgresConnection.getInstance();
             String sqlQuery = "SELECT * FROM bike";
             this.resultSet = connection.query(sqlQuery);
+            jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +43,7 @@ public class BikeLayer {
     }
 
     public List<EBike> getEBikeList() {
-        return getEBikeFromResult();
+        return getEBikeFromJSON();
     }
 
     public List<Bike> getBikeByDockId(Integer id) {
@@ -71,21 +76,22 @@ public class BikeLayer {
     private List<Bike> getBikeFromResult(){
         List<Bike> bikeList = new ArrayList<>();
         try {
-            while (resultSet.next()) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject bikeJson = jsonArray.getJSONObject(i);
                 Category category = CategoryLayer.getInstance().getCategoryById(
-                        resultSet.getInt("category_id")
+                        bikeJson.getInt("category_id")
                 );
                 Dock dock = DockLayer.getInstance().getDockById(
-                        resultSet.getInt("dock_id")
+                        bikeJson.getInt("dock_id")
                 );
-                Bike Bike = new Bike(resultSet.getInt("bike_id"),
-                        resultSet.getString("bike_name"),
-                        resultSet.getString("status"),
+                Bike bike = new Bike(resultSet.getInt("bike_id"),
+                        bikeJson.getString("bike_name"),
+                        bikeJson.getString("status"),
                         category,
                         dock,
-                        resultSet.getString("image"));
+                        bikeJson.getString("image"));
                 assert false;
-                bikeList.add(Bike);
+                bikeList.add(bike);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,24 +99,25 @@ public class BikeLayer {
         return bikeList;
     }
 
-    private List<EBike> getEBikeFromResult() {
+    private List<EBike> getEBikeFromJSON() {
         List<EBike> eBikeList = new ArrayList<>();
         CategoryLayer.getInstance().getCategoryList();
         try {
-            while (resultSet.next()) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject bikeJson = jsonArray.getJSONObject(i);
                 Category category = CategoryLayer.getInstance().getCategoryById(
-                        resultSet.getInt("category_id")
+                        bikeJson.getInt("category_id")
                 );
                 Dock dock = DockLayer.getInstance().getDockById(
-                        resultSet.getInt("dock_id")
+                        bikeJson.getInt("dock_id")
                 );
                 EBike eBike = new EBike(resultSet.getInt("bike_id"),
-                        resultSet.getString("bike_name"),
-                        resultSet.getString("status"),
-                        resultSet.getInt("battery"),
+                        bikeJson.getString("bike_name"),
+                        bikeJson.getString("status"),
+                        bikeJson.getInt("battery"),
                         category,
                         dock,
-                        resultSet.getString("image"));
+                        bikeJson.getString("image"));
                 assert false;
                 eBikeList.add(eBike);
             }

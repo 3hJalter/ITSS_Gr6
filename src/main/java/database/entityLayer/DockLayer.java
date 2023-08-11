@@ -3,6 +3,9 @@ package database.entityLayer;
 import database.connection.DatabaseConnection;
 import database.connection.impl.PostgresConnection;
 import entity.Dock;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import utils.General;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -10,14 +13,14 @@ import java.util.List;
 
 public class DockLayer {
     private static DockLayer instance;
-
-    private ResultSet resultSet;
+    JSONArray jsonArray;
 
     private DockLayer() {
         try {
             DatabaseConnection connection = PostgresConnection.getInstance();
             String sqlQuery = "SELECT * FROM dock";
-            resultSet = connection.query(sqlQuery);
+            ResultSet resultSet = connection.query(sqlQuery);
+            jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -31,32 +34,33 @@ public class DockLayer {
     }
 
     public List<Dock> getDockList() {
-        return getDockFromResult();
+        return getDockFromJSON();
     }
 
     public List<Dock> searchDock(String keyword) {
         List<Dock> list = new ArrayList<>();
-        for (Dock dock : getDockFromResult()) {
+        for (Dock dock : getDockFromJSON()) {
             if (dock.getDockName().contains(keyword)) list.add(dock);
         }
         return list;
     }
 
     public Dock getDockById(Integer id){
-        for (Dock dock : getDockFromResult()) {
+        for (Dock dock : getDockFromJSON()) {
             if (dock.getDockId().equals(id)) return dock;
         }
         return null;
     }
 
-    private List<Dock> getDockFromResult(){
+    private List<Dock> getDockFromJSON(){
         List<Dock> dockList = new ArrayList<>();
         try {
-            while (resultSet.next()) {
-                Dock dock = new Dock(resultSet.getInt("dock_id"),
-                        resultSet.getString("dock_name"),
-                        resultSet.getString("image"),
-                        resultSet.getString("address"));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject dockJson = jsonArray.getJSONObject(i);
+                Dock dock = new Dock(dockJson.getInt("dock_id"),
+                        dockJson.getString("dock_name"),
+                        dockJson.getString("image"),
+                        dockJson.getString("address"));
                 assert false;
                 dockList.add(dock);
             }
