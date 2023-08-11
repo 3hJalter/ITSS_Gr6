@@ -16,4 +16,15 @@ public class Bike {
     private Category category;
     private Dock dock;
     private String image;
+
+    public String convertToString() {
+        return "Bike{" +
+                "bikeId=" + bikeId +
+                ", bikeName='" + bikeName + '\'' +
+                ", status='" + status + '\'' +
+                ", category=" + category +
+                ", dock=" + dock +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }
