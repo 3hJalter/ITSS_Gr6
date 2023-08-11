@@ -4,7 +4,6 @@ import database.connection.DatabaseConnection;
 import database.connection.impl.PostgresConnection;
 import database.entityLayer.IEntityLayer;
 import entity.Dock;
-import entity.Dock;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -44,17 +43,28 @@ public class DockLayer implements IEntityLayer {
         return dockList;
     }
 
-    public List<Dock> search(String keyword) {
+    public List<Dock> searchByName(String keyword) {
         List<Dock> list = new ArrayList<>();
         for (Dock dock : dockList) {
-            if (dock.getDockName().contains(keyword)) list.add(dock);
+            if (dock.getDockName().contains(keyword))
+                list.add(dock);
         }
         return list;
     }
 
-    public Dock getById(Integer id){
+    public List<Dock> searchByAddress(String keyword) {
+        List<Dock> list = new ArrayList<>();
         for (Dock dock : dockList) {
-            if (dock.getDockId().equals(id)) return dock;
+            if (dock.getAddress().contains(keyword))
+                list.add(dock);
+        }
+        return list;
+    }
+
+    public Dock getById(Integer id) {
+        for (Dock dock : dockList) {
+            if (dock.getDockId().equals(id))
+                return dock;
         }
         return null;
     }

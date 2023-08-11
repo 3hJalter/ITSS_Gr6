@@ -8,12 +8,12 @@ import static utils.Config.*;
 
 public class PostgresConnection implements DatabaseConnection {
     private static PostgresConnection instance;
-    private Connection connection = null;
+    private Connection connection;
 
     public static PostgresConnection getInstance() {
         if (instance == null) {
             instance = new PostgresConnection(); // Create the instance only once
-            System.out.println("Create new conn instance");
+            System.out.println("Create new connection instance");
         }
         return instance;
     }
@@ -43,12 +43,12 @@ public class PostgresConnection implements DatabaseConnection {
     }
 
     public void closeConnection() {
-        if (connection != null)
-            try {
-                connection.close();
-                System.out.println("Close connection successfully");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (connection == null) return;
+        try {
+            connection.close();
+            System.out.println("Close connection successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
