@@ -7,22 +7,22 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Response<T> {
     private T object;
-    private String errorCode;
-    private String errorMessage;
+    private String code;
+    private String message;
 
     public Response(T object, ResponseMessage responseMessage) {
         this.object = object;
-        this.errorCode = responseMessage.getCode();
-        this.errorMessage = responseMessage.getMessage();
+        this.code = responseMessage.getCode();
+        this.message = responseMessage.getMessage();
     }
 
     public Response(Exception e) {
-        this.errorCode = "400";
-        this.errorMessage = e.getCause().getMessage();
+        this.code = "400";
+        this.message = e.getCause().getMessage();
     }
 
     public Response(ResponseMessage responseMessage) {
-        this.errorCode = responseMessage.getCode();
-        this.errorMessage = responseMessage.getMessage();
+        this.code = responseMessage.getCode();
+        this.message = responseMessage.getMessage();
     }
 }

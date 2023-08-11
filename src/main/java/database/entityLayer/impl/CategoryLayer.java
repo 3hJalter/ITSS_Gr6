@@ -19,7 +19,10 @@ public class CategoryLayer implements IEntityLayer {
             String sqlQuery = "SELECT * FROM category";
             ResultSet resultSet = connection.query(sqlQuery);
             while (resultSet.next()) {
-                Category category = new Category(resultSet.getInt("category_id"), resultSet.getString("category_name"), resultSet.getDouble("price"), resultSet.getFloat("price_multiple"));
+                Category category = new Category(resultSet.getInt("category_id"),
+                        resultSet.getString("category_name"),
+                        resultSet.getDouble("price"),
+                        resultSet.getFloat("price_multiple"));
                 assert false;
                 categoryList.add(category);
             }
@@ -36,11 +39,12 @@ public class CategoryLayer implements IEntityLayer {
         return instance;
     }
 
-    public List<Category> getCategoryList() {
+
+    public List<Category> getList() {
         return categoryList;
     }
 
-    public List<Category> searchCategories(String keyword) {
+    public List<Category> search(String keyword) {
         List<Category> list = new ArrayList<>();
         for (Category category : categoryList) {
             if (category.getCategoryName().contains(keyword)) list.add(category);

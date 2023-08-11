@@ -5,11 +5,9 @@ import entity.Category;
 import utils.response.ResponseMessage;
 import utils.response.responseMessageImpl.CategoryResponseMessage;
 
-import java.util.List;
-
 public class CategoryValidation {
     private static boolean isExist(Integer id){
-        for (Category category : CategoryLayer.getInstance().getCategoryList()) {
+        for (Category category : CategoryLayer.getInstance().getList()) {
             if (category.getCategoryId().equals(id)) return true;
         }
         return false;

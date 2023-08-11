@@ -7,11 +7,11 @@ import utils.response.ResponseMessage;
 
 @Getter
 @AllArgsConstructor
-public enum CategoryResponseMessage implements ResponseMessage {
+public enum DockResponseMessage implements ResponseMessage {
 
-    CATEGORY_NOT_EXIST("400_C0", "Category does not exist"),
-    CATEGORY_ID_IS_INVALID("400_C1", "Category ID is invalid"),
-    SUCCESSFUL("200_C0", "Successful");
+    DOCK_NOT_EXIST("400_D0", "Dock does not exist"),
+    DOCK_ID_IS_INVALID("400_D1", "Dock ID is invalid"),
+    SUCCESSFUL("200_D0", "Successful");
     
     private final String code;
     private final String message;

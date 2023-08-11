@@ -1,5 +1,8 @@
 package database.entityLayer;
 
-public interface IEntityLayer {
+import entity.Category;
 
+import java.util.List;
+
+public interface IEntityLayer {
 }
