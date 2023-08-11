@@ -17,14 +17,13 @@ import java.util.List;
 public class BikeLayer {
     private static BikeLayer instance;
 
-    private ResultSet resultSet;
     private JSONArray jsonArray;
 
     private BikeLayer() {
         try {
             DatabaseConnection connection = PostgresConnection.getInstance();
             String sqlQuery = "SELECT * FROM bike";
-            this.resultSet = connection.query(sqlQuery);
+            ResultSet resultSet = connection.query(sqlQuery);
             jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,9 +47,10 @@ public class BikeLayer {
 
     public List<Bike> getBikeByDockId(Integer id) {
         List<Bike> bikeList = new ArrayList<>();
-        Dock dock = DockLayer.getInstance().getDockById(id);
+        if (id == null) return bikeList;
         for (Bike bike : getBikeFromResult()) {
-            if (!bike.getDock().equals(dock)) continue;
+            if (bike.getDock() == null) continue;
+            if (!bike.getDock().getDockId().equals(id)) continue;
             bikeList.add(bike);
         }
         return bikeList;
@@ -58,15 +58,18 @@ public class BikeLayer {
 
     public List<Bike> getBikeByCategoryId(Integer id) {
         List<Bike> bikeList = new ArrayList<>();
-        Category category = CategoryLayer.getInstance().getCategoryById(id);
+        if (id == null) return bikeList;
         for (Bike bike : getBikeFromResult()) {
-            if (!bike.getCategory().equals(category)) continue;
+            if (bike.getCategory() == null) continue;
+//            if (bike.getDock() == null) continue;
+            if (!bike.getCategory().getCategoryId().equals(id)) continue;
             bikeList.add(bike);
         }
         return bikeList;
     }
 
     public Bike getBikeById(Integer id){
+        if (id == null) return null;
         for (Bike bike : getBikeFromResult()) {
             if (bike.getBikeId().equals(id)) return bike;
         }
@@ -81,10 +84,15 @@ public class BikeLayer {
                 Category category = CategoryLayer.getInstance().getCategoryById(
                         bikeJson.getInt("category_id")
                 );
-                Dock dock = DockLayer.getInstance().getDockById(
-                        bikeJson.getInt("dock_id")
-                );
-                Bike bike = new Bike(resultSet.getInt("bike_id"),
+
+                Dock dock = null;
+                if (bikeJson.has("dock_id")) {
+                    dock = DockLayer.getInstance().getDockById(
+                            bikeJson.getInt("dock_id")
+                    );
+                }
+
+                Bike bike = new Bike(bikeJson.getInt("bike_id"),
                         bikeJson.getString("bike_name"),
                         bikeJson.getString("status"),
                         category,
@@ -105,13 +113,19 @@ public class BikeLayer {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject bikeJson = jsonArray.getJSONObject(i);
+                if (!bikeJson.has("battery")) continue;
                 Category category = CategoryLayer.getInstance().getCategoryById(
                         bikeJson.getInt("category_id")
                 );
-                Dock dock = DockLayer.getInstance().getDockById(
-                        bikeJson.getInt("dock_id")
-                );
-                EBike eBike = new EBike(resultSet.getInt("bike_id"),
+
+                Dock dock = null;
+                if (bikeJson.has("dock_id")) {
+                    dock = DockLayer.getInstance().getDockById(
+                            bikeJson.getInt("dock_id")
+                    );
+                }
+
+                EBike eBike = new EBike(bikeJson.getInt("bike_id"),
                         bikeJson.getString("bike_name"),
                         bikeJson.getString("status"),
                         bikeJson.getInt("battery"),

@@ -18,7 +18,7 @@ public class CategoryValidation {
     }
 
     public static ResponseMessage validate(Integer id){
-        if (isId(id)) return CategoryResponseMessage.CATEGORY_ID_IS_INVALID;
+        if (!isId(id)) return CategoryResponseMessage.CATEGORY_ID_IS_INVALID;
         if (!isExist(id)) return CategoryResponseMessage.CATEGORY_NOT_EXIST;
         return CategoryResponseMessage.SUCCESSFUL;
     }

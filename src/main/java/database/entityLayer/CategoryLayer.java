@@ -47,6 +47,7 @@ public class CategoryLayer {
     }
 
     public Category getCategoryById(Integer id) {
+        if (id == null) return null;
         for (Category category : getCategoryFromJSON()) {
             if (category.getCategoryId().equals(id)) return category;
         }

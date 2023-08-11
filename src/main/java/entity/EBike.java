@@ -19,4 +19,16 @@ public class EBike extends Bike {
         setDock(dock);
         setImage(image);
     }
+
+    public String convertToString() {
+        return "EBike{" +
+                "bikeId=" + getBikeId() +
+                ", bikeName='" + getBikeName() + '\'' +
+                ", status='" + getStatus() + '\'' +
+                ", battery=" + battery +
+                ", category=" + getCategory() +
+                ", dock=" + getDock() +
+                ", image='" + getImage() + '\'' +
+                '}';
+    }
 }

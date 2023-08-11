@@ -18,7 +18,7 @@ public class BikeValidation {
     }
 
     public static ResponseMessage validate(Integer id){
-        if (isId(id)) return BikeResponseMessage.BIKE_ID_IS_INVALID;
+        if (!isId(id)) return BikeResponseMessage.BIKE_ID_IS_INVALID;
         if (!isExist(id)) return BikeResponseMessage.BIKE_NOT_EXIST;
         return BikeResponseMessage.SUCCESSFUL;
     }

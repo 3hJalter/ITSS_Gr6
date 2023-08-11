@@ -46,6 +46,7 @@ public class DockLayer {
     }
 
     public Dock getDockById(Integer id){
+        if (id == null) return null;
         for (Dock dock : getDockFromJSON()) {
             if (dock.getDockId().equals(id)) return dock;
         }

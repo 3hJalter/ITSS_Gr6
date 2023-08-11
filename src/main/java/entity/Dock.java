@@ -14,4 +14,13 @@ public class Dock {
     private String dockName;
     private String image;
     private String address;
+
+    public String convertToString() {
+        return "Dock{" +
+                "dockId=" + dockId +
+                ", dockName='" + dockName + '\'' +
+                ", image='" + image + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

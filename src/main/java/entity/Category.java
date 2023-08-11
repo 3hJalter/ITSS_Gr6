@@ -14,4 +14,13 @@ public class Category {
     private String categoryName;
     private Double price;
     private Double priceMultiple;
+
+    public String convertToString() {
+        return "Category{" +
+                "categoryId=" + categoryId +
+                ", categoryName='" + categoryName + '\'' +
+                ", price=" + price +
+                ", priceMultiple=" + priceMultiple +
+                '}';
+    }
 }
