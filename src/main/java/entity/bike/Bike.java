@@ -1,5 +1,7 @@
-package entity;
+package entity.bike;
 
+import entity.Category;
+import entity.Dock;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

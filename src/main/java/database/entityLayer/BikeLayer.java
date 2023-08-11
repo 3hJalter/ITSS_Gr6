@@ -1,11 +1,9 @@
 package database.entityLayer;
 
-import database.connection.DatabaseConnection;
-import database.connection.impl.PostgresConnection;
-import entity.Bike;
 import entity.Category;
 import entity.Dock;
-import entity.EBike;
+import entity.bike.Bike;
+import entity.bike.EBike;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.General;
@@ -14,16 +12,15 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BikeLayer {
+public class BikeLayer extends BaseLayer {
     private static BikeLayer instance;
 
     private JSONArray jsonArray;
 
     private BikeLayer() {
         try {
-            DatabaseConnection connection = PostgresConnection.getInstance();
             String sqlQuery = "SELECT * FROM bike";
-            ResultSet resultSet = connection.query(sqlQuery);
+            ResultSet resultSet = databaseConnection.getData(sqlQuery);
             jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,7 +65,7 @@ public class BikeLayer {
         return bikeList;
     }
 
-    public Bike getBikeById(Integer id){
+    public Bike getBikeById(Integer id) {
         if (id == null) return null;
         for (Bike bike : getBikeFromResult()) {
             if (bike.getBikeId().equals(id)) return bike;
@@ -76,7 +73,7 @@ public class BikeLayer {
         return null;
     }
 
-    private List<Bike> getBikeFromResult(){
+    private List<Bike> getBikeFromResult() {
         List<Bike> bikeList = new ArrayList<>();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {

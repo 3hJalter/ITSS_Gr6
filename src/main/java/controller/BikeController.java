@@ -1,8 +1,8 @@
 package controller;
 
 import database.entityLayer.BikeLayer;
-import entity.Bike;
-import entity.EBike;
+import entity.bike.Bike;
+import entity.bike.EBike;
 import utils.response.Response;
 import utils.response.ResponseMessage;
 import utils.response.responseMessageImpl.BikeResponseMessage;

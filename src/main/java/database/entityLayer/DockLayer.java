@@ -1,7 +1,5 @@
 package database.entityLayer;
 
-import database.connection.DatabaseConnection;
-import database.connection.impl.PostgresConnection;
 import entity.Dock;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,15 +9,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DockLayer {
+public class DockLayer extends BaseLayer {
     private static DockLayer instance;
     JSONArray jsonArray;
 
     private DockLayer() {
         try {
-            DatabaseConnection connection = PostgresConnection.getInstance();
             String sqlQuery = "SELECT * FROM dock";
-            ResultSet resultSet = connection.query(sqlQuery);
+            ResultSet resultSet = databaseConnection.getData(sqlQuery);
             jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,7 +42,7 @@ public class DockLayer {
         return list;
     }
 
-    public Dock getDockById(Integer id){
+    public Dock getDockById(Integer id) {
         if (id == null) return null;
         for (Dock dock : getDockFromJSON()) {
             if (dock.getDockId().equals(id)) return dock;
@@ -53,7 +50,7 @@ public class DockLayer {
         return null;
     }
 
-    private List<Dock> getDockFromJSON(){
+    private List<Dock> getDockFromJSON() {
         List<Dock> dockList = new ArrayList<>();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {

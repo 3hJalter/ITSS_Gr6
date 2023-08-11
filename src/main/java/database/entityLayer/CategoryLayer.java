@@ -1,7 +1,5 @@
 package database.entityLayer;
 
-import database.connection.DatabaseConnection;
-import database.connection.impl.PostgresConnection;
 import entity.Category;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,15 +9,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryLayer {
+public class CategoryLayer extends BaseLayer {
     private static CategoryLayer instance;
     JSONArray jsonArray;
 
     private CategoryLayer() {
         try {
-            DatabaseConnection connection = PostgresConnection.getInstance();
             String sqlQuery = "SELECT * FROM category";
-            ResultSet resultSet = connection.query(sqlQuery);
+            ResultSet resultSet = databaseConnection.getData(sqlQuery);
             jsonArray = General.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,10 +56,7 @@ public class CategoryLayer {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject categoryJson = jsonArray.getJSONObject(i);
-                Category category = new Category(categoryJson.getInt("category_id"),
-                        categoryJson.getString("category_name"),
-                        categoryJson.getDouble("price"),
-                        categoryJson.getDouble("price_multiple"));
+                Category category = new Category(categoryJson.getInt("category_id"), categoryJson.getString("category_name"), categoryJson.getDouble("price"), categoryJson.getDouble("price_multiple"));
                 assert false;
                 categoryList.add(category);
             }

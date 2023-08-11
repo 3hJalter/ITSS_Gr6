@@ -1,7 +1,7 @@
 package validation;
 
 import database.entityLayer.BikeLayer;
-import entity.Bike;
+import entity.bike.Bike;
 import utils.response.ResponseMessage;
 import utils.response.responseMessageImpl.BikeResponseMessage;
 
