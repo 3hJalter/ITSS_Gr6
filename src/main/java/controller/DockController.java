@@ -36,14 +36,6 @@ public class DockController {
         return new Response<>(dockList, DockResponseMessage.SUCCESSFUL);
     }
 
-    public Response<List<Bike>> getBikeByDockId(Integer dockId) {
-        ResponseMessage validateMessage = DockValidation.validate(dockId);
-        if (validateMessage != DockResponseMessage.SUCCESSFUL)
-            return new Response<>(null, validateMessage);
-        List<Bike> bikeList = BikeLayer.getInstance().getBikeByDockId(dockId);
-        return new Response<>(bikeList, DockResponseMessage.SUCCESSFUL);
-    }
-
     public Response<Dock> getDockById(Integer id) {
         ResponseMessage validateMessage = DockValidation.validate(id);
         if (validateMessage != DockResponseMessage.SUCCESSFUL)

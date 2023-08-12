@@ -6,6 +6,8 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static utils.Config.CLIENT_URL;
+
 public class ControlAPI {
 
     public static String parseQueryString(String queryString, String paramName) {
@@ -29,7 +31,7 @@ public class ControlAPI {
 
     public static void setCorsHeaders(HttpExchange exchange) {
         Headers headers = exchange.getResponseHeaders();
-        headers.add("Access-Control-Allow-Origin", "http://localhost:5173");
+        headers.add("Access-Control-Allow-Origin", CLIENT_URL);
         headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         headers.add("Access-Control-Allow-Headers", "Content-Type");
     }
