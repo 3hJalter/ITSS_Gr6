@@ -6,14 +6,14 @@ import {
   // deleteBookController,
   searchDockController,
   getBikeByDockController
-} from "../../controller/dock.controller.js";
+} from "../controller/dock.controller.js";
 import {
   StyledTable,
   StyledTableHead,
   StyledTableCell,
   StyledTableBody,
-} from "../muiStyled.js";
-import { DeleteButton, UpdateButton, ViewButton } from "../button/Button.jsx";
+} from "./muiStyled.js";
+import { DeleteButton, UpdateButton, ViewButton } from "./button/Button.jsx";
 
 const GetAllDocks = () => {
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ const GetAllDocks = () => {
   const getBikeByDockHandler = async (id) => {
     const response = await getBikeByDockController(id);
     const bikeData = response.data.object;
-    console.log(id);
+    console.log("bike",bikeData);
     navigate(`/dock/${id}/list-bike`, { state: bikeData });
   };
 

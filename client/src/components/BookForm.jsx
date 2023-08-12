@@ -1,5 +1,5 @@
 import {FormControl, Input, InputLabel} from "@mui/material";
-import {CancelButton} from "../button/Button.jsx";
+import {CancelButton} from "./button/Button.jsx";
 
 const BookForm = ({prop, setProp, func, Btn}) => {
 
