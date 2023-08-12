@@ -7,10 +7,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
-  getAllBikesController,
-  getBikeByIdController,
-  getBikeByDockController,
-  rentBikeController,
+  getBikeFromBarcodeController
 } from "../controller/bike.controller.js";
 import { useLocation } from "react-router-dom";
 import {
@@ -50,8 +47,14 @@ const GetAllBikes = () => {
 
     // const response = await rentBikeController(data);
     // alert(response.data.message);
-
-    navigate("/deposit", { state: barcode });
+    const response = await getBikeFromBarcodeController(barcode);
+    const bikeData = response.data.object;
+    console.log("message", response.data.message);
+    if (response.data.message !== "Successful") {
+      alert(response.data.message);
+      return;
+    }
+    navigate("/deposit", { state: bikeData });
   };
 
   return (
@@ -62,7 +65,7 @@ const GetAllBikes = () => {
         fullWidth
         value={barcode}
         onChange={(e) => setBarcode(e.target.value)}
-        style={{ marginTop: "200px", width: "50%" }}
+        style={{ marginTop: "120px", width: "50%" }}
       />
       <Button
         variant="contained"
@@ -82,7 +85,7 @@ const GetAllBikes = () => {
             <StyledTableCell>Category</StyledTableCell>
             <StyledTableCell>Dock name</StyledTableCell>
             <StyledTableCell>Battery</StyledTableCell>
-            <TableCell style={{ borderRadius: "0 15px 0 0", width: "10px" }}>Image</TableCell>
+            <TableCell style={{ borderRadius: "0 15px 0 0"}}>Image</TableCell>
             {/* <TableCell style={{ borderRadius: "0 15px 0 0", width: "10px" }}>
               Actions
             </TableCell> */}
@@ -94,7 +97,7 @@ const GetAllBikes = () => {
             <StyledTableBody key={bike.bikeId}>
               <StyledTableCell
                 style={{
-                  maxWidth: "120px",
+                  maxWidth: "80px",
                   wordWrap: "break-word",
                   fontWeight: "bold",
                   padding: "25px",
@@ -121,7 +124,7 @@ const GetAllBikes = () => {
               <StyledTableCell
                 style={{
                   wordWrap: "break-word",
-                  maxWidth: "100px",
+                  maxWidth: "50px",
                 }}
               >
                 {bike.dock.dockName}
@@ -129,7 +132,7 @@ const GetAllBikes = () => {
               <StyledTableCell
                 style={{
                   wordWrap: "break-word",
-                  maxWidth: "100px",
+                  maxWidth: "50px",
                 }}
               >
                 {bike.battery ? bike.battery + "%" : "Not available"}
@@ -143,7 +146,7 @@ const GetAllBikes = () => {
                     display: "block",
                     margin: "0 auto",
                     width: "200px",
-                    height: "130px",
+                    height: "140px",
                     wordWrap: "break-word",
                   }}
                 />

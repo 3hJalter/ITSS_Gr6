@@ -5,7 +5,7 @@ import {
   getAllDocksController,
   // deleteBookController,
   searchDockController,
-  getBikeByDockController
+  getBikeByDockController,
 } from "../controller/dock.controller.js";
 import {
   StyledTable,
@@ -54,7 +54,7 @@ const GetAllDocks = () => {
   const getBikeByDockHandler = async (id) => {
     const response = await getBikeByDockController(id);
     const bikeData = response.data.object;
-    console.log("bike",bikeData);
+    console.log("bike", bikeData);
     navigate(`/dock/${id}/list-bike`, { state: bikeData });
   };
 
@@ -66,77 +66,91 @@ const GetAllDocks = () => {
         fullWidth
         value={searchQuery}
         onChange={searchDockHandler}
-        style={{ marginTop: "200px", width: "50%" }}
+        style={{ marginTop: "120px", width: "50%" }}
       />
-      <StyledTable>
-        <TableHead>
-          <StyledTableHead>
-            <StyledTableCell style={{ borderRadius: "15px 0 0 0" }}>
-              Dock ID
-            </StyledTableCell>
-            <StyledTableCell>Dock name</StyledTableCell>
-            <StyledTableCell>Address</StyledTableCell>
-
-            <StyledTableCell>Image</StyledTableCell>
-            <TableCell style={{ borderRadius: "0 15px 0 0", width: "10px" }}>
-              Actions
-            </TableCell>
-          </StyledTableHead>
-        </TableHead>
-
-        <TableBody>
-          {docks.map((dock) => (
-            <StyledTableBody key={dock.dockId}>
+      {/* <div className=" w-5/6"> */}
+        <StyledTable>
+          <TableHead>
+            <StyledTableHead>
               <StyledTableCell
-                style={{
-                  maxWidth: "120px",
-                  wordWrap: "break-word",
-                  fontWeight: "bold",
-                  padding: "25px",
-                }}
+                style={{ borderRadius: "15px 0 0 0", width: "150px" }}
               >
-                {dock.dockId}
+                Dock ID
               </StyledTableCell>
-              <StyledTableCell
-                style={{
-                  wordWrap: "break-word",
-                  maxWidth: "100px",
-                }}
-              >
-                {dock.dockName}
+              <StyledTableCell style={{ width: "180px" }}>
+                Dock name
               </StyledTableCell>
-              <StyledTableCell
-                style={{
-                  wordWrap: "break-word",
-                  maxWidth: "100px",
-                }}
-              >
-                {dock.address}
+              <StyledTableCell style={{ width: "300px" }}>
+                Address
               </StyledTableCell>
 
-              <StyledTableCell>
-                <img
-                  src={dock.image}
-                  alt={dock.image}
-                  style={{
-                    display: "block",
-                    margin: "0 auto",
-                    width: "200px",
-                    height: "120px",
-                    wordWrap: "break-word",
-                  }}
-                />
+              <StyledTableCell style={{ width: "250px" }}>
+                Image
               </StyledTableCell>
-
-              <TableCell>
-                {/* <UpdateButton book={dock} />
-                <DeleteButton onClick={() => deleteBookHandler(dock._id)} /> */}
-                <ViewButton onClick={() => getBikeByDockHandler(dock.dockId)} />
+              <TableCell style={{ borderRadius: "0 15px 0 0", width: "150px" }}>
+                Actions
               </TableCell>
-            </StyledTableBody>
-          ))}
-        </TableBody>
-      </StyledTable>
+            </StyledTableHead>
+          </TableHead>
+
+          <TableBody>
+            {docks.map((dock) => (
+              <StyledTableBody key={dock.dockId}>
+                <StyledTableCell
+                  style={{
+                    maxWidth: "100px",
+                    wordWrap: "break-word",
+                    fontWeight: "bold",
+                    padding: "25px",
+                  }}
+                >
+                  {dock.dockId}
+                </StyledTableCell>
+                <StyledTableCell
+                  style={{
+                    wordWrap: "break-word",
+                    maxWidth: "80px",
+                  }}
+                >
+                  {dock.dockName}
+                </StyledTableCell>
+                <StyledTableCell
+                  style={{
+                    wordWrap: "break-word",
+                    maxWidth: "100px",
+                  }}
+                >
+                  {dock.address}
+                </StyledTableCell>
+
+                <StyledTableCell>
+                  <img
+                    src={dock.image}
+                    alt={dock.image}
+                    style={{
+                      display: "block",
+                      margin: "0 auto",
+                      width: "200px",
+                      height: "120px",
+                      wordWrap: "break-word",
+                    }}
+                  />
+                </StyledTableCell>
+
+                <TableCell>
+                  {/* <UpdateButton book={dock} />
+                <DeleteButton onClick={() => deleteBookHandler(dock._id)} /> */}
+                  <div className="justify-center items-center flex">
+                    <ViewButton
+                      onClick={() => getBikeByDockHandler(dock.dockId)}
+                    />
+                  </div>
+                </TableCell>
+              </StyledTableBody>
+            ))}
+          </TableBody>
+        </StyledTable>
+      {/* </div> */}
     </>
   );
 };

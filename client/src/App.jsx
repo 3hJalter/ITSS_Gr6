@@ -7,6 +7,7 @@ import Deposit from "./components/Deposit";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import UpdateBook from "./components/Books/UpdateBook";
 import Footer from "./components/Layout/Footer";
+import Home from "./components/Home";
 import NotFound from "./components/ErrorPage/NotFound";
 import Favicon from "react-favicon";
 function App() {
@@ -25,12 +26,13 @@ function App() {
           }}
         >
           <Routes>
-            <Route path="/" element={<GetAllDocks />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/docks" element={<GetAllDocks />} />
             <Route path="/dock/:id/list-bike" element={<GetAllBikes />} />
-            <Route path="/deposit/" element={<Deposit/>}></Route>
+            <Route path="/deposit/" element={<Deposit />}></Route>
             {/* <Route path="/create" element={<CreateBook/>}/>
-                        <Route path="/update/:id" element={<UpdateBook/>}></Route>
-                        <Route path="*" element={<NotFound/>}></Route> */}
+                        <Route path="/update/:id" element={<UpdateBook/>}></Route>*/}
+            <Route path="*" element={<NotFound />}></Route>
           </Routes>
         </div>
         <Footer />

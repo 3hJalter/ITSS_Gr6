@@ -99,3 +99,12 @@ export const returnBikeController = async (data) => {
     console.log(error.message);
   }
 };
+
+export const getBikeFromBarcodeController = async (data) => {
+  try {
+    console.log(`${API_URL}/bike/barcodeInfo?barcode=${data}`);
+    return await axios.get(`${API_URL}/bike/barcodeInfo?barcode=${data}`);
+  } catch (error) {
+    console.log(error.message);
+  }
+}

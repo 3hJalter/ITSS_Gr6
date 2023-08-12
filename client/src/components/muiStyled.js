@@ -21,7 +21,10 @@ export const StyledTypography = styled(Typography)`
 
 export const StyledTable = styled(Table)`
   width: 90%;
-  margin: 100px auto 100px auto;
+  margin-top: 60px;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 120px;
   box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
   border-radius: 15px;
 `;
