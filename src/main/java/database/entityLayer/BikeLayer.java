@@ -96,12 +96,22 @@ public class BikeLayer extends BaseLayer {
                     );
                 }
 
-                Bike bike = new Bike(bikeJson.getInt("bike_id"),
-                        bikeJson.getString("bike_name"),
-                        category,
-                        dock,
-                        bikeJson.getString("image"));
-                
+                Bike bike;
+                if (!bikeJson.has("battery")) {
+                    bike = new Bike(bikeJson.getInt("bike_id"),
+                            bikeJson.getString("bike_name"),
+                            category,
+                            dock,
+                            bikeJson.getString("image"));
+                } else {
+                    Integer battery = bikeJson.getInt("battery");
+                    bike = new EBike(bikeJson.getInt("bike_id"),
+                            bikeJson.getString("bike_name"),
+                            battery,
+                            category,
+                            dock,
+                            bikeJson.getString("image"));
+                }
                 bikeList.add(bike);
             }
         } catch (Exception e) {

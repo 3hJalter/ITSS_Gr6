@@ -1,75 +1,75 @@
 package api;
 
-import com.sun.net.httpserver.*;
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
-import controller.DockController;
+import controller.BikeController;
 import utils.General;
 
-public class DockAPI {
+public class BikeAPI {
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-        HttpContext context = server.createContext("/");
-        context.setHandler(exchange -> {
-            Headers headers = exchange.getResponseHeaders();
-            headers.add("Access-Control-Allow-Origin", "http://localhost:5173");
-            headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-            headers.add("Access-Control-Allow-Headers", "Content-Type");
-            if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
-                exchange.sendResponseHeaders(204, -1);
-            }
-        });
-        server.createContext("/dock/list", new DockListHandler());
-        server.createContext("/dock/search", new DockSearchHandler());
-        server.createContext("/dock/bikes", new DockBikesHandler());
-        server.createContext("/dock/info", new DockInfoHandler());
+        server.createContext("/bike/list", new BikeListHandler());
+        server.createContext("/bike/ebike-list", new EBikeListHandler());
+        server.createContext("/bike/dock", new BikeByDockHandler());
+        server.createContext("/bike/category", new BikeByCategoryHandler());
+        server.createContext("/bike/info", new BikeInfoHandler());
         server.setExecutor(null); // Use the default executor
         server.start();
     }
 
-    static class DockListHandler implements HttpHandler {
+    static class BikeListHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            Object responseObject = DockController.getInstance().getDockList();
+            Object responseObject = BikeController.getInstance().getBikeList();
             String response = General.convertToJson(responseObject);
             sendResponse(exchange, response);
         }
     }
 
-    static class DockSearchHandler implements HttpHandler {
+    static class EBikeListHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            // Parse the query parameter "keyword"
-            String keyword = parseQueryString(exchange.getRequestURI().getQuery(), "keyword");
-            Object responseObject = DockController.getInstance().searchDock(keyword);
+            Object responseObject = BikeController.getInstance().getEBikeList();
             String response = General.convertToJson(responseObject);
             sendResponse(exchange, response);
         }
     }
 
-    static class DockBikesHandler implements HttpHandler {
+    static class BikeByDockHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            // Parse the query parameter "dockId"
             String dockIdStr = parseQueryString(exchange.getRequestURI().getQuery(), "dockId");
             int dockId = Integer.parseInt(dockIdStr);
-            Object responseObject = DockController.getInstance().getDockById(dockId);
+            Object responseObject = BikeController.getInstance().getBikeByDockId(dockId);
             String response = General.convertToJson(responseObject);
             sendResponse(exchange, response);
         }
     }
 
-    static class DockInfoHandler implements HttpHandler {
+    static class BikeByCategoryHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            // Parse the query parameter "id"
+            String categoryIdStr = parseQueryString(exchange.getRequestURI().getQuery(), "categoryId");
+            int categoryId = Integer.parseInt(categoryIdStr);
+            Object responseObject = BikeController.getInstance().getBikeByCategoryId(categoryId);
+            String response = General.convertToJson(responseObject);
+            sendResponse(exchange, response);
+        }
+    }
+
+    static class BikeInfoHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
             String idStr = parseQueryString(exchange.getRequestURI().getQuery(), "id");
             int id = Integer.parseInt(idStr);
-            Object responseObject = DockController.getInstance().getDockById(id);
+            Object responseObject = BikeController.getInstance().getBikeById(id);
             String response = General.convertToJson(responseObject);
             sendResponse(exchange, response);
         }
