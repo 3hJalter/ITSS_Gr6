@@ -1,7 +1,9 @@
 package controller;
 
+import database.entityLayer.BikeLayer;
 import database.entityLayer.DockLayer;
 import entity.Dock;
+import entity.bike.Bike;
 import utils.response.Response;
 import utils.response.ResponseMessage;
 import utils.response.responseMessageImpl.DockResponseMessage;
@@ -32,6 +34,14 @@ public class DockController {
     public Response<List<Dock>> searchDock(String keyword) {
         List<Dock> dockList = dockLayer.searchDock(keyword);
         return new Response<>(dockList, DockResponseMessage.SUCCESSFUL);
+    }
+
+    public Response<List<Bike>> getBikeByDockId(Integer dockId) {
+        ResponseMessage validateMessage = DockValidation.validate(dockId);
+        if (validateMessage != DockResponseMessage.SUCCESSFUL)
+            return new Response<>(null, validateMessage);
+        List<Bike> bikeList = BikeLayer.getInstance().getBikeByDockId(dockId);
+        return new Response<>(bikeList, DockResponseMessage.SUCCESSFUL);
     }
 
     public Response<Dock> getDockById(Integer id) {
