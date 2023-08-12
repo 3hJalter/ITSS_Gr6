@@ -19,6 +19,9 @@ public class Transaction {
     private Long deposit;
     private Bike bike;
     private String status;
+    private String transactionType;
+    private Integer minuteUsed;
+    private Timestamp lastPause;
 
     public String convertToString(){
         return "Transaction{" +
@@ -28,6 +31,9 @@ public class Transaction {
                 ", deposit=" + deposit +
                 ", bike=" + bike +
                 ", status=" + status +
+                ", status=" + transactionType +
+                ", minuteUsed=" + minuteUsed +
+                ", lastPause=" + lastPause +
                 '}';
     }
 }

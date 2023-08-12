@@ -95,7 +95,9 @@ public class InvoiceLayer extends BaseLayer {
     public int createInvoice(Transaction transaction) {
         try {
             databaseConnection.getConnection().setAutoCommit(false);
-            long price = PriceMethod.getTotalPrice(transaction);
+            long price = transaction.getTransactionType().equals("24h")
+                    ? PriceMethod.get24hTotalPrice(transaction)
+                    : PriceMethod.getTotalPrice(transaction);
             String sqlQuery = "INSERT INTO invoice (customer_id, transaction_id, start_rent, end_rent, " +
                     "price, bike_id)\n"
                     + "VALUES ("
