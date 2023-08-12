@@ -4,6 +4,7 @@ import database.entityLayer.BikeLayer;
 import database.entityLayer.TransactionLayer;
 import entity.Transaction;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import utils.PriceMethod;
 import utils.response.Response;
 import utils.response.ResponseMessage;
@@ -65,10 +66,11 @@ public class TransactionController {
     }
 
     @AllArgsConstructor
+    @Getter
     public static class ActiveTransaction {
-        Transaction transaction;
-        Long currentPay;
-        Long timeRent;
+        private Transaction transaction;
+        private Long currentPay;
+        private Long timeRent;
 
         public String convertToString() {
             return "ActiveTransactionInfo{" +
