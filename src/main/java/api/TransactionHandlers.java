@@ -55,4 +55,16 @@ public class TransactionHandlers {
             ControlAPI.sendResponse(exchange, jsonResponse);
         }
     }
+
+    public static class GetDepositHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            ControlAPI.setCorsHeaders(exchange);
+            String bikeIdStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "bikeId");
+            int bikeId = Integer.parseInt(bikeIdStr);
+            Response<?> response = TransactionController.getInstance().getDeposit(bikeId);
+            String jsonResponse = General.convertToJson(response);
+            ControlAPI.sendResponse(exchange, jsonResponse);
+        }
+    }
 }
