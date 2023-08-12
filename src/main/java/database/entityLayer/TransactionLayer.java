@@ -101,7 +101,7 @@ public class TransactionLayer extends BaseLayer {
                     + deposit
                     + ", " + bikeId
                     + ", 'active'"
-                    + ", " + transactionType
+                    + ", '" + transactionType + "'"
                     + ", " + 0
                     + ", CURRENT_TIMESTAMP"
                     + ");";
