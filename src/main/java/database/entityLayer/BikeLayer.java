@@ -2,6 +2,7 @@ package database.entityLayer;
 
 import entity.Category;
 import entity.Dock;
+import entity.Invoice;
 import entity.bike.Bike;
 import entity.bike.EBike;
 import org.json.JSONArray;
@@ -18,6 +19,17 @@ public class BikeLayer extends BaseLayer {
     private JSONArray jsonArray;
 
     private BikeLayer() {
+        setJsonArray();
+    }
+
+    public static BikeLayer getInstance() {
+        if (instance == null) {
+            instance = new BikeLayer();
+        }
+        return instance;
+    }
+
+    private void setJsonArray() {
         try {
             String sqlQuery = "SELECT * FROM bike";
             ResultSet resultSet = databaseConnection.getData(sqlQuery);
@@ -29,15 +41,8 @@ public class BikeLayer extends BaseLayer {
         }
     }
 
-    public static BikeLayer getInstance() {
-        if (instance == null) {
-            instance = new BikeLayer();
-        }
-        return instance;
-    }
-
     public List<Bike> getBikeList() {
-        return getBikeFromResult();
+        return getBikeFromJSON();
     }
 
     public List<EBike> getEBikeList() {
@@ -47,7 +52,7 @@ public class BikeLayer extends BaseLayer {
     public List<Bike> getBikeByDockId(Integer id) {
         List<Bike> bikeList = new ArrayList<>();
         if (id == null) return bikeList;
-        for (Bike bike : getBikeFromResult()) {
+        for (Bike bike : getBikeFromJSON()) {
             if (bike.getDock() == null) continue;
             if (!bike.getDock().getDockId().equals(id)) continue;
             bikeList.add(bike);
@@ -58,7 +63,7 @@ public class BikeLayer extends BaseLayer {
     public List<Bike> getBikeByCategoryId(Integer id) {
         List<Bike> bikeList = new ArrayList<>();
         if (id == null) return bikeList;
-        for (Bike bike : getBikeFromResult()) {
+        for (Bike bike : getBikeFromJSON()) {
             if (bike.getCategory() == null) continue;
 //            if (bike.getDock() == null) continue;
             if (!bike.getCategory().getCategoryId().equals(id)) continue;
@@ -69,13 +74,13 @@ public class BikeLayer extends BaseLayer {
 
     public Bike getBikeById(Integer id) {
         if (id == null) return null;
-        for (Bike bike : getBikeFromResult()) {
+        for (Bike bike : getBikeFromJSON()) {
             if (bike.getBikeId().equals(id)) return bike;
         }
         return null;
     }
 
-    private List<Bike> getBikeFromResult() {
+    private List<Bike> getBikeFromJSON() {
         List<Bike> bikeList = new ArrayList<>();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -96,7 +101,7 @@ public class BikeLayer extends BaseLayer {
                         category,
                         dock,
                         bikeJson.getString("image"));
-                assert false;
+                
                 bikeList.add(bike);
             }
         } catch (Exception e) {
@@ -129,12 +134,50 @@ public class BikeLayer extends BaseLayer {
                         category,
                         dock,
                         bikeJson.getString("image"));
-                assert false;
+                
                 eBikeList.add(eBike);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return eBikeList;
+    }
+
+    public void rentBikeById(Integer bikeId) {
+        try {
+            databaseConnection.getConnection().setAutoCommit(false);
+            String sqlQuery = "UPDATE bike \n"
+                    + "SET dock_id = null \n"
+                    + "WHERE bike_id = " + bikeId
+                    + ";";
+            databaseConnection.updateData(sqlQuery);
+            databaseConnection.getConnection().commit();
+            databaseConnection.getConnection().setAutoCommit(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            setJsonArray();
+        }
+    }
+
+    public void returnInvoiceBikeToDockId(Integer invoiceId, Integer dockId) {
+        Invoice invoice = InvoiceLayer.getInstance().getInvoiceById(invoiceId);
+        if (invoice == null) return;
+        Dock dock = DockLayer.getInstance().getDockById(dockId);
+        if (dock == null) return;
+        try {
+            databaseConnection.getConnection().setAutoCommit(false);
+            String sqlQuery = "UPDATE bike \n"
+                    + "SET dock_id = " + dockId + " \n"
+                    + "WHERE bike_id = " + invoice.getBike().getBikeId()
+                    + ";";
+            databaseConnection.updateData(sqlQuery);
+            databaseConnection.getConnection().commit();
+            databaseConnection.getConnection().setAutoCommit(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            setJsonArray();
+        }
     }
 }

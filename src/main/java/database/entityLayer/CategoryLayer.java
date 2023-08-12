@@ -56,7 +56,7 @@ public class CategoryLayer extends BaseLayer {
                         categoryJson.getDouble("deposit_rate"),
                         categoryJson.getLong("rent_price"),
                         categoryJson.getDouble("price_multiple"));
-                assert false;
+
                 categoryList.add(category);
             }
         } catch (Exception e) {

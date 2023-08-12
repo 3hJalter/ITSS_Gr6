@@ -65,6 +65,26 @@ public class PostgresConnection implements IDatabaseConnection {
         }
     }
 
+    @Override
+    public int updateData(String sqlQuery) {
+        try {
+            Connection connection = getConnection();
+            if (connection != null) {
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                int rowsAffected = preparedStatement.executeUpdate();
+                System.out.println("Data updated successfully. Rows affected: " + rowsAffected);
+                return rowsAffected;
+            }
+            System.out.println("Failed to get a valid database connection.");
+            return -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error when updating data: " + e.getMessage());
+            return -1;
+        }
+    }
+
+
     public void closeConnection() {
         if (connection != null)
             try {

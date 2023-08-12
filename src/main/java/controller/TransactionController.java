@@ -1,5 +1,6 @@
 package controller;
 
+import database.entityLayer.BikeLayer;
 import database.entityLayer.TransactionLayer;
 import entity.Transaction;
 import lombok.AllArgsConstructor;
@@ -35,13 +36,13 @@ public class TransactionController {
         return new Response<>(transactionList, TransactionResponseMessage.SUCCESSFUL);
     }
 
-    public Response<ActiveTransactionInfo> getActiveTransactionByCustomerId(Integer customerId) {
+    public Response<ActiveTransaction> getActiveTransactionByCustomerId(Integer customerId) {
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != CustomerResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
         Transaction transaction = transactionLayer.getActiveTransactionByCustomerId(customerId);
         if (transaction == null) return new Response<>(null, TransactionResponseMessage.TRANSACTION_NOT_EXIST);
-        ActiveTransactionInfo ati = new ActiveTransactionInfo(transaction,
+        ActiveTransaction ati = new ActiveTransaction(transaction,
                  PriceMethod.getTotalPrice(transaction), PriceMethod.getTimeRentInMinutes(transaction));
         return new Response<>(ati, TransactionResponseMessage.SUCCESSFUL);
     }
@@ -56,13 +57,14 @@ public class TransactionController {
         validateMessage = BikeValidation.validate(bikeId);
         if (validateMessage != BikeResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
-        int status = transactionLayer.createTransaction(customerId, bikeId);
-        if (status == -1) return new Response<>(null, TransactionResponseMessage.CAN_NOT_CREATE_TRANSACTION);
+        int newTransactionId = transactionLayer.createTransaction(customerId, bikeId);
+        if (newTransactionId == -1) return new Response<>(null, TransactionResponseMessage.CAN_NOT_CREATE_TRANSACTION);
+        BikeLayer.getInstance().rentBikeById(bikeId);
         return new Response<>(null, TransactionResponseMessage.SUCCESSFUL);
     }
 
     @AllArgsConstructor
-    public static class ActiveTransactionInfo {
+    public static class ActiveTransaction {
         Transaction transaction;
         Long currentPay;
         Long timeRent;

@@ -61,7 +61,6 @@ public class DockLayer extends BaseLayer {
                         dockJson.getString("dock_name"),
                         dockJson.getString("image"),
                         dockJson.getString("address"));
-                assert false;
                 dockList.add(dock);
             }
         } catch (Exception e) {

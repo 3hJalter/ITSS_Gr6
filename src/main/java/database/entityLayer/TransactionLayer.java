@@ -9,7 +9,6 @@ import utils.General;
 import utils.PriceMethod;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ public class TransactionLayer extends BaseLayer {
     JSONArray jsonArray;
 
     private TransactionLayer() {
-        SetJsonArray();
+        setJsonArray();
     }
 
     public static TransactionLayer getInstance() {
@@ -29,7 +28,7 @@ public class TransactionLayer extends BaseLayer {
         return instance;
     }
 
-    private void SetJsonArray() {
+    private void setJsonArray() {
         try {
             String sqlQuery = "SELECT * FROM transaction";
             ResultSet resultSet = databaseConnection.getData(sqlQuery);
@@ -45,6 +44,14 @@ public class TransactionLayer extends BaseLayer {
         return getTransactionFromJSON();
     }
 
+    public Transaction getTransactionById(Integer id) {
+        if (id == null) return null;
+        for (Transaction transaction : getTransactionFromJSON()) {
+            if (transaction.getTransactionId().equals(id)) return transaction;
+        }
+        return null;
+    }
+    
     public Transaction getActiveTransactionByCustomerId(Integer customerId) {
         if (customerId == null) return null;
         for (Transaction transaction : getTransactionFromJSON()) {
@@ -68,7 +75,6 @@ public class TransactionLayer extends BaseLayer {
                         transactionJson.getLong("deposit"),
                         bike,
                         transactionJson.getString("status"));
-                assert false;
                 transactionList.add(transaction);
             }
         } catch (Exception e) {
@@ -91,18 +97,32 @@ public class TransactionLayer extends BaseLayer {
                     + ", 'active');";
             int generatedId = databaseConnection.insertData(sqlQuery);
             databaseConnection.getConnection().commit();
-            SetJsonArray();
+            databaseConnection.getConnection().setAutoCommit(true);
+
             return generatedId;
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
         } finally {
-            try {
-                databaseConnection.getConnection().setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            databaseConnection.closeConnection();
+            setJsonArray();
+        }
+    }
+
+    public void setTransactionToInactive(Transaction transaction){
+        if (transaction == null) return;
+        try {
+            databaseConnection.getConnection().setAutoCommit(false);
+            String sqlQuery = "UPDATE transaction \n"
+                    + "SET status = 'inactive' \n"
+                    + "WHERE transaction_id = " + transaction.getTransactionId()
+                    + ";";
+            databaseConnection.updateData(sqlQuery);
+            databaseConnection.getConnection().commit();
+            databaseConnection.getConnection().setAutoCommit(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            setJsonArray();
         }
     }
 }

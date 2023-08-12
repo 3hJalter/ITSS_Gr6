@@ -50,7 +50,7 @@ public class CustomerLayer extends BaseLayer {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject customerJson = jsonArray.getJSONObject(i);
                 Customer customer = new Customer(customerJson.getInt("customer_id"), customerJson.getString("username"));
-                assert false;
+
                 customerList.add(customer);
             }
         } catch (Exception e) {
