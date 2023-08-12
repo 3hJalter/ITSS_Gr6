@@ -86,6 +86,20 @@ export const ViewButton = ({ onClick }) => {
         >
             View
         </StyledUpdateButton>
-        
+
+    );
+}
+
+export const RentBikeButton = ({ onClick }) => {
+    return (
+        <StyledUpdateButton
+
+            variant="outlined"
+            startIcon={<EditIcon />}
+            onClick={onClick}
+        >
+            Rent
+        </StyledUpdateButton>
+
     );
 }

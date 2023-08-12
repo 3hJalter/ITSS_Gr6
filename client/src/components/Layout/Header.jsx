@@ -33,8 +33,8 @@ const NavBar = () => {
                 }}
             >
                 <Toolbar>
-                    <Tabs to="/">Get all books</Tabs>
-                    <Tabs to="/create">Create new book</Tabs>
+                    <Tabs to="/">View all Docks</Tabs>
+                    {/* <Tabs to="/create">Create new book</Tabs> */}
                 </Toolbar>
             </Header>
         </div>

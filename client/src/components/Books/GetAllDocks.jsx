@@ -53,7 +53,9 @@ const GetAllDocks = () => {
 
   const getBikeByDockHandler = async (id) => {
     const response = await getBikeByDockController(id);
-    navigate(`/bike/`);
+    const bikeData = response.data.object;
+    console.log(id);
+    navigate(`/dock/${id}/list-bike`, { state: bikeData });
   };
 
   return (
@@ -84,7 +86,7 @@ const GetAllDocks = () => {
 
         <TableBody>
           {docks.map((dock) => (
-            <StyledTableBody key={dock._id}>
+            <StyledTableBody key={dock.dockId}>
               <StyledTableCell
                 style={{
                   maxWidth: "120px",

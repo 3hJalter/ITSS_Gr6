@@ -2,33 +2,54 @@ import { TableHead, TableBody, TableCell } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   getAllBikesController,
-  getBikeByIdController
+  getBikeByIdController,
+  getBikeByDockController,
+  rentBikeController
 } from "../../controller/bike.controller.js";
+import {useLocation} from "react-router-dom";
 import {
   StyledTable,
   StyledTableHead,
   StyledTableCell,
   StyledTableBody,
 } from "../muiStyled.js";
-import { DeleteButton, UpdateButton } from "../button/Button.jsx";
+import { DeleteButton, UpdateButton, RentBikeButton } from "../button/Button.jsx";
 
 const GetAllBikes = () => {
+  const location = useLocation();
+  const bikeData = location.state;
   const [bikes, setBikes] = useState([]);
-  useEffect(() => {
-    getAllBikeHandler();
-  }, []);
+  // useEffect(() => {
+  //   getAllBikeHandler();
+  // }, []);
 
   const getAllBikeHandler = async () => {
-    const response = await getAllBikesController();
+    const response = await getBikeByDockController();
     setBikes(response.data.object);
   };
 
-  // const deleteBookHandler = async (id) => {
-  //   if (confirm(`Are you sure you want to delete`)) {
-  //     await deleteBookController(id);
-  //   } else return;
-  //   await getAllBikeHandler().then(() => {});
-  // };
+  // export const rentBikeController = async (data) => {
+  //   try {
+  //     return await axios.post(`${API_URL}/transaction/create`, data);
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // }
+
+  const rentBikeHandler = async (id) => {
+    const data = {
+      bikeId: id,
+      customerId: "1",
+    }
+    const response = await rentBikeController(data);
+    console.log(response.data);
+    if (response.data.code === "400_T3")
+      alert("Bike is not available");
+    else {
+      console.log(response.data.message)
+    }
+  }
+
 
   return (
     <StyledTable>
@@ -50,7 +71,7 @@ const GetAllBikes = () => {
 
 
       <TableBody>
-        {bikes.map((bike) => (
+        {bikeData.map((bike) => (
           <StyledTableBody key={bike.bikeId}>
             <StyledTableCell
               style={{
@@ -108,19 +129,10 @@ const GetAllBikes = () => {
                 }}
               />
             </StyledTableCell>
-            <StyledTableCell
-              style={{
-                wordWrap: "break-word",
-                maxWidth: "100px",
-              }}
-            >
-              {bike.address}
-            </StyledTableCell>
 
-            {/* <TableCell>
-              <UpdateButton book={bike} />
-              <DeleteButton onClick={() => deleteBookHandler(bike._id)} />
-            </TableCell> */}
+            <StyledTableCell>
+              <RentBikeButton onClick={() => rentBikeHandler(bike.bikeId)} />
+            </StyledTableCell>
 
           </StyledTableBody>
         ))}

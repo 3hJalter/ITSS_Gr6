@@ -23,7 +23,7 @@ function App() {
                 }}>
                     <Routes>
                         <Route path="/" element={<GetAllDocks />} />
-                        <Route path="/bike" element={<GetAllBikes />} />
+                        <Route path="/dock/:id/list-bike" element={<GetAllBikes />} />
                         {/* <Route path="/create" element={<CreateBook/>}/>
                         <Route path="/update/:id" element={<UpdateBook/>}></Route>
                         <Route path="*" element={<NotFound/>}></Route> */}
