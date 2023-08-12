@@ -51,5 +51,4 @@ public class DockController {
         Dock dock = dockLayer.getDockById(id);
         return new Response<>(dock, DockResponseMessage.SUCCESSFUL);
     }
-
 }

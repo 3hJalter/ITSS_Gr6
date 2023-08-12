@@ -1,5 +1,6 @@
 package utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,6 +8,9 @@ import org.json.JSONObject;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class General {
     public static JSONArray convertResultSetToJsonArray(ResultSet resultSet) throws SQLException, JSONException {
@@ -27,4 +31,16 @@ public class General {
 
         return jsonArray;
     }
+
+    public static String convertToJson(Object object) {
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = "NO DATA";
+        try {
+            json = ow.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return json;
+    }
+
 }

@@ -3,6 +3,7 @@ import controller.TransactionController;
 import database.entityLayer.InvoiceLayer;
 import entity.Invoice;
 import entity.Transaction;
+import utils.General;
 import utils.response.Response;
 import utils.response.responseMessageImpl.InvoiceResponseMessage;
 import utils.response.responseMessageImpl.TransactionResponseMessage;
@@ -23,17 +24,20 @@ public class App {
         for (Invoice invoice : invoiceList) {
             System.out.println(invoice.convertToString());
         }*/
-//        System.out.println("----------- Read All -------------");
-//        Response<List<Transaction>> response = TransactionController.getInstance().getTransactionList();
-//        if (response.getMessage().equals(TransactionResponseMessage.SUCCESSFUL.getMessage())) {
-//            List<Transaction> transactionList = response.getObject();
-//            for (Transaction transaction:
-//                    transactionList) {
-//                System.out.println(transaction.convertToString());
-//            }
-//        } else {
-//            System.out.println(response.getMessage());
-//        }
+        System.out.println("----------- Read All -------------");
+        Response<List<Transaction>> response = TransactionController.getInstance().getTransactionList();
+        if (response.getMessage().equals(TransactionResponseMessage.SUCCESSFUL.getMessage())) {
+            List<Transaction> transactionList = response.getObject();
+            for (Transaction transaction:
+                    transactionList) {
+                System.out.println(transaction.convertToString());
+            }
+        } else {
+            System.out.println(response.getMessage());
+        }
+        System.out.println("----------- Read All JSON -------------");
+        String responseJSON = General.convertToJson(response);
+        System.out.println(responseJSON);
 //
 //        System.out.println("----------- Create -------------");
 //        Response<?> response1 = TransactionController.getInstance().createTransaction(1, 2);
