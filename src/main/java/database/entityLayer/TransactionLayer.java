@@ -56,7 +56,8 @@ public class TransactionLayer extends BaseLayer {
         if (customerId == null) return null;
         for (Transaction transaction : getTransactionFromJSON()) {
             if (transaction.getCustomer().getCustomerId().equals(customerId)
-                    && transaction.getStatus().equals("active")) return transaction;
+                    && (transaction.getStatus().equals("active")
+                    || transaction.getStatus().equals("paused"))) return transaction;
         }
         return null;
     }
@@ -69,12 +70,16 @@ public class TransactionLayer extends BaseLayer {
                 Customer customer = CustomerLayer.getInstance().getCustomerById(transactionJson.getInt("customer_id"));
                 Bike bike = BikeLayer.getInstance().getBikeById(transactionJson.getInt("bike_id"));
                 Timestamp createAt = Timestamp.valueOf(transactionJson.getString("create_at"));
+                Timestamp lastPause = Timestamp.valueOf(transactionJson.getString("last_pause"));
                 Transaction transaction = new Transaction(transactionJson.getInt("transaction_id"),
                         customer,
                         createAt,
                         transactionJson.getLong("deposit"),
                         bike,
-                        transactionJson.getString("status"));
+                        transactionJson.getString("status"),
+                        transactionJson.getString("transaction_type"),
+                        transactionJson.getInt("minute_used"),
+                        lastPause);
                 transactionList.add(transaction);
             }
         } catch (Exception e) {
@@ -83,18 +88,23 @@ public class TransactionLayer extends BaseLayer {
         return transactionList;
     }
 
-    public int createTransaction(Integer customerId, Integer bikeId) {
+    public int createTransaction(Integer customerId, Integer bikeId, String transactionType) {
         try {
             databaseConnection.getConnection().setAutoCommit(false);
             long deposit = PriceMethod.getDeposit(bikeId);
-            String sqlQuery = "INSERT INTO transaction (customer_id, create_at, deposit, bike_id, status)\n"
+            String sqlQuery = "INSERT INTO transaction (customer_id, create_at, deposit, " +
+                    "bike_id, status, transaction_type, minute_used, last_pause)\n"
                     + "VALUES ("
                     + customerId
                     + ", CURRENT_TIMESTAMP"
                     + ", "
                     + deposit
                     + ", " + bikeId
-                    + ", 'active');";
+                    + ", 'active'"
+                    + ", '" + transactionType + "'"
+                    + ", " + 0
+                    + ", CURRENT_TIMESTAMP"
+                    + ");";
             int generatedId = databaseConnection.insertData(sqlQuery);
             databaseConnection.getConnection().commit();
             databaseConnection.getConnection().setAutoCommit(true);
@@ -108,12 +118,52 @@ public class TransactionLayer extends BaseLayer {
         }
     }
 
+
     public void setTransactionToInactive(Transaction transaction){
         if (transaction == null) return;
         try {
             databaseConnection.getConnection().setAutoCommit(false);
             String sqlQuery = "UPDATE transaction \n"
                     + "SET status = 'inactive' \n"
+                    + "WHERE transaction_id = " + transaction.getTransactionId()
+                    + ";";
+            databaseConnection.updateData(sqlQuery);
+            databaseConnection.getConnection().commit();
+            databaseConnection.getConnection().setAutoCommit(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            setJsonArray();
+        }
+    }
+
+    public void pauseTransaction(Transaction transaction) {
+        if (transaction == null) return;
+        try {
+            long minuteUsed = PriceMethod.getActiveTimeRent(transaction);
+            databaseConnection.getConnection().setAutoCommit(false);
+            String sqlQuery = "UPDATE transaction \n"
+                    + "SET status = 'paused'"
+                    + ", minute_used = " + minuteUsed + " \n"
+                    + "WHERE transaction_id = " + transaction.getTransactionId()
+                    + ";";
+            databaseConnection.updateData(sqlQuery);
+            databaseConnection.getConnection().commit();
+            databaseConnection.getConnection().setAutoCommit(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            setJsonArray();
+        }
+    }
+
+    public void unPauseTransaction(Transaction transaction) {
+        if (transaction == null) return;
+        try {
+            databaseConnection.getConnection().setAutoCommit(false);
+            String sqlQuery = "UPDATE transaction \n"
+                    + "SET status = 'active'"
+                    + ", last_pause = CURRENT_TIMESTAMP" + "\n"
                     + "WHERE transaction_id = " + transaction.getTransactionId()
                     + ";";
             databaseConnection.updateData(sqlQuery);

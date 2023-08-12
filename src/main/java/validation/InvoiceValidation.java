@@ -1,7 +1,6 @@
 package validation;
 
 import database.entityLayer.InvoiceLayer;
-import database.entityLayer.TransactionLayer;
 import entity.Invoice;
 import entity.Transaction;
 import utils.response.ResponseMessage;
@@ -9,7 +8,7 @@ import utils.response.responseMessageImpl.InvoiceResponseMessage;
 
 public class InvoiceValidation {
     private static boolean hasActiveTransaction(Transaction transaction) {
-        return transaction.getStatus().equals("active");
+        return (transaction.getStatus().equals("active") || transaction.getStatus().equals("paused"));
     }
 
     private static boolean isExist(Integer id){

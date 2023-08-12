@@ -43,12 +43,13 @@ public class TransactionHandlers {
             // Parse the query parameter "customerId" and "bikeId"
             String customerIdStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "customerId");
             String barcodeStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "barcode");
+            String transactionTypeStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "transactionType");
 
             int customerId = Integer.parseInt(customerIdStr);
             UUID barcode = UUID.fromString(barcodeStr);
 
             // Call the createTransaction method from TransactionController
-            Response<?> response = TransactionController.getInstance().createTransaction(customerId, barcode);
+            Response<?> response = TransactionController.getInstance().createTransaction(customerId, barcode, transactionTypeStr);
 
             // Convert the response to JSON and send the response
             String jsonResponse = General.convertToJson(response);
@@ -63,6 +64,30 @@ public class TransactionHandlers {
             String bikeIdStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "bikeId");
             int bikeId = Integer.parseInt(bikeIdStr);
             Response<?> response = TransactionController.getInstance().getDeposit(bikeId);
+            String jsonResponse = General.convertToJson(response);
+            ControlAPI.sendResponse(exchange, jsonResponse);
+        }
+    }
+
+    public static class PauseTransactionHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            ControlAPI.setCorsHeaders(exchange);
+            String transactionIdStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "transactionId");
+            int transactionId = Integer.parseInt(transactionIdStr);
+            Response<?> response = TransactionController.getInstance().pauseTransaction(transactionId);
+            String jsonResponse = General.convertToJson(response);
+            ControlAPI.sendResponse(exchange, jsonResponse);
+        }
+    }
+
+    public static class UnPauseTransactionHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            ControlAPI.setCorsHeaders(exchange);
+            String transactionIdStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "transactionId");
+            int transactionId = Integer.parseInt(transactionIdStr);
+            Response<?> response = TransactionController.getInstance().unPauseTransaction(transactionId);
             String jsonResponse = General.convertToJson(response);
             ControlAPI.sendResponse(exchange, jsonResponse);
         }

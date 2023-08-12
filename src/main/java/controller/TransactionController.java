@@ -45,12 +45,15 @@ public class TransactionController {
             return new Response<>(null, validateMessage);
         Transaction transaction = transactionLayer.getActiveTransactionByCustomerId(customerId);
         if (transaction == null) return new Response<>(null, TransactionResponseMessage.TRANSACTION_NOT_EXIST);
+        Long currentPrice = transaction.getTransactionType().equals("24h")
+            ? PriceMethod.get24hTotalPrice(transaction)
+            : PriceMethod.getTotalPrice(transaction);
         ActiveTransaction ati = new ActiveTransaction(transaction,
-                 PriceMethod.getTotalPrice(transaction), PriceMethod.getTimeRentInMinutes(transaction));
+                 currentPrice, PriceMethod.getTimeRentInMinutes(transaction));
         return new Response<>(ati, TransactionResponseMessage.SUCCESSFUL);
     }
 
-    public Response<?> createTransaction(Integer customerId, UUID barcode){
+    public Response<?> createTransaction(Integer customerId, UUID barcode, String transactionType){
         // Transaction without credit card, need modify when have interbank subsystem
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != CustomerResponseMessage.SUCCESSFUL)
@@ -64,7 +67,7 @@ public class TransactionController {
         validateMessage = BikeValidation.validate(bike.getBikeId(), bike);
         if (validateMessage != BikeResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
-        int newTransactionId = transactionLayer.createTransaction(customerId, bike.getBikeId());
+        int newTransactionId = transactionLayer.createTransaction(customerId, bike.getBikeId(), transactionType);
         if (newTransactionId == -1) return new Response<>(null, TransactionResponseMessage.CAN_NOT_CREATE_TRANSACTION);
         BikeLayer.getInstance().rentBikeById(bike.getBikeId());
         return new Response<>(null, TransactionResponseMessage.SUCCESSFUL);
@@ -73,6 +76,24 @@ public class TransactionController {
     public Response<Long> getDeposit(Integer bikeId) {
         Long deposit = PriceMethod.getDeposit(bikeId);
         return new Response<>(deposit, TransactionResponseMessage.SUCCESSFUL);
+    }
+
+    public Response<?> pauseTransaction(Integer transactionId) {
+        ResponseMessage validateMessage = TransactionValidation.validate(transactionId);
+        if (validateMessage != TransactionResponseMessage.SUCCESSFUL)
+            return new Response<>(null, validateMessage);
+        Transaction transaction = TransactionLayer.getInstance().getTransactionById(transactionId);
+        TransactionLayer.getInstance().pauseTransaction(transaction);
+        return new Response<>(null, TransactionResponseMessage.SUCCESSFUL);
+    }
+
+    public Response<?> unPauseTransaction(Integer transactionId) {
+        ResponseMessage validateMessage = TransactionValidation.validate(transactionId);
+        if (validateMessage != TransactionResponseMessage.SUCCESSFUL)
+            return new Response<>(null, validateMessage);
+        Transaction transaction = TransactionLayer.getInstance().getTransactionById(transactionId);
+        TransactionLayer.getInstance().unPauseTransaction(transaction);
+        return new Response<>(null, TransactionResponseMessage.SUCCESSFUL);
     }
 
     @AllArgsConstructor

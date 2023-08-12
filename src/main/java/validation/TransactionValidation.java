@@ -9,7 +9,8 @@ public class TransactionValidation {
     private static boolean hasActiveTransaction(Integer customerId) {
         for (Transaction transaction : TransactionLayer.getInstance().getTransactionList()) {
             if (transaction.getCustomer().getCustomerId().equals(customerId)
-                    && transaction.getStatus().equals("active")) return true;
+                    && (transaction.getStatus().equals("active")
+                    || transaction.getStatus().equals("paused"))) return true;
         }
         return false;
     }
