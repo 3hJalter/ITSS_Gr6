@@ -20,7 +20,7 @@ const GetAllDocks = () => {
 
   const getAllBooksHandler = async () => {
     const response = await getAllBooksController();
-    setBooks(response.data);
+    setDocks(response.data.object);
     console.log("data", response.data);
   };
 
