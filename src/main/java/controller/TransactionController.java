@@ -48,6 +48,7 @@ public class TransactionController {
     }
 
     public Response<?> createTransaction(Integer customerId, Integer bikeId){
+        // Transaction without credit card, need modify when have interbank subsystem
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != CustomerResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);

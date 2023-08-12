@@ -51,6 +51,7 @@ public class InvoiceController {
     }
 
     public Response<?> createInvoice(Integer transactionId, Integer dockId){
+        // Invoice without credit card, need modify when have interbank subsystem
         ResponseMessage validateMessage = DockValidation.validate(dockId);
         if (validateMessage != DockResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
