@@ -70,6 +70,11 @@ public class TransactionController {
         return new Response<>(null, TransactionResponseMessage.SUCCESSFUL);
     }
 
+    public Response<Long> getDeposit(Integer bikeId) {
+        Long deposit = PriceMethod.getDeposit(bikeId);
+        return new Response<>(deposit, TransactionResponseMessage.SUCCESSFUL);
+    }
+
     @AllArgsConstructor
     @Getter
     public static class ActiveTransaction {

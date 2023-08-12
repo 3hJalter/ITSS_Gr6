@@ -25,6 +25,7 @@ public class APIURL {
         server.createContext("/transaction/list", new TransactionHandlers.TransactionListHandler());
         server.createContext("/transaction/active", new TransactionHandlers.ActiveTransactionHandler());
         server.createContext("/transaction/create", new TransactionHandlers.CreateTransactionHandler());
+        server.createContext("/transaction/deposit", new TransactionHandlers.GetDepositHandler());
         server.setExecutor(null); // Use the default executor
         server.start();
     }
