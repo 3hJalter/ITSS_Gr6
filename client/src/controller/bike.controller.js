@@ -83,7 +83,7 @@ export const rentBikeController = async (data) => {
     console.log("rentBikeController");
     console.log(data.bikeId);
     const response = await axios.post(
-      `${API_URL}/transaction/create?cutomerId=1&bikeId=${data.bikeId}`
+      `${API_URL}/transaction/create?customerId=1&bikeId=${data.bikeId}`
     );
     console.log(response);
     return response;

@@ -121,8 +121,8 @@ const GetAllDocks = () => {
                   style={{
                     display: "block",
                     margin: "0 auto",
-                    width: "100px",
-                    height: "150px",
+                    width: "200px",
+                    height: "120px",
                     wordWrap: "break-word",
                   }}
                 />

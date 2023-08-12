@@ -42,14 +42,8 @@ const GetAllBikes = () => {
       customerId: "1",
     }
     const response = await rentBikeController(data);
-    console.log(response.data);
-    if (response.data.code === "400_T3")
-      alert("Bike is not available");
-    else {
-      console.log(response.data.message)
-    }
+      alert(response.data.message)
   }
-
 
   return (
     <StyledTable>
@@ -59,8 +53,8 @@ const GetAllBikes = () => {
             Bike ID
           </StyledTableCell>
           <StyledTableCell>Bike name</StyledTableCell>
-          <StyledTableCell>Category Id</StyledTableCell>
-          <StyledTableCell>Dock Id</StyledTableCell>
+          <StyledTableCell>Category</StyledTableCell>
+          <StyledTableCell>Dock name</StyledTableCell>
           <StyledTableCell>Battery</StyledTableCell>
           <StyledTableCell>Image</StyledTableCell>
           <TableCell style={{ borderRadius: "0 15px 0 0", width: "10px" }}>
@@ -123,8 +117,8 @@ const GetAllBikes = () => {
                 style={{
                   display: "block",
                   margin: "0 auto",
-                  width: "100px",
-                  height: "150px",
+                  width: "200px",
+                  height: "130px",
                   wordWrap: "break-word",
                 }}
               />
