@@ -75,3 +75,17 @@ export const SaveChangesButton = ({onClick}) => {
         </StyledSaveChangeButton>
     );
 };
+
+export const ViewButton = ({ onClick }) => {
+    return (
+        <StyledUpdateButton
+
+            variant="outlined"
+            startIcon={<EditIcon />}
+            onClick={onClick}
+        >
+            View
+        </StyledUpdateButton>
+        
+    );
+}

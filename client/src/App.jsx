@@ -1,9 +1,10 @@
 import React from "react";
 import Header from "./components/Layout/Header";
 import GetAllDocks from "./components/Books/GetAllDocks";
-import CreateBook from "./components/Books/CreateBook";
+import GetAllBikes from "./components/Books/GetAllBikes";
+// import CreateBook from "./components/Books/CreateBook";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import UpdateBook from "./components/Books/UpdateBook";
+// import UpdateBook from "./components/Books/UpdateBook";
 import Footer from "./components/Layout/Footer";
 import NotFound from "./components/ErrorPage/NotFound";
 import Favicon from "react-favicon";
@@ -21,7 +22,8 @@ function App() {
                     alignItems: "center"
                 }}>
                     <Routes>
-                        <Route path="/" element={<GetAllDocks/>}/>
+                        <Route path="/" element={<GetAllDocks />} />
+                        <Route path="/bike" element={<GetAllBikes />} />
                         {/* <Route path="/create" element={<CreateBook/>}/>
                         <Route path="/update/:id" element={<UpdateBook/>}></Route>
                         <Route path="*" element={<NotFound/>}></Route> */}
