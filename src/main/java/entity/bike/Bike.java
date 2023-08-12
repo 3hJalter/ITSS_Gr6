@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +19,7 @@ public class Bike {
     private Category category;
     private Dock dock;
     private String image;
-
+    private UUID barcode;
     public String convertToString() {
         return "Bike{" +
                 "bikeId=" + bikeId +
@@ -25,6 +27,7 @@ public class Bike {
                 ", category=" + category +
                 ", dock=" + dock +
                 ", image='" + image + '\'' +
+                ", barcode='" + barcode + '\'' +
                 '}';
     }
 }

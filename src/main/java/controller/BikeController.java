@@ -13,6 +13,7 @@ import validation.CategoryValidation;
 import validation.DockValidation;
 
 import java.util.List;
+import java.util.UUID;
 
 public class BikeController {
     private static BikeController instance;
@@ -56,10 +57,19 @@ public class BikeController {
     }
 
     public Response<Bike> getBikeById(Integer id) {
-        ResponseMessage validateMessage = BikeValidation.validate(id);
+        ResponseMessage validateMessage = BikeValidation.validate(id, null);
         if (validateMessage != BikeResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
         Bike bike = bikeLayer.getBikeById(id);
+        return new Response<>(bike, BikeResponseMessage.SUCCESSFUL);
+    }
+
+    public Response<Bike> getBikeByBarcode(UUID barcode) {
+        Bike bike = BikeLayer.getInstance().getBikeByBarcode(barcode);
+        if (bike == null) return new Response<>(null, BikeResponseMessage.BIKE_NOT_EXIST);
+        ResponseMessage validateMessage = BikeValidation.validate(bike.getBikeId(), bike);
+        if (validateMessage != BikeResponseMessage.SUCCESSFUL)
+            return new Response<>(null, validateMessage);
         return new Response<>(bike, BikeResponseMessage.SUCCESSFUL);
     }
 

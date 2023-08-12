@@ -7,6 +7,7 @@ import utils.ControlAPI;
 import utils.General;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class BikeHandlers {
 
@@ -64,6 +65,19 @@ public class BikeHandlers {
             String idStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "id");
             int id = Integer.parseInt(idStr);
             Object responseObject = BikeController.getInstance().getBikeById(id);
+            String response = General.convertToJson(responseObject);
+            ControlAPI.sendResponse(exchange, response);
+        }
+    }
+
+    public static class BikeInfoByBarcodeHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            ControlAPI.setCorsHeaders(exchange);
+            // Parse the query parameter "barcode"
+            String barcodeStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "barcode");
+            UUID barcode = UUID.fromString(barcodeStr);
+            Object responseObject = BikeController.getInstance().getBikeByBarcode(barcode);
             String response = General.convertToJson(responseObject);
             ControlAPI.sendResponse(exchange, response);
         }

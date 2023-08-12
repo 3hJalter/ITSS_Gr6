@@ -8,6 +8,7 @@ import utils.General;
 import utils.response.Response;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class TransactionHandlers {
 
@@ -41,13 +42,13 @@ public class TransactionHandlers {
 
             // Parse the query parameter "customerId" and "bikeId"
             String customerIdStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "customerId");
-            String bikeIdStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "bikeId");
+            String barcodeStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "barcode");
 
             int customerId = Integer.parseInt(customerIdStr);
-            int bikeId = Integer.parseInt(bikeIdStr);
+            UUID barcode = UUID.fromString(barcodeStr);
 
             // Call the createTransaction method from TransactionController
-            Response<?> response = TransactionController.getInstance().createTransaction(customerId, bikeId);
+            Response<?> response = TransactionController.getInstance().createTransaction(customerId, barcode);
 
             // Convert the response to JSON and send the response
             String jsonResponse = General.convertToJson(response);
