@@ -1,6 +1,9 @@
 package api;
 
-import com.sun.net.httpserver.*;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,16 +16,7 @@ public class DockAPI {
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-        HttpContext context = server.createContext("/");
-        context.setHandler(exchange -> {
-            Headers headers = exchange.getResponseHeaders();
-            headers.add("Access-Control-Allow-Origin", "http://localhost:5173");
-            headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-            headers.add("Access-Control-Allow-Headers", "Content-Type");
-            if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
-                exchange.sendResponseHeaders(204, -1);
-            }
-        });
+
         server.createContext("/dock/list", new DockListHandler());
         server.createContext("/dock/search", new DockSearchHandler());
         server.createContext("/dock/bikes", new DockBikesHandler());
@@ -34,6 +28,7 @@ public class DockAPI {
     static class DockListHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            setCorsHeaders(exchange);
             Object responseObject = DockController.getInstance().getDockList();
             String response = General.convertToJson(responseObject);
             sendResponse(exchange, response);
@@ -43,6 +38,7 @@ public class DockAPI {
     static class DockSearchHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            setCorsHeaders(exchange);
             // Parse the query parameter "keyword"
             String keyword = parseQueryString(exchange.getRequestURI().getQuery(), "keyword");
             Object responseObject = DockController.getInstance().searchDock(keyword);
@@ -54,6 +50,7 @@ public class DockAPI {
     static class DockBikesHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            setCorsHeaders(exchange);
             // Parse the query parameter "dockId"
             String dockIdStr = parseQueryString(exchange.getRequestURI().getQuery(), "dockId");
             int dockId = Integer.parseInt(dockIdStr);
@@ -66,6 +63,7 @@ public class DockAPI {
     static class DockInfoHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            setCorsHeaders(exchange);
             // Parse the query parameter "id"
             String idStr = parseQueryString(exchange.getRequestURI().getQuery(), "id");
             int id = Integer.parseInt(idStr);
@@ -95,9 +93,19 @@ public class DockAPI {
     }
 
     private static void sendResponse(HttpExchange exchange, String response) throws IOException {
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Content-Type", "application/json"); // Set the appropriate content type
+
         exchange.sendResponseHeaders(200, response.length());
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
+    }
+
+    private static void setCorsHeaders(HttpExchange exchange) {
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Access-Control-Allow-Origin", "http://localhost:5173");
+        headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        headers.add("Access-Control-Allow-Headers", "Content-Type");
     }
 }

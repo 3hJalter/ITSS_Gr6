@@ -1,8 +1,10 @@
 import controller.InvoiceController;
 import controller.TransactionController;
+import database.entityLayer.BikeLayer;
 import database.entityLayer.InvoiceLayer;
 import entity.Invoice;
 import entity.Transaction;
+import entity.bike.Bike;
 import utils.General;
 import utils.response.Response;
 import utils.response.responseMessageImpl.InvoiceResponseMessage;
@@ -13,6 +15,12 @@ import java.util.List;
 public class App {
     public static void main(String[] args) {
         System.out.println("Test");
+
+        System.out.println("----------- Read All -------------");
+//        List<Bike> bikeList = BikeLayer.getInstance().getBikeList();
+//        for (Bike bike : bikeList) {
+//            System.out.println(bike.convertToString());
+//        }
 /*        Response<?> response4 = InvoiceController.getInstance().createInvoice(4, 1);
         if (response4.getMessage().equals(InvoiceResponseMessage.SUCCESSFUL.getMessage())) {
             System.out.println("Create Invoice success");
@@ -24,20 +32,20 @@ public class App {
         for (Invoice invoice : invoiceList) {
             System.out.println(invoice.convertToString());
         }*/
-        System.out.println("----------- Read All -------------");
-        Response<List<Transaction>> response = TransactionController.getInstance().getTransactionList();
-        if (response.getMessage().equals(TransactionResponseMessage.SUCCESSFUL.getMessage())) {
-            List<Transaction> transactionList = response.getObject();
-            for (Transaction transaction:
-                    transactionList) {
-                System.out.println(transaction.convertToString());
-            }
-        } else {
-            System.out.println(response.getMessage());
-        }
-        System.out.println("----------- Read All JSON -------------");
-        String responseJSON = General.convertToJson(response);
-        System.out.println(responseJSON);
+//        System.out.println("----------- Read All -------------");
+//        Response<List<Transaction>> response = TransactionController.getInstance().getTransactionList();
+//        if (response.getMessage().equals(TransactionResponseMessage.SUCCESSFUL.getMessage())) {
+//            List<Transaction> transactionList = response.getObject();
+//            for (Transaction transaction:
+//                    transactionList) {
+//                System.out.println(transaction.convertToString());
+//            }
+//        } else {
+//            System.out.println(response.getMessage());
+//        }
+//        System.out.println("----------- Read All JSON -------------");
+//        String responseJSON = General.convertToJson(response);
+//        System.out.println(responseJSON);
 //
 //        System.out.println("----------- Create -------------");
 //        Response<?> response1 = TransactionController.getInstance().createTransaction(1, 2);
