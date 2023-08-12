@@ -3,6 +3,7 @@ package controller;
 import database.entityLayer.BikeLayer;
 import database.entityLayer.TransactionLayer;
 import entity.Transaction;
+import entity.bike.Bike;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import utils.PriceMethod;
@@ -16,6 +17,7 @@ import validation.CustomerValidation;
 import validation.TransactionValidation;
 
 import java.util.List;
+import java.util.UUID;
 
 public class TransactionController {
     private static TransactionController instance;
@@ -48,7 +50,7 @@ public class TransactionController {
         return new Response<>(ati, TransactionResponseMessage.SUCCESSFUL);
     }
 
-    public Response<?> createTransaction(Integer customerId, Integer bikeId){
+    public Response<?> createTransaction(Integer customerId, UUID barcode){
         // Transaction without credit card, need modify when have interbank subsystem
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != CustomerResponseMessage.SUCCESSFUL)
@@ -56,12 +58,15 @@ public class TransactionController {
         validateMessage = TransactionValidation.validateCreation(customerId);
         if (validateMessage != TransactionResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
-        validateMessage = BikeValidation.validate(bikeId);
+
+        Bike bike = BikeLayer.getInstance().getBikeByBarcode(barcode);
+        if (bike == null) return new Response<>(null, BikeResponseMessage.BIKE_NOT_EXIST);
+        validateMessage = BikeValidation.validate(bike.getBikeId(), bike);
         if (validateMessage != BikeResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
-        int newTransactionId = transactionLayer.createTransaction(customerId, bikeId);
+        int newTransactionId = transactionLayer.createTransaction(customerId, bike.getBikeId());
         if (newTransactionId == -1) return new Response<>(null, TransactionResponseMessage.CAN_NOT_CREATE_TRANSACTION);
-        BikeLayer.getInstance().rentBikeById(bikeId);
+        BikeLayer.getInstance().rentBikeById(bike.getBikeId());
         return new Response<>(null, TransactionResponseMessage.SUCCESSFUL);
     }
 

@@ -13,6 +13,7 @@ public enum BikeResponseMessage implements ResponseMessage {
     BIKE_ID_NOT_FOUND("400_B2", "Bike ID not found"),
     BIKE_PIN_OUT_OF_RANGE("400B3", "Bike PIN should be between 0 and 100"),
     BIKE_STATUS_IS_NULL("400_B4", "Bike status must not be null"),
+    BIKE_ALREADY_RENTED("400_B5", "Bike already rented"),
     SUCCESSFUL("200_B0", "Successful");
 
     private final String code;

@@ -17,9 +17,14 @@ public class BikeValidation {
         return id != null;
     }
 
-    public static ResponseMessage validate(Integer id){
+    private static boolean isBikeAlreadyRent (Bike bike) {
+        return bike.getDock() == null;
+    }
+
+    public static ResponseMessage validate(Integer id, Bike bike){
         if (!isId(id)) return BikeResponseMessage.BIKE_ID_IS_INVALID;
         if (!isExist(id)) return BikeResponseMessage.BIKE_NOT_EXIST;
+        if (bike != null && isBikeAlreadyRent(bike)) return BikeResponseMessage.BIKE_ALREADY_RENTED;
         return BikeResponseMessage.SUCCESSFUL;
     }
     

@@ -13,6 +13,7 @@ public class APIURL {
         server.createContext("/bike/byDockId", new BikeHandlers.BikeByDockIdHandler());
         server.createContext("/bike/byCategoryId", new BikeHandlers.BikeByCategoryIdHandler());
         server.createContext("/bike/info", new BikeHandlers.BikeInfoHandler());
+        server.createContext("/bike/barcodeInfo", new BikeHandlers.BikeInfoByBarcodeHandler());
         server.createContext("/category/list", new CategoryHandlers.CategoryListHandler());
         server.createContext("/dock/list", new DockHandlers.DockListHandler());
         server.createContext("/dock/search", new DockHandlers.DockSearchHandler());

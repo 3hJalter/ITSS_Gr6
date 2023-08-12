@@ -12,6 +12,7 @@ import utils.General;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BikeLayer extends BaseLayer {
     private static BikeLayer instance;
@@ -47,6 +48,14 @@ public class BikeLayer extends BaseLayer {
 
     public List<EBike> getEBikeList() {
         return getEBikeFromJSON();
+    }
+
+    public Bike getBikeByBarcode(UUID barcode) {
+        if (barcode == null) return null;
+        for (Bike bike : getBikeFromJSON()) {
+            if (bike.getBarcode().equals(barcode)) return bike;
+        }
+        return null;
     }
 
     public List<Bike> getBikeByDockId(Integer id) {
@@ -95,14 +104,16 @@ public class BikeLayer extends BaseLayer {
                             bikeJson.getInt("dock_id")
                     );
                 }
-
+                UUID barcode;
+                barcode = UUID.fromString(bikeJson.getString("barcode"));
                 Bike bike;
                 if (!bikeJson.has("battery")) {
                     bike = new Bike(bikeJson.getInt("bike_id"),
                             bikeJson.getString("bike_name"),
                             category,
                             dock,
-                            bikeJson.getString("image"));
+                            bikeJson.getString("image"),
+                            barcode);
                 } else {
                     Integer battery = bikeJson.getInt("battery");
                     bike = new EBike(bikeJson.getInt("bike_id"),
@@ -110,7 +121,8 @@ public class BikeLayer extends BaseLayer {
                             battery,
                             category,
                             dock,
-                            bikeJson.getString("image"));
+                            bikeJson.getString("image"),
+                            barcode);
                 }
                 bikeList.add(bike);
             }
@@ -138,12 +150,16 @@ public class BikeLayer extends BaseLayer {
                     );
                 }
 
+                UUID barcode;
+                barcode = UUID.fromString(bikeJson.getString("barcode"));
+
                 EBike eBike = new EBike(bikeJson.getInt("bike_id"),
                         bikeJson.getString("bike_name"),
                         bikeJson.getInt("battery"),
                         category,
                         dock,
-                        bikeJson.getString("image"));
+                        bikeJson.getString("image"),
+                        barcode);
                 
                 eBikeList.add(eBike);
             }
