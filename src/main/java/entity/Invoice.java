@@ -20,4 +20,16 @@ public class Invoice {
     private Timestamp endRent;
     private Long price;
     private Bike bike;
+
+    public String convertToString() {
+        return "Invoice{" +
+                "invoiceId=" + invoiceId +
+                ", transaction=" + transaction +
+                ", customer=" + customer +
+                ", startRent=" + startRent +
+                ", endRent=" + endRent +
+                ", price=" + price +
+                ", bike=" + bike +
+                '}';
+    }
 }

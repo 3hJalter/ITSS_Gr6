@@ -2,6 +2,8 @@ package controller;
 
 import database.entityLayer.TransactionLayer;
 import entity.Transaction;
+import lombok.AllArgsConstructor;
+import utils.PriceMethod;
 import utils.response.Response;
 import utils.response.ResponseMessage;
 import utils.response.responseMessageImpl.BikeResponseMessage;
@@ -33,13 +35,15 @@ public class TransactionController {
         return new Response<>(transactionList, TransactionResponseMessage.SUCCESSFUL);
     }
 
-    public Response<Transaction> getActiveTransactionByCustomerId(Integer customerId) {
+    public Response<ActiveTransactionInfo> getActiveTransactionByCustomerId(Integer customerId) {
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != CustomerResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
         Transaction transaction = transactionLayer.getActiveTransactionByCustomerId(customerId);
         if (transaction == null) return new Response<>(null, TransactionResponseMessage.TRANSACTION_NOT_EXIST);
-        return new Response<>(transaction, TransactionResponseMessage.SUCCESSFUL);
+        ActiveTransactionInfo ati = new ActiveTransactionInfo(transaction,
+                 PriceMethod.getTotalPrice(transaction), PriceMethod.getTimeRentInMinutes(transaction));
+        return new Response<>(ati, TransactionResponseMessage.SUCCESSFUL);
     }
 
     public Response<?> createTransaction(Integer customerId, Integer bikeId){
@@ -57,4 +61,18 @@ public class TransactionController {
         return new Response<>(null, TransactionResponseMessage.SUCCESSFUL);
     }
 
+    @AllArgsConstructor
+    public static class ActiveTransactionInfo {
+        Transaction transaction;
+        Long currentPay;
+        Long timeRent;
+
+        public String convertToString() {
+            return "ActiveTransactionInfo{" +
+                    "transaction=" + transaction +
+                    ", currentPay=" + currentPay +
+                    ", timeRent=" + timeRent +
+                    '}';
+        }
+    }
 }
