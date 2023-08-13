@@ -12,4 +12,11 @@ import lombok.Setter;
 public class Customer {
     private Integer customerId;
     private String username;
+
+    public String convertToString() {
+        return "Category{" +
+                "customerId=" + customerId +
+                ", username='" + username +
+                '}';
+    }
 }

@@ -45,7 +45,7 @@ const NavBar = () => {
               style={{ width: "80px" }}
             />
           </Tabs>
-          <Tabs to="/">View all Docks</Tabs>
+          <Tabs to="/active-transaction ">Current active transaction</Tabs>
           {/* <Tabs to="/create">Create new book</Tabs> */}
         </Toolbar>
       </Header>

@@ -80,9 +80,9 @@ export const getBikeByIdController = async (data) => {
 
 export const rentBikeController = async (data) => {
   try {
-    console.log(`${API_URL}/transaction/create?customerId=3&barcode=${data.barcode}&transactionType=${data.transactionType}`);
+    console.log(`${API_URL}/transaction/create?customerId=1&barcode=${data.barcode}&transactionType=${data.transactionType}`);
     const response = await axios.get(
-      `${API_URL}/transaction/create?customerId=4&barcode=${data.barcode}&transactionType=${data.transactionType}`
+      `${API_URL}/transaction/create?customerId=1&barcode=${data.barcode}&transactionType=${data.transactionType}`
     );
     return response;
   } catch (error) {

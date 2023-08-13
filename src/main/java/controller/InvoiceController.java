@@ -5,12 +5,16 @@ import database.entityLayer.InvoiceLayer;
 import database.entityLayer.TransactionLayer;
 import entity.Invoice;
 import entity.Transaction;
-import entity.bike.Bike;
 import utils.PriceMethod;
 import utils.response.Response;
 import utils.response.ResponseMessage;
-import utils.response.responseMessageImpl.*;
-import validation.*;
+import utils.response.responseMessageImpl.DockResponseMessage;
+import utils.response.responseMessageImpl.InvoiceResponseMessage;
+import utils.response.responseMessageImpl.TransactionResponseMessage;
+import validation.CustomerValidation;
+import validation.DockValidation;
+import validation.InvoiceValidation;
+import validation.TransactionValidation;
 
 import java.util.List;
 
@@ -41,7 +45,7 @@ public class InvoiceController {
         Invoice invoice = invoiceLayer.getInvoiceById(id);
         return new Response<>(invoice, InvoiceResponseMessage.SUCCESSFUL);
     }
-    
+
     public Response<List<Invoice>> getInvoiceByCustomerId(Integer customerId) {
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != DockResponseMessage.SUCCESSFUL)
@@ -50,7 +54,7 @@ public class InvoiceController {
         return new Response<>(invoiceList, InvoiceResponseMessage.SUCCESSFUL);
     }
 
-    public Response<?> createInvoice(Integer transactionId, Integer dockId){
+    public Response<?> createInvoice(Integer transactionId, Integer dockId) {
         // Invoice without credit card, need modify when have interbank subsystem
         ResponseMessage validateMessage = DockValidation.validate(dockId);
         if (validateMessage != DockResponseMessage.SUCCESSFUL)
