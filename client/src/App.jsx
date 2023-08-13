@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import UpdateBook from "./components/Books/UpdateBook";
 import Footer from "./components/Layout/Footer";
 import Home from "./components/Home";
+import ActiveTransaction from "./components/ActiveTransaction";
 import NotFound from "./components/ErrorPage/NotFound";
 import Favicon from "react-favicon";
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/docks" element={<GetAllDocks />} />
             <Route path="/dock/:id/list-bike" element={<GetAllBikes />} />
             <Route path="/deposit/" element={<Deposit />}></Route>
+            <Route path="/active-transaction" element={<ActiveTransaction />}></Route>
             {/* <Route path="/create" element={<CreateBook/>}/>
                         <Route path="/update/:id" element={<UpdateBook/>}></Route>*/}
             <Route path="*" element={<NotFound />}></Route>

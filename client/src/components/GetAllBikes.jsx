@@ -49,7 +49,6 @@ const GetAllBikes = () => {
     // alert(response.data.message);
     const response = await getBikeFromBarcodeController(barcode);
     const bikeData = response.data.object;
-    console.log("message", response.data.message);
     if (response.data.message !== "Successful") {
       alert(response.data.message);
       return;

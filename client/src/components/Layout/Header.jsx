@@ -40,7 +40,7 @@ const NavBar = () => {
         <Toolbar>
           <Tabs to="/">
             <img
-              src="./images/ecobike.png"
+              src="http://localhost:5173/images/ecobike.png"
               alt="logo"
               style={{ width: "80px" }}
             />

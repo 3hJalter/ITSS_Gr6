@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import { Button } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { rentBikeController } from "../controller/bike.controller";
@@ -7,18 +7,34 @@ function Deposit() {
   const navigate = useNavigate();
   const location = useLocation();
   const bikeData = location.state;
-  console.log("bike", bikeData);
+  const [transactionType, setTransactionType] = useState("normal");
+
+  const cancelHandler = () => {
+    navigate("/docks/");
+  };
+
+  const transactionTypeHandler = (e) => {
+    setTransactionType(e.target.value);
+  };
 
   const depositHandler = async () => {
+    console.log("rentBikeController");
     const data = {
       customerId: 1,
       barcode: bikeData.barcode,
+      transactionType: transactionType,
     };
 
     const response = await rentBikeController(data);
+    const transaction = response.data;
+    if (transaction.message !== "Successful") {
+      alert(transaction.message);
+      return;
+    }
+    console.log("response", response);
+    console.log("response.data", response.data);
     alert("Deposit successfully");
-
-    navigate("/docks");
+    navigate("/active-transaction", { state: { transaction } });
   };
 
   return (
@@ -45,14 +61,30 @@ function Deposit() {
             <div>Rent price: {bikeData.category.rentPrice}</div>
           </div>
         </div>
-        <div className="text-center w-full">
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={depositHandler}
+        {/* ============================================== */}
+        <div className="text-center font-bold text-2xl mt-6">
+          Select Transaction Type:
+        </div>
+        <div className="flex items-center justify-center w-full gap-4">
+          <select
+            value={transactionType}
+            onChange={transactionTypeHandler}
+            className="py-2 px-4 text-xl border rounded-md"
           >
-            <div className="text-2xl">Deposite</div>
-          </Button>
+            <option value="normal">Normal</option>
+            <option value="24h">24 Hours</option>
+          </select>
+        </div>
+        {/* ================================================ */}
+        <div className=" flex items-center justify-center text-center w-full gap-10">
+          <div className="flex items-center justify-center text-center w-full gap-10 mt-6">
+            <Button variant="outlined" color="primary" onClick={cancelHandler}>
+              <div className="text-2xl">Cancel</div>
+            </Button>
+            <Button variant="outlined" color="primary" onClick={depositHandler}>
+              <div className="text-2xl">Deposit</div>
+            </Button>
+          </div>
         </div>
       </div>
     </>
