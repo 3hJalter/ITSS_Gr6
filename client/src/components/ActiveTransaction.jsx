@@ -63,9 +63,10 @@ function ActiveTransaction() {
 
   const pauseHandler = () => {
     // activeTransaction.transaction.status = "paused";
-    setPauseButtonText("Continue");
+    setPauseButtonText("Resume");
     const transactionId = activeTransaction.transaction.transactionId;
     pauseTransactionController(transactionId);
+    getActiveTransaction();
   };
 
   const resumeHandler = () => {
@@ -73,6 +74,7 @@ function ActiveTransaction() {
     setPauseButtonText("Pause");
     const transactionId = activeTransaction.transaction.transactionId;
     resumeTransactionController(transactionId);
+    getActiveTransaction();
   };
 
   const payHandler = () => {
