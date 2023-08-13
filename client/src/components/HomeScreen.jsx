@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function Home() {
+function HomeScreen() {
   const navigate = useNavigate();
   const viewDocksHandler = () => {
     navigate("/docks");
@@ -50,4 +50,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomeScreen;

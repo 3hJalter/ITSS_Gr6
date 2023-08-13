@@ -5,34 +5,23 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import {
-  getBikeFromBarcodeController
-} from "../controller/bike.controller.js";
+import { useState } from "react";
+import { getBikeFromBarcodeController } from "../controller/bike.controller.js";
 import { useLocation } from "react-router-dom";
 import {
   StyledTable,
   StyledTableHead,
   StyledTableCell,
   StyledTableBody,
-} from "./muiStyled.js";
-import {
-  DeleteButton,
-  UpdateButton,
-  RentBikeButton,
-} from "./button/Button.jsx";
+} from "./style/muiStyled.js";
 
 import { useNavigate } from "react-router-dom";
 
-const GetAllBikes = () => {
+const BikesScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const bikeData = location.state;
   const [barcode, setBarcode] = useState("");
-  // const [bikes, setBikes] = useState([]);
-  // useEffect(() => {
-  //   getAllBikeHandler();
-  // }, []);
 
   const depositHandler = async () => {
     if (barcode.trim() === "") {
@@ -40,13 +29,6 @@ const GetAllBikes = () => {
       return;
     }
 
-    // const data = {
-    //   customerId: 1,
-    //   barcode: barcode,
-    // };
-
-    // const response = await rentBikeController(data);
-    // alert(response.data.message);
     const response = await getBikeFromBarcodeController(barcode);
     const bikeData = response.data.object;
     if (response.data.message !== "Successful") {
@@ -54,6 +36,10 @@ const GetAllBikes = () => {
       return;
     }
     navigate("/deposit", { state: bikeData });
+  };
+
+  const backHandler = () => {
+    navigate("/docks");
   };
 
   return (
@@ -66,14 +52,14 @@ const GetAllBikes = () => {
         onChange={(e) => setBarcode(e.target.value)}
         style={{ marginTop: "120px", width: "50%" }}
       />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={depositHandler}
-        style={{ marginTop: "20px", width: "15%" }}
-      >
-        Deposite
-      </Button>
+      <div className="grid grid-cols-2 gap-10 p-8">
+        <Button variant="contained" color="primary" onClick={backHandler}>
+          Back
+        </Button>
+        <Button variant="contained" color="primary" onClick={depositHandler}>
+          Deposit
+        </Button>
+      </div>
       <StyledTable>
         <TableHead>
           <StyledTableHead>
@@ -84,10 +70,8 @@ const GetAllBikes = () => {
             <StyledTableCell>Category</StyledTableCell>
             <StyledTableCell>Dock name</StyledTableCell>
             <StyledTableCell>Battery</StyledTableCell>
-            <TableCell style={{ borderRadius: "0 15px 0 0"}}>Image</TableCell>
-            {/* <TableCell style={{ borderRadius: "0 15px 0 0", width: "10px" }}>
-              Actions
-            </TableCell> */}
+            <StyledTableCell>Barcode</StyledTableCell>
+            <TableCell style={{ borderRadius: "0 15px 0 0" }}>Image</TableCell>
           </StyledTableHead>
         </TableHead>
 
@@ -137,6 +121,15 @@ const GetAllBikes = () => {
                 {bike.battery ? bike.battery + "%" : "Not available"}
               </StyledTableCell>
 
+              <StyledTableCell
+                style={{
+                  wordWrap: "break-word",
+                  maxWidth: "250px",
+                }}
+              >
+                {bike.barcode}
+              </StyledTableCell>
+
               <StyledTableCell>
                 <img
                   src={bike.image}
@@ -150,10 +143,6 @@ const GetAllBikes = () => {
                   }}
                 />
               </StyledTableCell>
-
-              {/* <StyledTableCell>
-                <RentBikeButton onClick={() => rentBikeHandler(bike.bikeId)} />
-              </StyledTableCell> */}
             </StyledTableBody>
           ))}
         </TableBody>
@@ -162,4 +151,4 @@ const GetAllBikes = () => {
   );
 };
 
-export default GetAllBikes;
+export default BikesScreen;

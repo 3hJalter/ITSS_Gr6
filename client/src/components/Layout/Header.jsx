@@ -1,5 +1,5 @@
 import { Toolbar } from "@mui/material";
-import { Header, Tabs } from "../muiStyled.js";
+import { Header, Tabs } from "../style/muiStyled.js";
 import { useEffect, useRef, React } from "react";
 const NavBar = () => {
   const header = useRef();
@@ -45,8 +45,9 @@ const NavBar = () => {
               style={{ width: "80px" }}
             />
           </Tabs>
-          <Tabs to="/active-transaction ">Current active transaction</Tabs>
-          {/* <Tabs to="/create">Create new book</Tabs> */}
+          {/* <Tabs to="/home">Home</Tabs> */}
+          {/* <Tabs to="/about">About</Tabs> */}
+          {/* <Tabs to="/contact">Contact</Tabs> */}
         </Toolbar>
       </Header>
     </div>

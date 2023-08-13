@@ -1,14 +1,15 @@
 import React from "react";
 import Header from "./components/Layout/Header";
-import GetAllDocks from "./components/GetAllDocks";
-import GetAllBikes from "./components/GetAllBikes";
-import Deposit from "./components/Deposit";
+import DocksScreen from "./components/DocksScreen";
+import BikesScreen from "./components/BikesScreen";
+import DepositScreen from "./components/DepositScreen";
 // import CreateBook from "./components/Books/CreateBook";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import UpdateBook from "./components/Books/UpdateBook";
 import Footer from "./components/Layout/Footer";
-import Home from "./components/Home";
-import ActiveTransaction from "./components/ActiveTransaction";
+import HomeScreen from "./components/HomeScreen";
+import PaymentScreen from "./components/PaymentScreen";
+import ActiveTransactionScreen from "./components/ActiveTransactionScreen";
 import NotFound from "./components/ErrorPage/NotFound";
 import Favicon from "react-favicon";
 function App() {
@@ -27,11 +28,15 @@ function App() {
           }}
         >
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/docks" element={<GetAllDocks />} />
-            <Route path="/dock/:id/list-bike" element={<GetAllBikes />} />
-            <Route path="/deposit/" element={<Deposit />}></Route>
-            <Route path="/active-transaction" element={<ActiveTransaction />}></Route>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/docks" element={<DocksScreen />} />
+            <Route path="/dock/:id/list-bike" element={<BikesScreen />} />
+            <Route path="/deposit/" element={<DepositScreen />}></Route>
+            <Route
+              path="/active-transaction"
+              element={<ActiveTransactionScreen />}
+            ></Route>
+            <Route path="/payment" element={<PaymentScreen />}></Route>
             {/* <Route path="/create" element={<CreateBook/>}/>
                         <Route path="/update/:id" element={<UpdateBook/>}></Route>*/}
             <Route path="*" element={<NotFound />}></Route>

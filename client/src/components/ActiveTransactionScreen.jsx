@@ -7,7 +7,8 @@ import {
   resumeTransactionController,
 } from "../controller/transaction.controller";
 
-function ActiveTransaction() {
+function ActiveTransactionScreen() {
+  const navigate = useNavigate();
   const initialTransactionData = {
     transaction: {
       transactionId: 0,
@@ -47,8 +48,8 @@ function ActiveTransaction() {
 
   useEffect(() => {
     getActiveTransaction();
-    pauseHandler();
-    resumeHandler();
+    // pauseHandler();
+    // resumeHandler();
   }, []);
 
   const getActiveTransaction = async () => {
@@ -78,18 +79,34 @@ function ActiveTransaction() {
   };
 
   const payHandler = () => {
-    console.log("payHandler");
+    console.log(activeTransaction.transaction.bike);
+    navigate("/payment", { state: { activeTransaction } });
+  };
+
+  const timeLastPause = new Date(
+    activeTransaction.transaction.lastPause
+  ).toLocaleString();
+
+  const toHoursAndMinutes = (totalMinutes) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    return `${padToTwoDigits(hours)}h${padToTwoDigits(minutes)}m`;
+  };
+
+  const padToTwoDigits = (num) => {
+    return num.toString().padStart(2, "0");
   };
 
   return (
     <>
-      <div className="w-3/4">
+      <div className="w-5/6">
         <div className="text-center font-bold text-4xl mt-28">
           Active Transaction
         </div>
 
         {/* ======================================================================= */}
-        <div className=" grid grid-cols-2 items-center justify-center gap-10 p-12">
+        <div className="grid grid-cols-2 items-center justify-center gap-10 p-12">
           <div className="card w-full shadow-3xl px-8 py-7 text-2xl rounded-2xl h-full flex justify-center items-center">
             <div>
               <img
@@ -126,16 +143,13 @@ function ActiveTransaction() {
               {activeTransaction.transaction.bike.category.depositRate}
             </div>
             <div className="text-3xl font-bold">
-              Minute Used: {activeTransaction.transaction.minuteUsed}
-            </div>
-            <div className="text-3xl font-bold">
-              Last Pause: {activeTransaction.transaction.lastPause}
+              Last Pause: {timeLastPause}
             </div>
             <div className="text-3xl font-bold">
               Current Pay: {activeTransaction.currentPay}
             </div>
             <div className="text-3xl font-bold">
-              Time Rent: {activeTransaction.timeRent}
+              Time Rent: {toHoursAndMinutes(activeTransaction.timeRent)}
             </div>
           </div>
         </div>
@@ -173,4 +187,4 @@ function ActiveTransaction() {
   );
 }
 
-export default ActiveTransaction;
+export default ActiveTransactionScreen;

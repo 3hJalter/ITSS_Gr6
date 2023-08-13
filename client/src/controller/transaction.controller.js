@@ -1,10 +1,24 @@
 import axios from "axios";
+import { CUSTOMER_ID } from "../config";
+import { API_URL } from "../config";
 
-const API_URL = "http://localhost:8000";
-
-export const getActiveTransactionController = async (data) => {
+export const createTransactionController = async (data) => {
   try {
-    const response = await axios.get(`${API_URL}/transaction/active?customerId=1`);
+    console.log(
+      `${API_URL}/transaction/create?customerId=${CUSTOMER_ID}&barcode=${data.barcode}&transactionType=${data.transactionType}`
+    );
+    const response = await axios.get(
+      `${API_URL}/transaction/create?customerId=${CUSTOMER_ID}&barcode=${data.barcode}&transactionType=${data.transactionType}`
+    );
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const getActiveTransactionController = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/transaction/active?customerId=${CUSTOMER_ID}`);
     return response;
   } catch (error) {
     console.log(error.message);
@@ -28,4 +42,3 @@ export const resumeTransactionController = async (transactionId) => {
     console.log(error.message);
   }
 }
-

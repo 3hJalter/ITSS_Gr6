@@ -1,9 +1,9 @@
 import { React, useState } from "react";
 import { Button } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { rentBikeController } from "../controller/bike.controller";
+import { createTransactionController } from "../controller/transaction.controller";
 
-function Deposit() {
+function DepositScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const bikeData = location.state;
@@ -18,14 +18,13 @@ function Deposit() {
   };
 
   const depositHandler = async () => {
-    console.log("rentBikeController");
     const data = {
       customerId: 1,
       barcode: bikeData.barcode,
       transactionType: transactionType,
     };
 
-    const response = await rentBikeController(data);
+    const response = await createTransactionController(data);
     const transaction = response.data;
     if (transaction.message !== "Successful") {
       alert(transaction.message);
@@ -39,7 +38,7 @@ function Deposit() {
 
   return (
     <>
-      <div className="grid items-center justify-center w-1/2 shadow-3xl mt-32 rounded-2xl p-8">
+      <div className="grid items-center justify-center w-1/2 shadow-3xl mt-32 mb-40 rounded-2xl p-8">
         <div className="text-center font-bold text-4xl">Bike information</div>
         <div className=" grid grid-cols-2 items-center justify-center mt-10 gap-10 p-12">
           <div className="card w-full p-4">
@@ -91,4 +90,4 @@ function Deposit() {
   );
 }
 
-export default Deposit;
+export default DepositScreen;
