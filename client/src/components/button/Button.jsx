@@ -1,34 +1,91 @@
 import CancelIcon from "@mui/icons-material/Cancel";
-import { useNavigate } from "react-router-dom";
-import {
-  StyledCancelButton,
-  StyledUpdateButton,
-} from "../style/muiStyled.js";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { StyledButton } from "../style/muiStyled.js";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-export const CancelButton = () => {
-  const navigate = useNavigate();
+export const CancelButton = ({ onClick }) => {
   return (
-    <div>
-      <StyledCancelButton
-        onClick={() => navigate("/")}
-        variant="outlined"
-        startIcon={<CancelIcon />}
-      >
-        Cancel
-      </StyledCancelButton>
-    </div>
+    <StyledButton
+      onClick={onClick}
+      variant="outlined"
+      startIcon={<CancelIcon />}
+    >
+      Cancel
+    </StyledButton>
   );
 };
 
 export const ViewButton = ({ onClick }) => {
   return (
-    <StyledUpdateButton
+    <StyledButton
       variant="outlined"
       startIcon={<VisibilityIcon />}
       onClick={onClick}
     >
       View
-    </StyledUpdateButton>
+    </StyledButton>
   );
 };
+
+export const DepositButton = ({ onClick }) => {
+  return (
+    <StyledButton
+      variant="outlined"
+      startIcon={<PaymentsIcon />}
+      onClick={onClick}
+    >
+      Deposit
+    </StyledButton>
+  );
+};
+
+export const BackButton = ({ onClick }) => {
+  return (
+    <StyledButton
+      variant="outlined"
+      startIcon={<ArrowBackIcon />}
+      onClick={onClick}
+    >
+      Back
+    </StyledButton>
+  );
+};
+
+export const PauseButton = ({ onClick, text }) => {
+  return (
+    <StyledButton
+      variant="outlined"
+      startIcon={<PauseIcon />}
+      onClick={onClick}
+    >
+      {text}
+    </StyledButton>
+  );
+}
+
+export const ResumeButton = ({ onClick, text }) => {
+  return (
+    <StyledButton
+      variant="outlined"
+      startIcon={<PlayArrowIcon />}
+      onClick={onClick}
+    >
+      {text}
+    </StyledButton>
+  );
+}
+
+export const PayButton = ({ onClick }) => {
+  return (
+    <StyledButton
+      variant="outlined"
+      startIcon={<PaymentsIcon />}
+      onClick={onClick}
+    >
+      Pay
+    </StyledButton>
+  );
+}

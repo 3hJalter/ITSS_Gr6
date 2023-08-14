@@ -1,7 +1,14 @@
 import {
-    FormGroup, Typography, styled, Table, TableRow, Button, AppBar, TableCell,
+  FormGroup,
+  Typography,
+  styled,
+  Table,
+  TableRow,
+  Button,
+  AppBar,
+  TableCell,
 } from "@mui/material";
-import {NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export const Container = styled(FormGroup)`
   width: 50%;
@@ -16,7 +23,7 @@ export const StyledTypography = styled(Typography)`
   text-align: center;
   font-size: 45px;
   font-weight: bold;
-  color: #394867
+  color: #394867;
 `;
 
 export const StyledTable = styled(Table)`
@@ -58,14 +65,9 @@ export const StyledTableCell = styled(TableCell)`
   border-right: 1px solid #c4c8d1;
 `;
 
-export const StyledCancelButton = styled(Button)`
-  width: 35%;
-  height: 50px;
-  margin-left: 0;
-  margin-top: 20px;
-  font-size: 16px;
-  display: flex;
-  position: absolute;
+export const StyledButton = styled(Button)`
+  // width: 20%;
+  font-size: 20px;
   border-color: #394867;
   color: #394867;
 
@@ -73,45 +75,6 @@ export const StyledCancelButton = styled(Button)`
     background-color: #d8d8d8;
     border-color: #394867;
   }
-`;
-
-export const StyledCreateButton = styled(Button)`
-  width: 35%;
-  margin-left: 65%;
-  height: 50px;
-  margin-top: 20px;
-  font-size: 16px;
-  display: flex;
-  background-color: #4d5a76;
-
-  &:hover {
-    background-color: #606c85;
-  }
-`;
-
-export const StyledDeleteButton = styled(Button)`
-  border-color: #394867;
-  color: #394867;
-  margin-top: 20px;
-`;
-
-export const StyledSaveChangeButton = styled(Button)`
-  width: 35%;
-  margin-left: 65%;
-  height: 50px;
-  margin-top: 20px;
-  font-size: 16px;
-  display: flex;
-  background-color: #394867;
-
-  &:hover {
-    background-color: #606c85;
-  }
-`;
-
-export const StyledUpdateButton = styled(Button)`
-  border-color: #394867;
-  color: #394867;
 `;
 
 export const Header = styled(AppBar)`

@@ -6,6 +6,9 @@ export default {
       boxShadow: {
         "3xl": "rgba(0, 0, 0, 0.35) 0px 5px 15px",
       },
+      backgroundColor: {
+        primary: "#4d5a76",
+      },
     },
   },
   plugins: [],

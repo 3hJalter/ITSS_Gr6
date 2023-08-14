@@ -11,7 +11,6 @@ export const getBikeByDockController = async (data) => {
 
 export const getBikeFromBarcodeController = async (data) => {
   try {
-    console.log(`${API_URL}/bike/barcodeInfo?barcode=${data}`);
     return await axios.get(`${API_URL}/bike/barcodeInfo?barcode=${data}`);
   } catch (error) {
     console.log(error.message);

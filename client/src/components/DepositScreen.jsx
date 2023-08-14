@@ -1,7 +1,10 @@
 import { React, useState } from "react";
-import { Button } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { createTransactionController } from "../controller/transaction.controller";
+import { DepositButton, CancelButton } from "./button/Button";
+import { TextField, Typography, Select, MenuItem } from "@mui/material";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
 
 function DepositScreen() {
   const navigate = useNavigate();
@@ -10,7 +13,7 @@ function DepositScreen() {
   const [transactionType, setTransactionType] = useState("normal");
 
   const cancelHandler = () => {
-    navigate("/docks/");
+    navigate(`/docks`);
   };
 
   const transactionTypeHandler = (e) => {
@@ -27,29 +30,26 @@ function DepositScreen() {
     const response = await createTransactionController(data);
     const transaction = response.data;
     if (transaction.message !== "Successful") {
-      alert(transaction.message);
+      toast.error(transaction.message);
       return;
     }
-    console.log("response", response);
-    console.log("response.data", response.data);
-    alert("Deposit successfully");
+    toast.success("Deposit successfully");
     navigate("/active-transaction", { state: { transaction } });
   };
 
   return (
     <>
-      <div className="grid items-center justify-center w-1/2 shadow-3xl mt-32 mb-40 rounded-2xl p-8">
+      <div className="grid items-center justify-center w-2/3 shadow-3xl mt-32 mb-40 rounded-2xl p-10">
         <div className="text-center font-bold text-4xl">Bike information</div>
-        <div className=" grid grid-cols-2 items-center justify-center mt-10 gap-10 p-12">
-          <div className="card w-full p-4">
+        <div className=" grid grid-cols-2 items-center justify-center m-6 gap-10">
+          <div className="flex w-full p-4 shadow-3xl h-full rounded-xl">
             <img
               src={bikeData.image}
               alt="image"
               style={{ maxWidth: "100%" }}
             />
           </div>
-          <div className="card w-full shadow-3xl px-8 py-7 text-2xl rounded-2xl">
-            {/* <div className="text-3xl font-bold">Bike Id: {bikeData.bikeId}</div> */}
+          <div className="card w-full h-full shadow-3xl px-8 py-7 text-2xl rounded-2xl">
             <div className="text-3xl font-bold">
               Bike name: {bikeData.bikeName}
             </div>
@@ -61,28 +61,56 @@ function DepositScreen() {
           </div>
         </div>
         {/* ============================================== */}
-        <div className="text-center font-bold text-2xl mt-6">
+        <div className="text-center font-bold text-2xl m-4">
           Select Transaction Type:
         </div>
         <div className="flex items-center justify-center w-full gap-4">
-          <select
-            value={transactionType}
-            onChange={transactionTypeHandler}
-            className="py-2 px-4 text-xl border rounded-md"
+          <Select value={transactionType} onChange={transactionTypeHandler}>
+            <MenuItem value="normal">Normal</MenuItem>
+            <MenuItem value="24h">24 Hours</MenuItem>
+          </Select>
+
+          {/* =============================================== */}
+        </div>
+        <div className="mt-4">
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "bold" }}
+            className="text-center"
           >
-            <option value="normal">Normal</option>
-            <option value="24h">24 Hours</option>
-          </select>
+            Enter Payment Details <CreditCardIcon />
+          </Typography>
+          <div className="flex justify-center items-center">
+            <form className="w-1/2">
+              <TextField
+                label="Card Number"
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                placeholder="Enter card number"
+              />
+              <TextField
+                label="Cardholder Name"
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                placeholder="Enter cardholder name"
+              />
+              <TextField
+                label="CVV Number"
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                placeholder="Enter CVV number"
+              />
+            </form>
+          </div>
         </div>
         {/* ================================================ */}
         <div className=" flex items-center justify-center text-center w-full gap-10">
           <div className="flex items-center justify-center text-center w-full gap-10 mt-6">
-            <Button variant="outlined" color="primary" onClick={cancelHandler}>
-              <div className="text-2xl">Cancel</div>
-            </Button>
-            <Button variant="outlined" color="primary" onClick={depositHandler}>
-              <div className="text-2xl">Deposit</div>
-            </Button>
+            <CancelButton onClick={cancelHandler} />
+            <DepositButton onClick={depositHandler} />
           </div>
         </div>
       </div>

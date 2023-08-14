@@ -3,11 +3,10 @@ import {
   TableBody,
   TableCell,
   TextField,
-  Button,
 } from "@mui/material";
 import { useState } from "react";
 import { getBikeFromBarcodeController } from "../controller/bike.controller.js";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   StyledTable,
   StyledTableHead,
@@ -15,7 +14,9 @@ import {
   StyledTableBody,
 } from "./style/muiStyled.js";
 
-import { useNavigate } from "react-router-dom";
+import { DepositButton, BackButton } from "./button/Button.jsx";
+
+import { toast } from "react-toastify";
 
 const BikesScreen = () => {
   const navigate = useNavigate();
@@ -25,16 +26,17 @@ const BikesScreen = () => {
 
   const depositHandler = async () => {
     if (barcode.trim() === "") {
-      alert("Please enter a barcode.");
+      toast.error("Please enter a barcode.");
       return;
     }
 
     const response = await getBikeFromBarcodeController(barcode);
     const bikeData = response.data.object;
     if (response.data.message !== "Successful") {
-      alert(response.data.message);
+      toast.error(response.data.message);
       return;
     }
+    toast.success("Deposit successfully");
     navigate("/deposit", { state: bikeData });
   };
 
@@ -53,12 +55,8 @@ const BikesScreen = () => {
         style={{ marginTop: "120px", width: "50%" }}
       />
       <div className="grid grid-cols-2 gap-10 p-8">
-        <Button variant="contained" color="primary" onClick={backHandler}>
-          Back
-        </Button>
-        <Button variant="contained" color="primary" onClick={depositHandler}>
-          Deposit
-        </Button>
+        <BackButton onClick={backHandler} />
+        <DepositButton onClick={depositHandler} />
       </div>
       <StyledTable>
         <TableHead>
@@ -70,7 +68,7 @@ const BikesScreen = () => {
             <StyledTableCell>Category</StyledTableCell>
             <StyledTableCell>Dock name</StyledTableCell>
             <StyledTableCell>Battery</StyledTableCell>
-            <StyledTableCell>Barcode</StyledTableCell>
+            <StyledTableCell style={{ minWidth: "280px"}}>Barcode</StyledTableCell>
             <TableCell style={{ borderRadius: "0 15px 0 0" }}>Image</TableCell>
           </StyledTableHead>
         </TableHead>
@@ -99,7 +97,7 @@ const BikesScreen = () => {
               <StyledTableCell
                 style={{
                   wordWrap: "break-word",
-                  maxWidth: "100px",
+                  maxWidth: "120px",
                 }}
               >
                 {bike.category.categoryName}
@@ -107,7 +105,7 @@ const BikesScreen = () => {
               <StyledTableCell
                 style={{
                   wordWrap: "break-word",
-                  maxWidth: "50px",
+                  maxWidth: "80px",
                 }}
               >
                 {bike.dock.dockName}
@@ -115,7 +113,7 @@ const BikesScreen = () => {
               <StyledTableCell
                 style={{
                   wordWrap: "break-word",
-                  maxWidth: "50px",
+                  maxWidth: "200px",
                 }}
               >
                 {bike.battery ? bike.battery + "%" : "Not available"}

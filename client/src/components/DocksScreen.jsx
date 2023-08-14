@@ -40,14 +40,11 @@ const DocksScreen = () => {
       return;
     }
 
-    // Call the searchDockController and await its response
     const response = await searchDockController(query);
-    // Update the docks state with the new search results
     setDocks(response.data.object);
   };
 
   const getBikeByDockHandler = async (id) => {
-    console.log("dock id", id);
     const response = await getBikeByDockController(id);
     const bikeData = response.data.object;
     navigate(`/dock/${id}/list-bike`, { state: bikeData });
@@ -63,7 +60,7 @@ const DocksScreen = () => {
         onChange={searchDockHandler}
         style={{ marginTop: "120px", width: "50%" }}
       />
-      {/* <div className=" w-5/6"> */}
+      {/* ================================================= */}
       <StyledTable>
         <TableHead>
           <StyledTableHead>
@@ -81,7 +78,7 @@ const DocksScreen = () => {
 
             <StyledTableCell style={{ width: "250px" }}>Image</StyledTableCell>
             <TableCell style={{ borderRadius: "0 15px 0 0", width: "150px" }}>
-              Actions
+              Action
             </TableCell>
           </StyledTableHead>
         </TableHead>
@@ -131,8 +128,6 @@ const DocksScreen = () => {
               </StyledTableCell>
 
               <TableCell>
-                {/* <UpdateButton book={dock} />
-                <DeleteButton onClick={() => deleteBookHandler(dock._id)} /> */}
                 <div className="justify-center items-center flex">
                   <ViewButton
                     onClick={() => getBikeByDockHandler(dock.dockId)}
@@ -146,5 +141,4 @@ const DocksScreen = () => {
     </>
   );
 };
-
 export default DocksScreen;

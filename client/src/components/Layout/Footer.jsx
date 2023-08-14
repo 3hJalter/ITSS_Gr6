@@ -102,7 +102,7 @@ function Footer() {
             href="https://github.com/nguyen-tuan-hiep/"
             style={{ color: "white" }}
           >
-            Nguyen Tuan Hiep{" "}
+            Nguyen Tuan Hiep
           </a>
           . All rights reserved.
         </div>

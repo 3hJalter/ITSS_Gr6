@@ -1,25 +1,24 @@
 import React, { useState } from "react";
-import { Typography, TextField, Button } from "@mui/material";
+import { Typography, TextField } from "@mui/material";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createInvoiceController } from "../controller/invoice.controller";
+import { BackButton, PayButton } from "./button/Button";
+import { toast } from "react-toastify";
 
 function PaymentScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const activeTransaction = location.state.activeTransaction;
-  console.log("bike", activeTransaction);
-
   const [dockId, setDockId] = useState("");
 
   const createInvoiceHandler = () => {
     const data = {
-      transactionId:
-        activeTransaction.transaction.transactionId,
+      transactionId: activeTransaction.transaction.transactionId,
       dockId: dockId,
     };
     createInvoiceController(data);
-    alert("Payment successfully");
+    toast.success("Payment successfully");
     navigate("/docks");
   };
 
@@ -80,21 +79,21 @@ function PaymentScreen() {
                 variant="outlined"
                 margin="normal"
                 placeholder="Enter card number"
-                />
+              />
               <TextField
                 label="Cardholder Name"
                 fullWidth
                 variant="outlined"
                 margin="normal"
                 placeholder="Enter cardholder name"
-                />
+              />
               <TextField
                 label="CVV Number"
                 fullWidth
                 variant="outlined"
                 margin="normal"
                 placeholder="Enter CVV number"
-                />
+              />
               <TextField
                 label="Return Dock ID"
                 fullWidth
@@ -103,7 +102,7 @@ function PaymentScreen() {
                 placeholder="Enter Dock ID to return bike"
                 value={dockId}
                 onChange={(event) => setDockId(event.target.value)}
-                />
+              />
             </form>
           </div>
         </div>
@@ -111,27 +110,9 @@ function PaymentScreen() {
         {/* ============================================ */}
       </div>
       <div className="mb-32">
-        <div className="grid grid-cols-2 gap-40">
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 3 }}
-            onClick={backHandler}
-          >
-            Back
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 3 }}
-            onClick={createInvoiceHandler}
-          >
-            Submit Payment
-          </Button>
+        <div className="grid grid-cols-2 gap-32 m-10">
+          <BackButton onClick={backHandler} />
+          <PayButton onClick={createInvoiceHandler} />
         </div>
       </div>
     </>

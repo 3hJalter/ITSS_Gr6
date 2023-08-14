@@ -1,8 +1,11 @@
-import { Toolbar } from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header, Tabs } from "../style/muiStyled.js";
-import { useEffect, useRef, React } from "react";
+import { Toolbar, Button, Typography } from "@mui/material";
+
 const NavBar = () => {
   const header = useRef();
+  const navigate = useNavigate();
   useEffect(() => {
     let lastScrollPosition = 0;
 
@@ -20,6 +23,10 @@ const NavBar = () => {
 
     return () => window.removeEventListener("scroll", scrollHandler);
   }, []);
+
+  const getActiveTransactionHandler = async () => {
+    navigate("/active-transaction");
+  };
 
   return (
     <div
@@ -39,18 +46,30 @@ const NavBar = () => {
       >
         <Toolbar>
           <Tabs to="/">
-            <img
-              src="http://localhost:5173/images/ecobike.png"
-              alt="logo"
-              style={{ width: "80px" }}
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src="http://localhost:5173/images/ecobike.png"
+                alt="logo"
+                style={{ width: "80px" }}
+              />
+              <Typography variant="h6" component="div" sx={{ marginLeft: 2 }}>
+                <h1 className="font-bold text-xl">EcoBike Rental System</h1>
+              </Typography>
+            </div>
           </Tabs>
-          {/* <Tabs to="/home">Home</Tabs> */}
-          {/* <Tabs to="/about">About</Tabs> */}
-          {/* <Tabs to="/contact">Contact</Tabs> */}
+          <div className="flex gap-10 ml-auto mr-12">
+            <Button color="inherit" onClick={getActiveTransactionHandler}>
+              Active Transaction
+            </Button>
+            <Button color="inherit">Home</Button>
+            <Button color="inherit">About</Button>
+            <Button color="inherit">Service</Button>
+            <Button color="inherit">Contact</Button>
+          </div>
         </Toolbar>
       </Header>
     </div>
   );
 };
+
 export default NavBar;

@@ -1,11 +1,18 @@
 import { React, useState, useEffect } from "react";
-import { Button } from "@mui/material";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import {
   getActiveTransactionController,
   pauseTransactionController,
   resumeTransactionController,
 } from "../controller/transaction.controller";
+
+import {
+  PauseButton,
+  ResumeButton,
+  PayButton,
+  CancelButton,
+} from "./button/Button";
 
 function ActiveTransactionScreen() {
   const navigate = useNavigate();
@@ -56,7 +63,7 @@ function ActiveTransactionScreen() {
     const response = await getActiveTransactionController();
     const transaction = response.data.object;
     if (response.data.message !== "Successful") {
-      alert(response.data.message);
+      toast.success(response.data.message);
       return;
     }
     setActiveTransaction(transaction);
@@ -79,7 +86,6 @@ function ActiveTransactionScreen() {
   };
 
   const payHandler = () => {
-    console.log(activeTransaction.transaction.bike);
     navigate("/payment", { state: { activeTransaction } });
   };
 
@@ -111,20 +117,20 @@ function ActiveTransactionScreen() {
             <div>
               <img
                 src={activeTransaction.transaction.bike.image}
-                alt="bike image"
+                alt="Bike image"
               />
             </div>
           </div>
-          {/* =================================================================================== */}
+          {/* =================================================================== */}
           <div className="card w-full shadow-3xl px-8 py-7 text-2xl rounded-2xl h-full">
             <div className="text-3xl font-bold">
-              Transaction Id: {activeTransaction.transaction.transactionId}
+              Transaction ID: {activeTransaction.transaction.transactionId}
             </div>
             <div className="text-3xl font-bold">
-              Bike Id: {activeTransaction.transaction.bike.bikeId}
+              Bike ID: {activeTransaction.transaction.bike.bikeId}
             </div>
             <div className="text-3xl font-bold">
-              Customer Id: {activeTransaction.transaction.customer.customerId}
+              Customer ID: {activeTransaction.transaction.customer.customerId}
             </div>
             <div className="text-3xl font-bold">
               Customer Name: {activeTransaction.transaction.customer.username}
@@ -154,33 +160,14 @@ function ActiveTransactionScreen() {
           </div>
         </div>
         {/* ======================================================================= */}
-
-        <div className="flex items-center justify-center w-full gap-4 mb-40">
+        <div className="flex items-center justify-center w-full gap-20 mb-40">
+          <CancelButton onClick={() => navigate("/docks")} />
           {activeTransaction.transaction.status === "active" ? (
-            <Button
-              variant="contained"
-              style={{ width: "15%" }}
-              onClick={pauseHandler}
-            >
-              <div className="text-2xl">{pauseButtonText}</div>
-            </Button>
+            <PauseButton onClick={pauseHandler} text={pauseButtonText} />
           ) : (
-            <Button
-              variant="contained"
-              style={{ width: "15%" }}
-              onClick={resumeHandler}
-            >
-              <div className="text-2xl">{pauseButtonText}</div>
-            </Button>
+            <ResumeButton onClick={resumeHandler} text={pauseButtonText} />
           )}
-
-          <Button
-            variant="contained"
-            style={{ width: "15%" }}
-            onClick={payHandler}
-          >
-            <div className="text-2xl">Pay</div>
-          </Button>
+          <PayButton onClick={payHandler} />
         </div>
       </div>
     </>
