@@ -54,7 +54,7 @@ public class TransactionController {
     }
 
     public Response<?> createTransaction(Integer customerId, UUID barcode, String transactionType){
-        // Transaction without credit card, need modify when have interbank subsystem
+        // Transaction without credit card, need modify when have subsystem.database.interbank subsystem
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != CustomerResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
