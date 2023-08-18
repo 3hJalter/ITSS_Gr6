@@ -1,8 +1,8 @@
 package utils;
 
-import database.entityLayer.BikeLayer;
-import entity.Transaction;
-import entity.bike.Bike;
+import bike.BikeLayer;
+import transaction.Transaction;
+import bike.bikeEntity.Bike;
 
 import java.sql.Timestamp;
 

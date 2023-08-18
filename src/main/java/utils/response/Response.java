@@ -1,14 +1,9 @@
 package utils.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
 public class Response<T> {
+    private final String code;
+    private final String message;
     private T object;
-    private String code;
-    private String message;
 
     public Response(T object, ResponseMessage responseMessage) {
         this.object = object;
@@ -24,5 +19,23 @@ public class Response<T> {
     public Response(ResponseMessage responseMessage) {
         this.code = responseMessage.getCode();
         this.message = responseMessage.getMessage();
+    }
+
+    public Response(T object, String code, String message) {
+        this.object = object;
+        this.code = code;
+        this.message = message;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public T getObject() {
+        return object;
     }
 }

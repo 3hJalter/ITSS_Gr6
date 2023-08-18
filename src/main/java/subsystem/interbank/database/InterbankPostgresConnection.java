@@ -1,6 +1,6 @@
 package subsystem.interbank.database;
 
-import database.connection.IDatabaseConnection;
+import utils.database.connection.IDatabaseConnection;
 
 import java.sql.*;
 
@@ -66,21 +66,19 @@ public class InterbankPostgresConnection implements IDatabaseConnection {
     }
 
     @Override
-    public int updateData(String sqlQuery) {
+    public void updateData(String sqlQuery) {
         try {
             Connection connection = getConnection();
             if (connection != null) {
                 PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
                 int rowsAffected = preparedStatement.executeUpdate();
                 System.out.println("Data updated successfully. Rows affected: " + rowsAffected);
-                return rowsAffected;
+                return;
             }
             System.out.println("Failed to get a valid database connection.");
-            return -1;
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error when updating data: " + e.getMessage());
-            return -1;
         }
     }
 

@@ -1,5 +1,4 @@
-import api.APIURL;
-
+import utils.api.APIURL;
 import java.io.IOException;
 
 public class App {

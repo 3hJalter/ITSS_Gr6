@@ -1,12 +1,6 @@
 package utils.response.responseMessageImpl;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import utils.response.ResponseMessage;
-
-
-@Getter
-@AllArgsConstructor
 public enum CustomerResponseMessage implements ResponseMessage {
 
     CUSTOMER_NOT_EXIST("400_CU0", "Customer does not exist"),
@@ -15,4 +9,19 @@ public enum CustomerResponseMessage implements ResponseMessage {
     
     private final String code;
     private final String message;
+
+    CustomerResponseMessage(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
 }

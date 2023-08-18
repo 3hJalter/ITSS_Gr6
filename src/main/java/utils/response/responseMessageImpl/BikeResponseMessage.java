@@ -1,11 +1,7 @@
 package utils.response.responseMessageImpl;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import utils.response.ResponseMessage;
 
-@Getter
-@AllArgsConstructor
 public enum BikeResponseMessage implements ResponseMessage {
 
     BIKE_NOT_EXIST("400_B0", "Bike does not exist"),
@@ -18,4 +14,19 @@ public enum BikeResponseMessage implements ResponseMessage {
 
     private final String code;
     private final String message;
+
+    BikeResponseMessage(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
 }
