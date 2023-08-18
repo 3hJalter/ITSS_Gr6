@@ -6,10 +6,20 @@ import java.sql.*;
 
 import static utils.Config.*;
 
+/**
+ * The InterbankPostgresConnection class implements the IDatabaseConnection interface
+ * and provides methods for managing database connections and executing queries
+ * on an Interbank-related PostgresSQL database.
+ */
 public class InterbankPostgresConnection implements IDatabaseConnection {
     private static InterbankPostgresConnection instance;
     private Connection connection;
 
+    /**
+     * Retrieves an instance of the InterbankPostgresConnection class.
+     *
+     * @return An instance of InterbankPostgresConnection.
+     */
     public static InterbankPostgresConnection getInstance() {
         if (instance == null) {
             instance = new InterbankPostgresConnection(); // Create the instance only once

@@ -6,7 +6,17 @@ import bike.bikeEntity.Bike;
 
 import java.sql.Timestamp;
 
+/**
+ * The PriceMethod class provides utility methods for calculating prices and deposits
+ * related to bike rentals and transactions.
+ */
 public class PriceMethod {
+    /**
+     * Retrieves the deposit amount for a specified bike.
+     *
+     * @param bikeId The ID of the bike for which to calculate the deposit.
+     * @return The calculated deposit amount in Long.
+     */
     public static Long getDeposit(Integer bikeId) {
         Bike bike = BikeLayer.getInstance().getBikeById(bikeId);
         return Double.valueOf(
@@ -14,23 +24,47 @@ public class PriceMethod {
                 .longValue();
     }
 
+    /**
+     * Calculates the deposit to be returned for a given transaction.
+     *
+     * @param transaction The transaction for which to calculate the deposit return.
+     * @return The deposit amount to be returned in Long.
+     */
     public static Long returnDeposit(Transaction transaction) {
         // Return deposit logic
         return transaction.getDeposit();
     }
 
+    /**
+     * Retrieves the total time of bike rental in minutes for a given transaction.
+     *
+     * @param transaction The transaction representing the bike rental.
+     * @return The total time of rental in minutes.
+     */
     public static long getTimeRentInMinutes(Transaction transaction) {
         if (transaction.getStatus().equals("active"))
             return getActiveTimeRent(transaction);
         else return transaction.getMinuteUsed();
     }
 
+    /**
+     * Calculates the active time of bike rental in minutes for a given transaction.
+     *
+     * @param transaction The transaction representing the bike rental.
+     * @return The active time of rental in minutes.
+     */
     public static long getActiveTimeRent(Transaction transaction) {
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         return (currentTime.getTime() - transaction.getLastPause().getTime())/60000
                 + transaction.getMinuteUsed();
     }
 
+    /**
+     * Calculates the total price for a given transaction, considering rental duration.
+     *
+     * @param transaction The transaction representing the bike rental.
+     * @return The calculated total price in Long.
+     */
     public static Long getTotalPrice(Transaction transaction) {
         long timeRentInMinutes = getTimeRentInMinutes(transaction);
         long totalPrice = 0L;
@@ -45,6 +79,13 @@ public class PriceMethod {
         return totalPrice;
     }
 
+    /**
+     * Calculates the total price for a given transaction over a 24-hour period,
+     * including late fees and early return refunds.
+     *
+     * @param transaction The transaction representing the bike rental.
+     * @return The calculated total price for a 24-hour period in Long.
+     */
     public static long get24hTotalPrice(Transaction transaction) {
         long timeRentInMinutes = getTimeRentInMinutes(transaction);
         long totalPrice;

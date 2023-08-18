@@ -15,14 +15,28 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the layer responsible for managing transactions.
+ * It interacts with the database to retrieve and manipulate transaction data.
+ */
 public class TransactionLayer extends BaseLayer {
+
     private static TransactionLayer instance;
     JSONArray jsonArray;
 
+    /**
+     * Private constructor that initializes the TransactionLayer instance by fetching transaction data
+     * from the database and converting it to JSON.
+     */
     private TransactionLayer() {
         setJsonArray();
     }
 
+    /**
+     * Get the instance of TransactionLayer.
+     *
+     * @return The instance of TransactionLayer
+     */
     public static TransactionLayer getInstance() {
         if (instance == null) {
             instance = new TransactionLayer();
@@ -30,6 +44,9 @@ public class TransactionLayer extends BaseLayer {
         return instance;
     }
 
+    /**
+     * Sets the JSON array with credit card data retrieved from the database.
+     */
     private void setJsonArray() {
         try {
             String sqlQuery = "SELECT * FROM transaction";
@@ -42,10 +59,21 @@ public class TransactionLayer extends BaseLayer {
         }
     }
 
+    /**
+     * Get a list of all transactions.
+     *
+     * @return A list of Transaction objects
+     */
     public List<Transaction> getTransactionList() {
         return getTransactionFromJSON();
     }
 
+    /**
+     * Get a transaction by its ID.
+     *
+     * @param id The ID of the transaction
+     * @return The Transaction object if found, otherwise null
+     */
     public Transaction getTransactionById(Integer id) {
         if (id == null) return null;
         for (Transaction transaction : getTransactionFromJSON()) {
@@ -54,6 +82,12 @@ public class TransactionLayer extends BaseLayer {
         return null;
     }
 
+    /**
+     * Get an active or paused transaction associated with a customer.
+     *
+     * @param customerId The ID of the customer
+     * @return The active or paused Transaction object if found, otherwise null
+     */
     public Transaction getActiveTransactionByCustomerId(Integer customerId) {
         if (customerId == null) return null;
         for (Transaction transaction : getTransactionFromJSON()) {
@@ -64,6 +98,11 @@ public class TransactionLayer extends BaseLayer {
         return null;
     }
 
+    /**
+     * Extract a list of Transaction objects from the stored JSON data.
+     *
+     * @return A list of Transaction objects parsed from the JSON data.
+     */
     private List<Transaction> getTransactionFromJSON() {
         List<Transaction> transactionList = new ArrayList<>();
         try {
@@ -90,6 +129,14 @@ public class TransactionLayer extends BaseLayer {
         return transactionList;
     }
 
+    /**
+     * Create a new transaction.
+     *
+     * @param customerId     The ID of the customer associated with the transaction
+     * @param bikeId         The ID of the bike associated with the transaction
+     * @param transactionType The type of the transaction
+     * @return The generated ID of the created transaction, or -1 if creation fails
+     */
     public int createTransaction(Integer customerId, Integer bikeId, String transactionType) {
         try {
             databaseConnection.getConnection().setAutoCommit(false);
@@ -120,7 +167,11 @@ public class TransactionLayer extends BaseLayer {
         }
     }
 
-
+    /**
+     * Set a transaction to inactive status.
+     *
+     * @param transaction The Transaction object to be set as inactive
+     */
     public void setTransactionToInactive(Transaction transaction) {
         if (transaction == null) return;
         try {
@@ -139,6 +190,11 @@ public class TransactionLayer extends BaseLayer {
         }
     }
 
+    /**
+     * Pause a transaction.
+     *
+     * @param transaction The Transaction object to be paused
+     */
     public void pauseTransaction(Transaction transaction) {
         if (transaction == null) return;
         try {
@@ -159,6 +215,11 @@ public class TransactionLayer extends BaseLayer {
         }
     }
 
+    /**
+     * Unpause a paused transaction.
+     *
+     * @param transaction The Transaction object to be resumed
+     */
     public void unPauseTransaction(Transaction transaction) {
         if (transaction == null) return;
         try {

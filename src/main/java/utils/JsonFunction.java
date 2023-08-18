@@ -11,7 +11,19 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+/**
+ * The JsonFunction class provides utility methods for converting data structures
+ * to JSON format.
+ */
 public class JsonFunction {
+    /**
+     * Converts a ResultSet object to a JSONArray containing the result set data in JSON format.
+     *
+     * @param resultSet The ResultSet object to be converted.
+     * @return A JSONArray representing the converted result set data in JSON format.
+     * @throws SQLException If a database access error occurs.
+     * @throws JSONException If there is an error during JSON object construction.
+     */
     public static JSONArray convertResultSetToJsonArray(ResultSet resultSet) throws SQLException, JSONException {
         JSONArray jsonArray = new JSONArray();
 
@@ -31,6 +43,13 @@ public class JsonFunction {
         return jsonArray;
     }
 
+    /**
+     * Converts an object to its JSON representation.
+     *
+     * @param object The object to be converted to JSON.
+     * @return A String containing the JSON representation of the input object.
+     * @throws RuntimeException If there is an error during JSON serialization.
+     */
     public static String convertToJson(Object object) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json;

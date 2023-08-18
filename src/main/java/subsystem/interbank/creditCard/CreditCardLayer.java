@@ -12,17 +12,31 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CreditCardLayer class provides access to credit card data stored in a JSON format,
+ * retrieved from a database table. It facilitates operations related to credit card information,
+ * including querying balances, changing balances, and retrieving credit card details.
+ */
 public class CreditCardLayer {
     private static IDatabaseConnection databaseConnection;
     private static CreditCardLayer instance;
     JSONArray jsonArray;
 
+    /**
+     * Private constructor that initializes the CreditCardLayer instance by fetching credit card data
+     * from the database and converting it to JSON.
+     */
     private CreditCardLayer() {
         if (databaseConnection == null)
             databaseConnection = InterbankPostgresConnection.getInstance();
         setJsonArray();
     }
 
+    /**
+     * Get the singleton instance of the CreditCardLayer class.
+     *
+     * @return The instance of the CreditCardLayer.
+     */
     public static CreditCardLayer getInstance() {
         if (instance == null) {
             instance = new CreditCardLayer();
@@ -30,6 +44,9 @@ public class CreditCardLayer {
         return instance;
     }
 
+    /**
+     * Sets the JSON array with credit card data retrieved from the database.
+     */
     private void setJsonArray() {
         try {
             String sqlQuery = "SELECT * FROM credit_card";
@@ -42,26 +59,52 @@ public class CreditCardLayer {
         }
     }
 
+    /**
+     * Get a list of all credit cards stored in the JSON data.
+     *
+     * @return A list of CreditCard objects representing the credit cards.
+     */
     public List<CreditCard> getCreditCardList() {
         return getCreditCardFromJSON();
     }
 
+    /**
+     * Get a credit card by its card number.
+     *
+     * @param cardNumber The card number of the credit card to retrieve.
+     * @return The CreditCard object representing the credit card with the given card number,
+     *         or null if no credit card with the provided card number is found.
+     */
     public CreditCard getCreditCardByCardNumber(String cardNumber) {
         if (cardNumber == null) return null;
-        for (CreditCard CreditCard : getCreditCardFromJSON()) {
-            if (CreditCard.getCardNumber().equals(cardNumber)) return CreditCard;
+        for (CreditCard creditCard : getCreditCardFromJSON()) {
+            if (creditCard.getCardNumber().equals(cardNumber)) return creditCard;
         }
         return null;
     }
 
+    /**
+     * Get a credit card by its unique identifier.
+     *
+     * @param cardId The ID of the credit card to retrieve.
+     * @return The CreditCard object representing the credit card with the given ID,
+     *         or null if no credit card with the provided ID is found.
+     */
     public CreditCard getCreditCardByCardId(Integer cardId) {
         if (cardId == null) return null;
-        for (CreditCard CreditCard : getCreditCardFromJSON()) {
-            if (CreditCard.getCreditCardId().equals(cardId)) return CreditCard;
+        for (CreditCard creditCard : getCreditCardFromJSON()) {
+            if (creditCard.getCreditCardId().equals(cardId)) return creditCard;
         }
         return null;
     }
 
+    /**
+     * Get the balance of a credit card by its card number.
+     *
+     * @param cardNumber The card number of the credit card for which to retrieve the balance.
+     * @return The balance of the credit card with the given card number,
+     *         or -1 if no credit card with the provided card number is found.
+     */
     public Double getBalance(String cardNumber) {
         if (cardNumber == null) return -1D;
         CreditCard creditCard = getCreditCardByCardNumber(cardNumber);
@@ -69,6 +112,12 @@ public class CreditCardLayer {
         return creditCard.getBalance();
     }
 
+    /**
+     * Reset the balance of a credit card to a predefined value.
+     *
+     * @param cardNumber The card number of the credit card for which to reset the balance.
+     * @return 0 if the balance reset is successful, -1 otherwise.
+     */
     public int resetBalance(String cardNumber) {
         if (cardNumber == null) return -1;
         CreditCard card = getCreditCardByCardNumber(cardNumber);
@@ -91,6 +140,14 @@ public class CreditCardLayer {
         }
     }
 
+    /**
+     * Change the balance of a credit card based on a transaction.
+     *
+     * @param card     The CreditCard object for which to change the balance.
+     * @param price    The amount to change the balance by.
+     * @param isPay    Whether the transaction is a payment (true) or a receive (false).
+     * @return The ID of the credit card if the balance change is successful, -1 otherwise.
+     */
     public Integer changeCardBalance(CreditCard card, Double price, boolean isPay) {
         if (isPay) {
             if (card.getBalance() < price) return -1;
@@ -114,25 +171,32 @@ public class CreditCardLayer {
         }
     }
 
+    /**
+     * Extract a list of CreditCard objects from the stored JSON data.
+     *
+     * @return A list of CreditCard objects parsed from the JSON data.
+     */
     private List<CreditCard> getCreditCardFromJSON() {
-        List<CreditCard> CreditCardList = new ArrayList<>();
+        List<CreditCard> creditCardList = new ArrayList<>();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject CreditCardJson = jsonArray.getJSONObject(i);
-                Timestamp expirationDate = Timestamp.valueOf(CreditCardJson.getString("expiration_date"));
-                CreditCard CreditCard = new CreditCard(CreditCardJson.getInt("credit_card_id"),
-                        CreditCardJson.getString("cardholder_name"),
-                        CreditCardJson.getString("card_number"),
-                        CreditCardJson.getString("issuing_bank"),
-                        CreditCardJson.getDouble("balance"),
+                JSONObject creditCardJson = jsonArray.getJSONObject(i);
+                Timestamp expirationDate = Timestamp.valueOf(creditCardJson.getString("expiration_date"));
+                CreditCard creditCard = new CreditCard(
+                        creditCardJson.getInt("credit_card_id"),
+                        creditCardJson.getString("cardholder_name"),
+                        creditCardJson.getString("card_number"),
+                        creditCardJson.getString("issuing_bank"),
+                        creditCardJson.getDouble("balance"),
                         expirationDate,
-                        CreditCardJson.getString("security_code"));
+                        creditCardJson.getString("security_code")
+                );
 
-                CreditCardList.add(CreditCard);
+                creditCardList.add(creditCard);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return CreditCardList;
+        return creditCardList;
     }
 }

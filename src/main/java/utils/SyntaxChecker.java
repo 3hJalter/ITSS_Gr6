@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SyntaxChecker {
-    private static boolean isInteger(String id) {
+    public static boolean isInteger(String id) {
         try {
             Integer.parseInt(id);
             return true;
@@ -30,7 +30,7 @@ public class SyntaxChecker {
         return parameterValue;
     }
 
-    private static boolean isMonth(Integer month) {
+    public static boolean isMonth(Integer month) {
         return month >= 1 && month <= 12;
     }
 
@@ -51,7 +51,7 @@ public class SyntaxChecker {
         return parameterValue;
     }
 
-    private static boolean isYear(Integer year) {
+    public static boolean isYear(Integer year) {
         return year >= 0 && year <= 99;
     }
 
@@ -72,7 +72,7 @@ public class SyntaxChecker {
         return parameterValue;
     }
 
-    private static boolean isUUID(String uuid) {
+    public static boolean isUUID(String uuid) {
         try {
             UUID.fromString(uuid);
             return true;
@@ -91,7 +91,7 @@ public class SyntaxChecker {
         return parameterValue;
     }
 
-    private static boolean isCardNumber(String number) {
+    public static boolean isCardNumber(String number) {
         Pattern pattern = Pattern.compile("^\\d{16}$");
         Matcher matcher = pattern.matcher(number);
         return matcher.matches();
@@ -108,7 +108,7 @@ public class SyntaxChecker {
         return parameterValue;
     }
 
-    private static boolean isValidName(String name) {
+    public static boolean isValidName(String name) {
         // Check if the name starts with a non-space character
         if (name == null || name.isEmpty() || Character.isWhitespace(name.charAt(0))) {
             return false;
@@ -141,7 +141,7 @@ public class SyntaxChecker {
         return parameterValue;
     }
 
-    private static boolean isValidSecurityCode(String code) {
+    public static boolean isValidSecurityCode(String code) {
         Pattern pattern = Pattern.compile("^\\d{3}$");
         Matcher matcher = pattern.matcher(code);
         return matcher.matches();
@@ -158,7 +158,7 @@ public class SyntaxChecker {
         return parameterValue;
     }
 
-    private static boolean isAmount(String id) {
+    public static boolean isAmount(String id) {
         try {
             Double.parseDouble(id);
             return true;

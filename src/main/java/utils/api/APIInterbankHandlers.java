@@ -12,11 +12,21 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * The APIInterbankHandlers class provides utility methods for interacting with the Interbank API
+ * to perform credit card transactions such as receiving money and making payments.
+ */
 public class APIInterbankHandlers {
     public static HttpClient httpClient = HttpClients.createDefault();
     static String baseReceiveURL = "http://localhost:8001/creditCard/receive";
     static String basePayURL = "http://localhost:8001/creditCard/pay";
 
+    /**
+     * Sends a request to the Interbank API to receive money into a specified credit card.
+     *
+     * @param cardNumber The credit card number to receive money into.
+     * @param amount     The amount of money to receive.
+     */
     public static void receiveMoney(String cardNumber, double amount) {
         String receiveURL = baseReceiveURL + "?cardNumber=" + cardNumber + "&amount=" + amount;
 
@@ -45,6 +55,18 @@ public class APIInterbankHandlers {
         }
     }
 
+    /**
+     * Sends a request to the Interbank API to make a payment using a credit card.
+     *
+     * @param cardNumber      The credit card number for payment.
+     * @param cardholderName  The name of the cardholder.
+     * @param issueBank       The issuing bank of the card.
+     * @param month           The expiration month of the card.
+     * @param year            The expiration year of the card.
+     * @param securityCode    The security code of the card.
+     * @param amount          The amount of money to pay.
+     * @return A message indicating the status of the payment.
+     */
     public static String payWithCard(String cardNumber, String cardholderName, String issueBank,
                                      int month, int year, String securityCode, double amount) {
         String encodedCardholderName = urlEncode(cardholderName);
@@ -85,7 +107,13 @@ public class APIInterbankHandlers {
         }
     }
 
-    public static String urlEncode(String value) {
+    /**
+     * URL encodes the given value using UTF-8 encoding.
+     *
+     * @param value The value to encode.
+     * @return The URL-encoded value.
+     */
+    private static String urlEncode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8)
                 .replace("+", "%20");
     }

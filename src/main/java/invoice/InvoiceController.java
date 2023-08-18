@@ -16,14 +16,26 @@ import utils.response.responseMessageImpl.TransactionResponseMessage;
 
 import java.util.List;
 
+/**
+ * The InvoiceController class provides methods to manage and interact with invoices.
+ * It handles various invoice-related operations such as creation, retrieval, and listing.
+ */
 public class InvoiceController {
     private static InvoiceController instance;
     private static InvoiceLayer invoiceLayer;
 
+    /**
+     * Private constructor initializes the InvoiceLayer instance.
+     */
     InvoiceController() {
         invoiceLayer = InvoiceLayer.getInstance();
     }
 
+    /**
+     * Returns the instance of InvoiceController. If an instance doesn't exist, it creates one.
+     *
+     * @return The InvoiceController instance.
+     */
     public static InvoiceController getInstance() {
         if (instance == null) {
             instance = new InvoiceController();
@@ -31,11 +43,22 @@ public class InvoiceController {
         return instance;
     }
 
+    /**
+     * Retrieves a list of all invoices.
+     *
+     * @return A Response object containing the list of invoices and a response message.
+     */
     public Response<List<Invoice>> getInvoiceList() {
         List<Invoice> invoiceList = invoiceLayer.getInvoiceList();
         return new Response<>(invoiceList, InvoiceResponseMessage.SUCCESSFUL);
     }
 
+    /**
+     * Retrieves an invoice by its unique identifier.
+     *
+     * @param id The identifier of the invoice to retrieve.
+     * @return A Response object containing the retrieved invoice and a response message.
+     */
     public Response<Invoice> getInvoiceById(Integer id) {
         ResponseMessage validateMessage = InvoiceValidation.validate(id);
         if (validateMessage != InvoiceResponseMessage.SUCCESSFUL)
@@ -44,6 +67,12 @@ public class InvoiceController {
         return new Response<>(invoice, InvoiceResponseMessage.SUCCESSFUL);
     }
 
+    /**
+     * Retrieves a list of invoices associated with a specific customer.
+     *
+     * @param customerId The identifier of the customer.
+     * @return A Response object containing the list of invoices and a response message.
+     */
     public Response<List<Invoice>> getInvoiceByCustomerId(Integer customerId) {
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != DockResponseMessage.SUCCESSFUL)
@@ -52,6 +81,19 @@ public class InvoiceController {
         return new Response<>(invoiceList, InvoiceResponseMessage.SUCCESSFUL);
     }
 
+    /**
+     * Creates an invoice for a given transaction and dock with credit card payment.
+     *
+     * @param transactionId  The identifier of the transaction associated with the invoice.
+     * @param dockId         The identifier of the dock associated with the invoice.
+     * @param cardNumber     The credit card number for payment.
+     * @param cardholderName The name of the cardholder.
+     * @param issueBank      The issuing bank of the credit card.
+     * @param month          The expiry month of the credit card.
+     * @param year           The expiry year of the credit card.
+     * @param securityCode   The security code of the credit card.
+     * @return A Response object with a success or error message.
+     */
     public Response<?> createInvoice(Integer transactionId, Integer dockId
             , String cardNumber, String cardholderName
             , String issueBank, int month, int year, String securityCode) {

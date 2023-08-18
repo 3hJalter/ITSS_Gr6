@@ -6,10 +6,20 @@ import java.sql.*;
 
 import static utils.Config.*;
 
+/**
+ * The PostgresConnection class implements the IDatabaseConnection interface
+ * and provides methods for managing database connections and executing queries
+ * on a PostgresSQL database.
+ */
 public class PostgresConnection implements IDatabaseConnection {
     private static PostgresConnection instance;
     private Connection connection;
 
+    /**
+     * Retrieves an instance of the PostgresConnection class.
+     *
+     * @return An instance of PostgresConnection.
+     */
     public static PostgresConnection getInstance() {
         if (instance == null) {
             instance = new PostgresConnection(); // Create the instance only once
@@ -25,12 +35,13 @@ public class PostgresConnection implements IDatabaseConnection {
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             return connection;
         } catch (Exception e) {
-            System.out.println("Error when connecting to database");
+            System.out.println("Error when connecting to the database");
             System.out.println(e.getMessage());
             return null;
         }
     }
 
+    @Override
     public ResultSet getData(String sqlQuery) {
         try {
             Statement statement = getConnection().createStatement();
@@ -82,14 +93,15 @@ public class PostgresConnection implements IDatabaseConnection {
         }
     }
 
-
+    @Override
     public void closeConnection() {
-        if (connection != null)
+        if (connection != null) {
             try {
                 connection.close();
                 connection = null;
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
     }
 }
