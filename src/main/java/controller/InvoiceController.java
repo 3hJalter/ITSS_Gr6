@@ -1,5 +1,6 @@
 package controller;
 
+import api.APIInterbankHandlers;
 import database.entityLayer.BikeLayer;
 import database.entityLayer.InvoiceLayer;
 import database.entityLayer.TransactionLayer;
@@ -54,7 +55,9 @@ public class InvoiceController {
         return new Response<>(invoiceList, InvoiceResponseMessage.SUCCESSFUL);
     }
 
-    public Response<?> createInvoice(Integer transactionId, Integer dockId) {
+    public Response<?> createInvoice(Integer transactionId, Integer dockId
+            , String cardNumber, String cardholderName
+            , String issueBank, int month, int year, String securityCode) {
         // Invoice without credit card, need modify when have interbank subsystem
         ResponseMessage validateMessage = DockValidation.validate(dockId);
         if (validateMessage != DockResponseMessage.SUCCESSFUL)
@@ -66,12 +69,29 @@ public class InvoiceController {
         validateMessage = InvoiceValidation.validateCreation(transaction);
         if (validateMessage != InvoiceResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
+
+        // Call Interbank to pay rent fee here
+        long price = transaction.getTransactionType().equals("24h")
+                ? PriceMethod.get24hTotalPrice(transaction)
+                : PriceMethod.getTotalPrice(transaction);
+        String message = APIInterbankHandlers.payWithCard(cardNumber, cardholderName, issueBank, month, year,
+                securityCode, price);
+        if (!message.equals("Successful")) {
+            return new Response<>(null, "501", message);
+        }
+        // End here
+
         int newInvoiceId = invoiceLayer.createInvoice(transaction);
-        if (newInvoiceId == -1) return new Response<>(null, InvoiceResponseMessage.CAN_NOT_CREATE_INVOICE);
+        if (newInvoiceId == -1) {
+            APIInterbankHandlers.receiveMoney(cardNumber, price);
+            return new Response<>(null, InvoiceResponseMessage.CAN_NOT_CREATE_INVOICE);
+            // Call Interbank to receive rent fee here
+        }
         // Modify if you need return deposit logic
-        System.out.println("Return deposit with value = "
-                + PriceMethod.returnDeposit(transaction));
-        //
+        Long deposit = PriceMethod.returnDeposit(transaction);
+        System.out.println("Return deposit with value = " + deposit);
+        // Call Interbank to receive deposit here
+        APIInterbankHandlers.receiveMoney(cardNumber, deposit);
         TransactionLayer.getInstance().setTransactionToInactive(transaction);
         BikeLayer.getInstance().returnInvoiceBikeToDockId(newInvoiceId, dockId);
         return new Response<>(null, InvoiceResponseMessage.SUCCESSFUL);

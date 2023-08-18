@@ -1,5 +1,6 @@
 package controller;
 
+import api.APIInterbankHandlers;
 import database.entityLayer.BikeLayer;
 import database.entityLayer.TransactionLayer;
 import entity.Transaction;
@@ -53,7 +54,9 @@ public class TransactionController {
         return new Response<>(ati, TransactionResponseMessage.SUCCESSFUL);
     }
 
-    public Response<?> createTransaction(Integer customerId, UUID barcode, String transactionType){
+    public Response<?> createTransaction(Integer customerId, UUID barcode, String transactionType
+            ,String cardNumber, String cardholderName
+            , String issueBank, int month, int year, String securityCode){
         // Transaction without credit card, need modify when have interbank subsystem
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != CustomerResponseMessage.SUCCESSFUL)
@@ -61,14 +64,26 @@ public class TransactionController {
         validateMessage = TransactionValidation.validateCreation(customerId);
         if (validateMessage != TransactionResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
-
         Bike bike = BikeLayer.getInstance().getBikeByBarcode(barcode);
         if (bike == null) return new Response<>(null, BikeResponseMessage.BIKE_NOT_EXIST);
         validateMessage = BikeValidation.validate(bike.getBikeId(), bike);
         if (validateMessage != BikeResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
+
+        // Call Interbank to pay deposit here
+        long deposit = PriceMethod.getDeposit(bike.getBikeId());
+        String message = APIInterbankHandlers.payWithCard(cardNumber, cardholderName, issueBank, month, year,
+                securityCode, deposit);
+        if (!message.equals("Successful")) {
+            return new Response<>(null, "501", message);
+        }
+        // End here
         int newTransactionId = transactionLayer.createTransaction(customerId, bike.getBikeId(), transactionType);
-        if (newTransactionId == -1) return new Response<>(null, TransactionResponseMessage.CAN_NOT_CREATE_TRANSACTION);
+        if (newTransactionId == -1) {
+            // Call Interbank to receive deposit here
+            APIInterbankHandlers.receiveMoney(cardNumber, deposit);
+            return new Response<>(null, TransactionResponseMessage.CAN_NOT_CREATE_TRANSACTION);
+        }
         BikeLayer.getInstance().rentBikeById(bike.getBikeId());
         return new Response<>(null, TransactionResponseMessage.SUCCESSFUL);
     }

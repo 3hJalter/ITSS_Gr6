@@ -56,11 +56,21 @@ public class InvoiceHandlers {
             String transactionIdStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "transactionId");
             String dockIdStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "dockId");
 
+            // For credit card
+            String cardNumber = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardNumber");
+            String cardholderName = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardholderName");
+            String issueBank = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "issueBank");
+            int month = Integer.parseInt(ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "month"));
+            int year = Integer.parseInt(ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "year"));
+            String securityCode = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "securityCode");
+            //
+
             int transactionId = Integer.parseInt(transactionIdStr);
             int dockId = Integer.parseInt(dockIdStr);
 
             // Call the createInvoice method from InvoiceController
-            Response<?> response = InvoiceController.getInstance().createInvoice(transactionId, dockId);
+            Response<?> response = InvoiceController.getInstance().createInvoice(transactionId, dockId
+                    ,cardNumber, cardholderName, issueBank, month, year, securityCode);
 
             // Convert the response to JSON and send the response
             String jsonResponse = General.convertToJson(response);

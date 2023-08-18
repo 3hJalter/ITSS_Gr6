@@ -45,11 +45,21 @@ public class TransactionHandlers {
             String barcodeStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "barcode");
             String transactionTypeStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "transactionType");
 
+            // For credit card
+            String cardNumber = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardNumber");
+            String cardholderName = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardholderName");
+            String issueBank = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "issueBank");
+            int month = Integer.parseInt(ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "month"));
+            int year = Integer.parseInt(ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "year"));
+            String securityCode = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "securityCode");
+            //
+
             int customerId = Integer.parseInt(customerIdStr);
             UUID barcode = UUID.fromString(barcodeStr);
 
             // Call the createTransaction method from TransactionController
-            Response<?> response = TransactionController.getInstance().createTransaction(customerId, barcode, transactionTypeStr);
+            Response<?> response = TransactionController.getInstance().createTransaction(customerId, barcode, transactionTypeStr
+                    ,cardNumber, cardholderName, issueBank, month, year, securityCode);
 
             // Convert the response to JSON and send the response
             String jsonResponse = General.convertToJson(response);
