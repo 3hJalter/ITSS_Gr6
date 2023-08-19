@@ -55,35 +55,35 @@ function Footer() {
           >
             <BottomNavigationAction
               icon={<GitHubIcon />}
-              href="https://github.com/nguyen-tuan-hiep/"
+              href=""
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "white" }}
             />
             <BottomNavigationAction
               icon={<FacebookIcon />}
-              href="https://www.facebook.com/hiepnttt"
+              href=""
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "white" }}
             />
             <BottomNavigationAction
               icon={<InstagramIcon />}
-              href="https://www.instagram.com/nguyen.tuan.hiep/"
+              href=""
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "white" }}
             />
             <BottomNavigationAction
               icon={<PinterestIcon />}
-              href="https://www.pinterest.com/hiep454546/"
+              href=""
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "white" }}
             />
             <BottomNavigationAction
               icon={<EmailIcon />}
-              href="mailto:hiep.nt205151@sis.hust.edu.vn"
+              href=""
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "white" }}
@@ -99,10 +99,10 @@ function Footer() {
         >
           &copy; {new Date().getFullYear()}{" "}
           <a
-            href="https://github.com/nguyen-tuan-hiep/"
+            href=""
             style={{ color: "white" }}
           >
-            Nguyen Tuan Hiep
+            ITSS Group 6
           </a>
           . All rights reserved.
         </div>
