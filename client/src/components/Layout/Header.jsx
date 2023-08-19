@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header, Tabs } from "../style/muiStyled.js";
 import { Toolbar, Button, Typography } from "@mui/material";
+import { getActiveTransactionController } from "../../controller/transaction.controller.js";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
   const header = useRef();
@@ -25,6 +27,11 @@ const NavBar = () => {
   }, []);
 
   const getActiveTransactionHandler = async () => {
+    const response = await getActiveTransactionController();
+    if (response.data.code === "400_T0") {
+      toast.error(response.data.message); // transaction does not exist
+      return;
+    }
     navigate("/active-transaction");
   };
 
