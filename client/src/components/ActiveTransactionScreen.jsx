@@ -142,12 +142,12 @@ function ActiveTransactionScreen() {
               Status: {activeTransaction.transaction.status}
             </div>
             <div className="text-3xl font-bold">
-              Deposit: {activeTransaction.transaction.deposit}
+              Deposit: {activeTransaction.transaction.deposit}VND
             </div>
-            <div className="text-3xl font-bold">
+            {/* <div className="text-3xl font-bold">
               Deposit rate:{" "}
               {activeTransaction.transaction.bike.category.depositRate}
-            </div>
+            </div> */}
             <div className="text-3xl font-bold">
               Last Pause: {timeLastPause}
             </div>

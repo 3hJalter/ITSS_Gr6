@@ -6,6 +6,12 @@ import { DepositButton, CancelButton } from "./button/Button";
 import { TextField, Typography, Select, MenuItem } from "@mui/material";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+
 function DepositScreen() {
   const [cardNumber, setCardNumber] = useState(0);
   const [cardHolderName, setCardHolderName] = useState("");
@@ -13,7 +19,7 @@ function DepositScreen() {
   const [cvvNumber, setCvvNumber] = useState(0);
   const [expireMonth, setExpireMonth] = useState(0);
   const [expireYear, setExpireYear] = useState(0);
-
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const bikeData = location.state;
@@ -25,6 +31,14 @@ function DepositScreen() {
 
   const transactionTypeHandler = (e) => {
     setTransactionType(e.target.value);
+  };
+
+  const openConfirmationDialog = () => {
+    setIsConfirmationOpen(true);
+  };
+
+  const closeConfirmationDialog = () => {
+    setIsConfirmationOpen(false);
   };
 
   const depositHandler = async () => {
@@ -42,6 +56,7 @@ function DepositScreen() {
 
     const response = await createTransactionController(data);
     const transaction = response.data;
+    console.log(transaction);
     if (transaction.message !== "Successful") {
       toast.error(transaction.message);
       return;
@@ -68,9 +83,13 @@ function DepositScreen() {
             </div>
             <div>Category: {bikeData.category.categoryName}</div>
             <div>Dock: {bikeData.dock.dockName}</div>
-            <div>Bike price: {bikeData.category.bikePrice}</div>
+            <div>Bike price: {bikeData.category.bikePrice}VND</div>
             <div>Deposit rate: {bikeData.category.depositRate}</div>
-            <div>Rent price: {bikeData.category.rentPrice}</div>
+            {/* <div>Rent price: {bikeData.category.rentPrice}</div> */}
+            <div>
+              Total deposit:{" "}
+              {bikeData.category.bikePrice * bikeData.category.depositRate}VND
+            </div>
           </div>
         </div>
         <div className="text-center font-bold text-2xl m-4">
@@ -101,6 +120,7 @@ function DepositScreen() {
                 margin="normal"
                 placeholder="Enter card number"
                 style={{ marginRight: "10px" }} // Add margin-right for spacing
+                inputProps={{ maxLength: 16 }}
               />
               <TextField
                 value={cardHolderName}
@@ -133,6 +153,7 @@ function DepositScreen() {
                 variant="outlined"
                 margin="normal"
                 placeholder="Enter CVV number"
+                inputProps={{ maxLength: 3 }}
               />
             </form>
           </div>
@@ -147,6 +168,7 @@ function DepositScreen() {
                 margin="normal"
                 placeholder="Expire month"
                 style={{ marginRight: "10px" }} // Add margin-right for spacing
+                inputProps={{ maxLength: 2 }}
               />
               <TextField
                 value={expireYear}
@@ -156,6 +178,7 @@ function DepositScreen() {
                 variant="outlined"
                 margin="normal"
                 placeholder="Expire year"
+                inputProps={{ maxLength: 2 }}
               />
             </form>
           </div>
@@ -163,10 +186,43 @@ function DepositScreen() {
         <div className="flex items-center justify-center text-center w-full gap-10 mt-6">
           <div className="flex items-center justify-center text-center w-full gap-10 mt-6">
             <CancelButton onClick={cancelHandler} />
-            <DepositButton onClick={depositHandler} />
+            <DepositButton onClick={openConfirmationDialog} />
           </div>
         </div>
       </div>
+
+
+
+      <div className="flex items-center justify-center text-center w-full gap-10 mt-6">
+      <div className="flex items-center justify-center text-center w-full gap-10 mt-6">
+        <CancelButton onClick={cancelHandler} />
+        <DepositButton onClick={openConfirmationDialog} />
+      </div>
+    </div>
+
+    {/* Confirmation Dialog */}
+    <Dialog open={isConfirmationOpen} onClose={closeConfirmationDialog}>
+      <DialogTitle>Are you sure you want to proceed with the deposit?</DialogTitle>
+        <DialogContent>
+
+          <div>
+
+          Total deposit:{" "} {bikeData.category.bikePrice * bikeData.category.depositRate}VND.
+          </div>
+          <div>
+
+          You will receive a refund of the deposit when you return the bike.
+          </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeConfirmationDialog} color="error" variant="outlined">
+          Cancel
+        </Button>
+        <Button onClick={depositHandler} color="primary" variant="contained">
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
     </>
   );
 }
