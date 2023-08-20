@@ -243,28 +243,28 @@ ALTER TABLE ONLY public.transaction ALTER COLUMN transaction_id SET DEFAULT next
 --
 
 COPY public.bike (bike_id, bike_name, battery, category_id, dock_id, image, barcode) FROM stdin;
-6	Bike 6	20	2	5	https://lectricebikes.com/cdn/shop/products/LectriceBikes-BXPremium-CargoPack_1445x.jpg?v=1690861096	406f0b1a-def5-40ea-a823-5984cf02f6c8
-8	Bike 8	\N	1	6	https://5.imimg.com/data5/SELLER/Default/2021/9/QF/GK/HR/1715048/leader-knight-rider-for-mens-bicycle-500x500.jpg	177ea473-f21b-4a30-acbb-c3f48a790b62
-11	Bike 11	\N	1	3	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFnr6VN4rlyZ-5-2QKhr9K570IBwx1qQTpwm_qXtIwHGKkKaXPG-uuYOmnSCoer-lt8bU&usqp=CAU	693b11fa-feb7-458f-870a-02f7cd8aebbd
-14	Bike 14	\N	1	6	https://5.imimg.com/data5/SELLER/Default/2022/4/SI/AV/FG/53657037/pilot-ex-26t-s-bar-avon-cycle-250x250.jpg	bd990df4-5c03-47cf-a30e-76b538675dd1
-17	Bike 17	\N	1	3	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUSfTP3u06r9y3cqe4Wc0ovVbL8hUVugmSvZ0vb-y4FQ-WWTRT3xwKxIdqeySyUQcOJCg&usqp=CAU	45fb7b78-8fd1-40aa-b327-172822ba47fe
-19	Bike 19	\N	3	5	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbazYUrYerAAfFrk1jfJgJN-kA2rLnasQTloeUiujXBGJ2J_U69WK3qmwBWVFIcy8LAxA&usqp=CAU	bb07a2b5-0fe1-45e2-84e2-0d50c746f693
-20	Bike 20	\N	1	6	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCQ90XgIT4tKrGoQtfULVe_XZSqXFiSmx6yj1dnwVIIpEdOxjKcaJFX-nwjpinKp7Rm0k&usqp=CAU	03ed9a53-908c-4ffb-b998-d734b244bdab
-9	Bike 9	10	2	4	https://www.reidcycles.com.au/cdn/shop/products/reid-cycles-australia-adventure-ebike-charcoal-s-791.png?v=1620964071&width=1946	bb495160-bcdf-4e72-93a9-e8fde282ae20
-7	Bike 7	\N	3	2	https://dolan-images.s3.eu-west-2.amazonaws.com/product-images/1000-1000/TDR-Alpina-Disc-Tandem-Build-4.jpg	053a1578-f589-47ef-854b-7acb91186586
-18	Bike 18	75	2	1	https://www.pngfind.com/pngs/m/121-1213897_gazelle-e-bike-no1-gazelle-electric-bike-hd.png	f93dded4-7d42-461b-8dfd-cffcec28464d
-12	Bike 12	95	2	\N	https://himiwaybike.com/cdn/shop/files/es1_1200x1200.png?v=1685525178	f8385a9f-b185-4c75-bc67-9b79f6964458
-21	Bike 21	100	4	1	https://w7.pngwing.com/pngs/905/562/png-transparent-cannondale-drapac-tandem-bicycle-cannondale-bicycle-corporation-29er-tandem-bicycle-bicycle-frame-bicycle-racing-bicycle.png	f94832e4-ff3c-467b-9d84-39256f50b1b7
-15	Bike 15	60	2	2	https://www.nicepng.com/png/detail/257-2572307_wallerang-m-01-electric-bike-wallerang-e-bikes.png	dddbf733-bae0-47d6-94dd-0348c31147b2
-100	test_bike	100	1	4	https://w7.pngwing.com/pngs/778/812/png-transparent-giant-bicycles-mountain-bike-cross-country-cycling-bicycle-sport-bicycle-frame-bicycle.png	fc74422c-ea36-4565-aa0b-d78d810d7037
-1	Bike 1	\N	1	1	https://www.sefiles.net/merchant/5282/images/zoom/SolarOrange2.png	aac26076-7c60-40a5-a2eb-dfd808dc2574
-13	Bike 13	\N	3	5	https://d2gbn3pgimi594.cloudfront.net/image/product-image/978/289978~800x800.jpg	f67f5818-713c-4d24-86f2-7f7f74a83d5c
-10	Bike 10	\N	3	1	https://cdn-amz.woka.io/images/I/81YFO5Wz16L.jpg	dc448dda-2327-4d2a-84e5-b4447a9d1837
-16	Bike 16	\N	3	\N	https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1mikVAh8F-vw2YjOM1WaGLlQxpDSRbrJm8A&usqp=CAU	ce76d1f3-9757-469d-9cd4-ee0d6196708a
-2	Bike 2	\N	1	3	https://mediacloud.theweek.co.uk/image/private/s--sUP83Hex--/f_auto,t_slideshow-image-mobile@1/v1622541616/theweek/2021/05/VanMoof.jpg	087f4a61-0c56-456e-b1f7-51bd8b4f6c65
-3	Bike 3	90	2	3	https://blixbike.com/cdn/shop/products/Blix_Dubbel_SlateGrey_WheelGuards_1200x.png?v=1680733368	1d559854-9382-425e-84ed-d6e770f9a470
-4	Bike 4	\N	3	\N	https://w7.pngwing.com/pngs/687/765/png-transparent-electric-bicycle-tandem-bicycle-cycling-electricity-rise-flyer-bicycle-frame-bicycle-hybrid-bicycle.png	10f4af38-0c04-4418-8c65-c62fc9305b78
-5	Bike 5	\N	1	\N	https://www.reidcycles.com.au/cdn/shop/products/reid-cycles-australia-adventure-ebike-charcoal-s-791.png?v=1620964071&width=1946	7bc4e9c6-03fe-46ef-858e-710bf0016d10
+7	Bike 7	\N	3	2	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528965/EcoBikeSystem/7_c5unbo.png	053a1578-f589-47ef-854b-7acb91186586
+8	Bike 8	\N	1	6	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528966/EcoBikeSystem/8_qhdvyi.png	177ea473-f21b-4a30-acbb-c3f48a790b62
+9	Bike 9	10	2	4	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528966/EcoBikeSystem/9_qv7azx.png	bb495160-bcdf-4e72-93a9-e8fde282ae20
+11	Bike 11	\N	1	3	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528966/EcoBikeSystem/11_dnogxa.png	693b11fa-feb7-458f-870a-02f7cd8aebbd
+12	Bike 12	95	2	4	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528966/EcoBikeSystem/12_jgk6rm.png	f8385a9f-b185-4c75-bc67-9b79f6964458
+13	Bike 13	\N	3	5	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528966/EcoBikeSystem/13_hrcp0u.png	f67f5818-713c-4d24-86f2-7f7f74a83d5c
+14	Bike 14	\N	1	6	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528966/EcoBikeSystem/14_yyrerl.png	bd990df4-5c03-47cf-a30e-76b538675dd1
+15	Bike 15	60	2	2	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528967/EcoBikeSystem/15_liqpwz.png	dddbf733-bae0-47d6-94dd-0348c31147b2
+16	Bike 16	\N	3	5	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528966/EcoBikeSystem/16_rvgjb0.png	ce76d1f3-9757-469d-9cd4-ee0d6196708a
+17	Bike 17	\N	1	3	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528967/EcoBikeSystem/17_bf1kie.png	45fb7b78-8fd1-40aa-b327-172822ba47fe
+19	Bike 19	\N	3	5	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528967/EcoBikeSystem/19_wxyssw.png	bb07a2b5-0fe1-45e2-84e2-0d50c746f693
+20	Bike 20	\N	1	6	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528967/EcoBikeSystem/20_nfecxt.png	03ed9a53-908c-4ffb-b998-d734b244bdab
+100	test_bike	100	1	4	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528967/EcoBikeSystem/100_xrxhht.png	fc74422c-ea36-4565-aa0b-d78d810d7037
+1	Bike 1	\N	1	1	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528965/EcoBikeSystem/1_c2uws2.png	aac26076-7c60-40a5-a2eb-dfd808dc2574
+10	Bike 10	\N	3	1	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528966/EcoBikeSystem/10_jpg3kq.png	dc448dda-2327-4d2a-84e5-b4447a9d1837
+18	Bike 18	75	2	1	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528967/EcoBikeSystem/18_z1c2um.png	f93dded4-7d42-461b-8dfd-cffcec28464d
+21	Bike 21	100	4	1	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528967/EcoBikeSystem/21_kih8u3.png	f94832e4-ff3c-467b-9d84-39256f50b1b7
+2	Bike 2	\N	1	3	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528965/EcoBikeSystem/2_pbymth.png	087f4a61-0c56-456e-b1f7-51bd8b4f6c65
+3	Bike 3	90	2	3	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528965/EcoBikeSystem/3_efjqo6.png	1d559854-9382-425e-84ed-d6e770f9a470
+4	Bike 4	\N	3	2	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528965/EcoBikeSystem/4_n0aj2n.png	10f4af38-0c04-4418-8c65-c62fc9305b78
+5	Bike 5	\N	1	2	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528965/EcoBikeSystem/5_qjaie6.png	7bc4e9c6-03fe-46ef-858e-710bf0016d10
+6	Bike 6	20	2	5	https://res.cloudinary.com/ddyvz7wtf/image/upload/v1692528965/EcoBikeSystem/6_rugohd.png	406f0b1a-def5-40ea-a823-5984cf02f6c8
 \.
 
 
