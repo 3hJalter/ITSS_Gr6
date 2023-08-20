@@ -15,7 +15,7 @@ function App() {
   return (
     <>
       <div className="App">
-        <Favicon url="./src/favicon.png"></Favicon>
+        <Favicon url="./images/favicon.png"></Favicon>
       </div>
       <ToastContainer autoClose={1000} transition={Slide} />
       <BrowserRouter>

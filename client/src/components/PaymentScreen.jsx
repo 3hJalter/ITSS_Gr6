@@ -65,9 +65,11 @@ function PaymentScreen() {
 
   useEffect(() => {
     getActiveTransaction();
-    // pauseHandler();
-    // resumeHandler();
   }, []);
+
+  const reloadTimeRent = () => {
+    getActiveTransaction();
+  };
 
   const getActiveTransaction = async () => {
     const response = await getActiveTransactionController();
@@ -80,6 +82,7 @@ function PaymentScreen() {
   };
 
   const createInvoiceHandler = async () => {
+    getActiveTransaction();
     const data = {
       transactionId: activeTransaction.transaction.transactionId,
       dockId: dockId,
@@ -129,25 +132,36 @@ function PaymentScreen() {
       <div className="grid grid-cols-2 gap-10 mt-40 w-3/5">
         {/* First div */}
         <div className=" flex flex-col shadow-3xl justify-center items-center rounded-xl">
-          <div className="text-2xl font-semibold m-4">Invoice Information</div>
-          <div className="w-4/5">
+          <div className="text-2xl font-semibold m-8">Invoice Information</div>
+          <div>
             <img
+              className="w-full"
               src={activeTransaction.transaction.bike.image}
               alt="bike logo"
             />
           </div>
-          <div className="m-8">
-            <div className="text-2xl font-semibold p-1 text-center">
+          <div className="m-6">
+            <div className="text-xl font-semibold p-1 text-center">
               Transaction ID: {activeTransaction.transaction.transactionId}
             </div>
-            <div className="text-2xl font-semibold p-1 text-center">
+            <div className="text-xl font-semibold p-1 text-center">
               Total time: {toHoursAndMinutes(activeTransaction.timeRent)}
             </div>
-            <div className="text-2xl font-semibold p-1 text-center">
+            <div className="text-xl font-semibold p-1 text-center">
               Total price: {activeTransaction.currentPay}VND
             </div>
-            <div className="text-md font-semibold pt-2">
+            <div className="text-md font-semibold pt-2 text-center">
               (You will not be charged if you return the bike within 10 minutes)
+            </div>
+
+            <div className="text-center mt-4">
+              <Button
+                variant="outlined"
+                className="font-bold py-2 px-4 rounded-full "
+                onClick={reloadTimeRent}
+              >
+                Reload Time Rent
+              </Button>
             </div>
           </div>
         </div>
@@ -167,39 +181,8 @@ function PaymentScreen() {
             <div className="flex justify-center items-center">
               <CreditCardIcon style={{ fontSize: "48px" }} />
             </div>
-            {/* <form>
-              <TextField
-                label="Card Number"
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                placeholder="Enter card number"
-              />
-              <TextField
-                label="Cardholder Name"
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                placeholder="Enter cardholder name"
-              />
-              <TextField
-                label="CVV Number"
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                placeholder="Enter CVV number"
-              />
-              <TextField
-                label="Return Dock ID"
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                placeholder="Enter Dock ID to return bike"
-                value={dockId}
-                onChange={(event) => setDockId(event.target.value)}
-              />
-            </form> */}
-            <div className="flex justify-center items-center">
+
+            <div className="flex justify-center items-center mt-8">
               <form className="flex w-full">
                 <TextField
                   value={cardNumber}
@@ -299,15 +282,12 @@ function PaymentScreen() {
           Are you sure you want to proceed with the payment?
         </DialogTitle>
         <DialogContent>
+          <div>Total payment: {activeTransaction.currentPay}VND.</div>
           <div>
-            Total payment: {activeTransaction.currentPay}VND.
+            After payment, you will receive the deposit refund of{" "}
+            {activeTransaction.transaction.deposit}VND.
           </div>
-          <div>
-            After payment, you will receive the deposit refund of {activeTransaction.transaction.deposit}VND.
-          </div>
-          <div>
-            Please return the bike to the dock {dockId}
-          </div>
+          <div>Please return the bike to the dock {dockId}</div>
         </DialogContent>
         <DialogActions>
           <Button
@@ -317,7 +297,11 @@ function PaymentScreen() {
           >
             Cancel
           </Button>
-          <Button onClick={createInvoiceHandler} color="primary" variant="contained">
+          <Button
+            onClick={createInvoiceHandler}
+            color="primary"
+            variant="contained"
+          >
             Confirm
           </Button>
         </DialogActions>

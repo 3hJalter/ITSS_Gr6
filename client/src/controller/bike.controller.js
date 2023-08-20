@@ -3,7 +3,8 @@ import { API_URL } from "../config";
 
 export const getBikeByDockController = async (data) => {
   try {
-    return await axios.get(`${API_URL}/bike/byDockId?dockId=${data}`);
+    const response = await axios.get(`${API_URL}/bike/byDockId?dockId=${data}`);
+    return response;
   } catch (error) {
     console.log(error.message);
   }
@@ -11,7 +12,8 @@ export const getBikeByDockController = async (data) => {
 
 export const getBikeFromBarcodeController = async (data) => {
   try {
-    return await axios.get(`${API_URL}/bike/barcodeInfo?barcode=${data}`);
+    const response = await axios.get(`${API_URL}/bike/barcodeInfo?barcode=${data}`);
+    return response;
   } catch (error) {
     console.log(error.message);
   }

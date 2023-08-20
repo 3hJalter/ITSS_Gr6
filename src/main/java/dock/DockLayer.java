@@ -23,7 +23,7 @@ public class DockLayer extends BaseLayer {
      */
     private DockLayer() {
         try {
-            String sqlQuery = "SELECT * FROM dock";
+            String sqlQuery = "SELECT * FROM dock ORDER BY dock_id ASC";
             ResultSet resultSet = databaseConnection.getData(sqlQuery);
             jsonArray = JsonFunction.convertResultSetToJsonArray(resultSet);
         } catch (Exception e) {

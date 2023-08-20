@@ -4,9 +4,6 @@ import { API_URL } from "../config";
 
 export const createTransactionController = async (data) => {
   try {
-    // console.log(
-    //   `${API_URL}/transaction/create?customerId=${CUSTOMER_ID}&barcode=${data.barcode}&transactionType=${data.transactionType}&cardholderName=${data.cardHolderName}&cardNumber=${data.cardNumber}&issueBank=${data.issueBank}&month=${data.month}&year=${data.year}&securityCode=${data.securityCode}`
-    // );
     const response = await axios.get(
       `${API_URL}/transaction/create?customerId=${CUSTOMER_ID}&barcode=${data.barcode}&transactionType=${data.transactionType}&cardholderName=${data.cardHolderName}&cardNumber=${data.cardNumber}&issueBank=${data.issueBank}&month=${data.month}&year=${data.year}&securityCode=${data.securityCode}`
     );

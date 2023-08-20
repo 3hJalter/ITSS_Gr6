@@ -53,7 +53,7 @@ function Footer() {
           <BottomNavigation
             style={{ backgroundColor: "inherit", height: "60px" }}
           >
-            <BottomNavigationAction
+            {/* <BottomNavigationAction
               icon={<GitHubIcon />}
               href=""
               target="_blank"
@@ -87,7 +87,7 @@ function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "white" }}
-            />
+            /> */}
           </BottomNavigation>
         </div>
         <div

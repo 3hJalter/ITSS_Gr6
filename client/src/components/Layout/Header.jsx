@@ -4,6 +4,7 @@ import { Header, Tabs } from "../style/muiStyled.js";
 import { Toolbar, Button, Typography } from "@mui/material";
 import { getActiveTransactionController } from "../../controller/transaction.controller.js";
 import { toast } from "react-toastify";
+import { CLIENT_URL } from "../../config.js";
 
 const NavBar = () => {
   const header = useRef();
@@ -55,7 +56,7 @@ const NavBar = () => {
           <Tabs to="/">
             <div style={{ display: "flex", alignItems: "center" }}>
               <img
-                src="http://localhost:5173/images/ecobike.png"
+                src={CLIENT_URL + "/images/ecobike.png"}
                 alt="logo"
                 style={{ width: "80px" }}
               />

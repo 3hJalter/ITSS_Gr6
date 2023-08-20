@@ -3,7 +3,8 @@ import { API_URL } from "../config";
 
 export const getAllDocksController = async () => {
   try {
-    return await axios.get(`${API_URL}/dock/list`);
+    const response = await axios.get(`${API_URL}/dock/list`);
+    return response;
   } catch (error) {
     console.log(error.message);
   }
@@ -11,7 +12,8 @@ export const getAllDocksController = async () => {
 
 export const searchDockController = async (data) => {
   try {
-    return await axios.get(`${API_URL}/dock/search?keyword=${data}`);
+    const response = await axios.get(`${API_URL}/dock/search?keyword=${data}`);
+    return response;
   } catch (error) {
     console.log(error.message);
   }

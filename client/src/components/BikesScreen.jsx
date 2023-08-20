@@ -1,11 +1,7 @@
-import {
-  TableHead,
-  TableBody,
-  TableCell,
-  TextField,
-} from "@mui/material";
+import { TableHead, TableBody, TableCell, TextField } from "@mui/material";
 import { useState } from "react";
 import { getBikeFromBarcodeController } from "../controller/bike.controller.js";
+import { getActiveTransactionController } from "../controller/transaction.controller.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   StyledTable,
@@ -25,6 +21,13 @@ const BikesScreen = () => {
   const [barcode, setBarcode] = useState("");
 
   const depositHandler = async () => {
+    const activeTransaction = await getActiveTransactionController();
+    console.log(activeTransaction.data);
+    if (activeTransaction.data.code === "200_T0") {
+      toast.error("Customer already has an active transaction.");
+      return;
+    }
+
     if (barcode.trim() === "") {
       toast.error("Please enter a barcode.");
       return;
@@ -68,7 +71,9 @@ const BikesScreen = () => {
             <StyledTableCell>Category</StyledTableCell>
             <StyledTableCell>Dock name</StyledTableCell>
             <StyledTableCell>Battery</StyledTableCell>
-            <StyledTableCell style={{ minWidth: "280px"}}>Barcode</StyledTableCell>
+            <StyledTableCell style={{ minWidth: "280px" }}>
+              Barcode
+            </StyledTableCell>
             <TableCell style={{ borderRadius: "0 15px 0 0" }}>Image</TableCell>
           </StyledTableHead>
         </TableHead>
@@ -116,7 +121,7 @@ const BikesScreen = () => {
                   maxWidth: "200px",
                 }}
               >
-                {bike.battery ? bike.battery + "%" : "Not available"}
+                {bike.battery ? bike.battery + "%" : "No Battery"}
               </StyledTableCell>
 
               <StyledTableCell
