@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 public class SyntaxChecker {
     public static ResponseMessage isId(String id) {
+        if (id == null) return SyntaxResponseMessage.INVALID_ID_INPUT;
         try {
             Integer.parseInt(id);
             return SyntaxResponseMessage.SUCCESSFUL;
@@ -28,6 +29,7 @@ public class SyntaxChecker {
     }
 
     public static ResponseMessage isMonth(String monthStr) {
+        if (monthStr == null) return SyntaxResponseMessage.INVALID_MONTH_INPUT;
         int month;
         try {
             month = Integer.parseInt(monthStr);
@@ -39,6 +41,7 @@ public class SyntaxChecker {
     }
 
     public static ResponseMessage isYear(String yearStr) {
+        if (yearStr == null) return SyntaxResponseMessage.INVALID_YEAR_INPUT;
         int year;
         try {
             year = Integer.parseInt(yearStr);
@@ -50,6 +53,7 @@ public class SyntaxChecker {
     }
 
     public static ResponseMessage isUUID(String uuid) {
+        if (uuid == null) return SyntaxResponseMessage.INVALID_BARCODE_UUID;
         try {
             UUID.fromString(uuid);
             return SyntaxResponseMessage.SUCCESSFUL;
@@ -65,17 +69,11 @@ public class SyntaxChecker {
     }
 
     public static ResponseMessage isCardNumber(String number) {
+        if (number == null) return SyntaxResponseMessage.INVALID_CARD_NUMBER;
         Pattern pattern = Pattern.compile("^\\d{16}$");
         Matcher matcher = pattern.matcher(number);
         return matcher.matches() ? SyntaxResponseMessage.SUCCESSFUL
                 : SyntaxResponseMessage.INVALID_CARD_NUMBER;
-    }
-
-    public static String parseAndCheckCardNumberParameter(HttpExchange exchange, String parameterName) throws IOException {
-        String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        ResponseMessage response = isCardNumber(parameterValue);
-        CheckSyntaxResponse(exchange, parameterName, response, response);
-        return parameterValue;
     }
 
     public static ResponseMessage isValidName(String name) {
@@ -91,11 +89,13 @@ public class SyntaxChecker {
     }
 
     public static ResponseMessage isValidSecurityCode(String code) {
+        if (code == null) return SyntaxResponseMessage.INVALID_SECURITY_CODE;
         Pattern pattern = Pattern.compile("^\\d{3}$");
         Matcher matcher = pattern.matcher(code);
         return matcher.matches() ? SyntaxResponseMessage.SUCCESSFUL
                 : SyntaxResponseMessage.INVALID_SECURITY_CODE;
     }
+
 
     private static void CheckSyntaxResponse(HttpExchange exchange, String parameterName, ResponseMessage response, ResponseMessage returnResponse) throws IOException {
         if (response != SyntaxResponseMessage.SUCCESSFUL) {
