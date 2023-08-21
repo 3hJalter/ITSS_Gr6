@@ -74,10 +74,10 @@ function PaymentScreen() {
   const getActiveTransaction = async () => {
     const response = await getActiveTransactionController();
     const transaction = response.data.object;
-    if (response.data.message !== "Successful") {
-      toast.success(response.data.message);
-      return;
-    }
+    // if (response.data.message !== "Successful") {
+    //   toast.success(response.data.message);
+    //   return;
+    // }
     setActiveTransaction(transaction);
   };
 
@@ -93,9 +93,7 @@ function PaymentScreen() {
       month: expireMonth,
       year: expireYear,
     };
-    console.log(data);
     const response = await createInvoiceController(data);
-    console.log(response);
     if (response.data.message !== "Successful") {
       toast.error(response.data.message);
       return;
