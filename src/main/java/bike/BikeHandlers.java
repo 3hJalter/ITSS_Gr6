@@ -66,7 +66,7 @@ public class BikeHandlers {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             ControlAPI.setCorsHeaders(exchange);
-            String dockIdStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "dockId");
+            String dockIdStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "dockId");
             int dockId = Integer.parseInt(dockIdStr);
             Object responseObject = BikeController.getInstance().getBikeByDockId(dockId);
             String response = JsonFunction.convertToJson(responseObject);
@@ -87,7 +87,7 @@ public class BikeHandlers {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             ControlAPI.setCorsHeaders(exchange);
-            String categoryIdStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "categoryId");
+            String categoryIdStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "categoryId");
             int categoryId = Integer.parseInt(categoryIdStr);
             Object responseObject = BikeController.getInstance().getBikeByCategoryId(categoryId);
             String response = JsonFunction.convertToJson(responseObject);
@@ -108,7 +108,7 @@ public class BikeHandlers {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             ControlAPI.setCorsHeaders(exchange);
-            String idStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "id");
+            String idStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "id");
             int id = Integer.parseInt(idStr);
             Object responseObject = BikeController.getInstance().getBikeById(id);
             String response = JsonFunction.convertToJson(responseObject);

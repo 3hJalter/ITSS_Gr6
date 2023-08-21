@@ -3,6 +3,7 @@ package utils;
 import com.sun.net.httpserver.HttpExchange;
 import utils.api.ControlAPI;
 import utils.response.Response;
+import utils.response.ResponseMessage;
 import utils.response.responseMessageImpl.SyntaxResponseMessage;
 
 import java.io.IOException;
@@ -11,170 +12,96 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SyntaxChecker {
-    public static boolean isInteger(String id) {
+    public static ResponseMessage isId(String id) {
         try {
             Integer.parseInt(id);
-            return true;
+            return SyntaxResponseMessage.SUCCESSFUL;
         } catch (NumberFormatException e) {
-            return false;
+            return SyntaxResponseMessage.INVALID_ID_INPUT;
         }
     }
-    public static String parseAndCheckIntegerParameter(HttpExchange exchange, String parameterName) throws IOException {
+    public static String parseAndCheckIdParameter(HttpExchange exchange, String parameterName) throws IOException {
         String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        boolean isInteger = SyntaxChecker.isInteger(parameterValue);
-        if (!isInteger) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_ID_INPUT)));
-            throw new IllegalArgumentException("Invalid parameter: " + parameterName);
-        }
+        ResponseMessage response = SyntaxChecker.isId(parameterValue);
+        CheckSyntaxResponse(exchange, parameterName, response, response);
         return parameterValue;
     }
 
-    public static boolean isMonth(Integer month) {
-        return month >= 1 && month <= 12;
+    public static ResponseMessage isMonth(String monthStr) {
+        int month;
+        try {
+            month = Integer.parseInt(monthStr);
+        } catch (NumberFormatException e) {
+            return SyntaxResponseMessage.INVALID_MONTH_INPUT;
+        }
+        if (month >= 1 && month <= 12) return SyntaxResponseMessage.SUCCESSFUL;
+        return SyntaxResponseMessage.INVALID_MONTH_INPUT;
     }
 
-    public static String parseAndCheckMonthParameter(HttpExchange exchange, String parameterName) throws IOException {
-        String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        boolean isInteger = SyntaxChecker.isInteger(parameterValue);
-        if (!isInteger) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_MONTH_INPUT)));
-            throw new IllegalArgumentException("Invalid parameter: " + parameterName);
+    public static ResponseMessage isYear(String yearStr) {
+        int year;
+        try {
+            year = Integer.parseInt(yearStr);
+        } catch (NumberFormatException e) {
+            return SyntaxResponseMessage.INVALID_YEAR_INPUT;
         }
-        boolean isMonth = SyntaxChecker.isMonth(Integer.parseInt(parameterValue));
-        if (!isMonth) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_MONTH_INPUT)));
-            throw new IllegalArgumentException("Invalid parameter: " + parameterName);
-        }
-        return parameterValue;
+        if (year >= 0 && year <= 99) return SyntaxResponseMessage.SUCCESSFUL;
+        return SyntaxResponseMessage.INVALID_YEAR_INPUT;
     }
 
-    public static boolean isYear(Integer year) {
-        return year >= 0 && year <= 99;
-    }
-
-    public static String parseAndCheckYearParameter(HttpExchange exchange, String parameterName) throws IOException {
-        String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        boolean isInteger = SyntaxChecker.isInteger(parameterValue);
-        if (!isInteger) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_YEAR_INPUT)));
-            throw new IllegalArgumentException("Invalid parameter: " + parameterName);
-        }
-        boolean isYear = SyntaxChecker.isYear(Integer.parseInt(parameterValue));
-        if (!isYear) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_YEAR_INPUT)));
-            throw new IllegalArgumentException("Invalid parameter: " + parameterName);
-        }
-        return parameterValue;
-    }
-
-    public static boolean isUUID(String uuid) {
+    public static ResponseMessage isUUID(String uuid) {
         try {
             UUID.fromString(uuid);
-            return true;
+            return SyntaxResponseMessage.SUCCESSFUL;
         } catch (IllegalArgumentException e) {
-            return false;
+            return SyntaxResponseMessage.INVALID_BARCODE_UUID;
         }
     }
     public static String parseAndCheckUUIDParameter(HttpExchange exchange, String parameterName) throws IOException {
         String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        boolean isUUID = SyntaxChecker.isUUID(parameterValue);
-        if (!isUUID) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_BARCODE_UUID)));
-            throw new IllegalArgumentException("Invalid parameter: " + parameterName);
-        }
+        ResponseMessage response = SyntaxChecker.isUUID(parameterValue);
+        CheckSyntaxResponse(exchange, parameterName, response, response);
         return parameterValue;
     }
 
-    public static boolean isCardNumber(String number) {
+    public static ResponseMessage isCardNumber(String number) {
         Pattern pattern = Pattern.compile("^\\d{16}$");
         Matcher matcher = pattern.matcher(number);
-        return matcher.matches();
+        return matcher.matches() ? SyntaxResponseMessage.SUCCESSFUL
+                : SyntaxResponseMessage.INVALID_CARD_NUMBER;
     }
 
     public static String parseAndCheckCardNumberParameter(HttpExchange exchange, String parameterName) throws IOException {
         String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        boolean isValidCardNumber = isCardNumber(parameterValue);
-        if (!isValidCardNumber) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_CARD_NUMBER)));
-            throw new IllegalArgumentException("Invalid card number parameter: " + parameterName);
-        }
+        ResponseMessage response = isCardNumber(parameterValue);
+        CheckSyntaxResponse(exchange, parameterName, response, response);
         return parameterValue;
     }
 
-    public static boolean isValidName(String name) {
+    public static ResponseMessage isValidName(String name) {
         // Check if the name starts with a non-space character
         if (name == null || name.isEmpty() || Character.isWhitespace(name.charAt(0))) {
-            return false;
+            return SyntaxResponseMessage.INVALID_NAME;
         }
         // Check if the name contains only letters and spaces
         Pattern pattern = Pattern.compile("^[a-zA-Z\\s]+$");
         Matcher matcher = pattern.matcher(name);
-        return matcher.matches();
+        return matcher.matches() ? SyntaxResponseMessage.SUCCESSFUL
+                : SyntaxResponseMessage.INVALID_NAME;
     }
 
-    public static String parseAndCheckCardHolderNameParameter(HttpExchange exchange, String parameterName) throws IOException {
-        String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        boolean isValidCardHolderName = isValidName(parameterValue);
-        if (!isValidCardHolderName) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_CARDHOLDER_NAME)));
-            throw new IllegalArgumentException("Invalid cardholder name parameter: " + parameterName);
-        }
-        return parameterValue;
-    }
-
-    public static String parseAndCheckIssuingBankParameter(HttpExchange exchange, String parameterName) throws IOException {
-        String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        boolean isValidCardHolderName = isValidName(parameterValue);
-        if (!isValidCardHolderName) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_ISSUING_BANK)));
-            throw new IllegalArgumentException("Invalid cardholder name parameter: " + parameterName);
-        }
-        return parameterValue;
-    }
-
-    public static boolean isValidSecurityCode(String code) {
+    public static ResponseMessage isValidSecurityCode(String code) {
         Pattern pattern = Pattern.compile("^\\d{3}$");
         Matcher matcher = pattern.matcher(code);
-        return matcher.matches();
+        return matcher.matches() ? SyntaxResponseMessage.SUCCESSFUL
+                : SyntaxResponseMessage.INVALID_SECURITY_CODE;
     }
 
-    public static String parseAndCheckSecurityCodeParameter(HttpExchange exchange, String parameterName) throws IOException {
-        String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        boolean isValidSecurityCode = isValidSecurityCode(parameterValue);
-        if (!isValidSecurityCode) {
+    private static void CheckSyntaxResponse(HttpExchange exchange, String parameterName, ResponseMessage response, ResponseMessage returnResponse) throws IOException {
+        if (response != SyntaxResponseMessage.SUCCESSFUL) {
             ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_SECURITY_CODE)));
-            throw new IllegalArgumentException("Invalid security code parameter: " + parameterName);
-        }
-        return parameterValue;
-    }
-
-    public static boolean isAmount(String id) {
-        try {
-            Double.parseDouble(id);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    public static String parseAndCheckDoubleParameter(HttpExchange exchange, String parameterName) throws IOException {
-        String parameterValue = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), parameterName);
-        boolean isInteger = SyntaxChecker.isInteger(parameterValue);
-        if (!isInteger) {
-            ControlAPI.sendResponse(exchange, JsonFunction.convertToJson(
-                    new Response<>(SyntaxResponseMessage.INVALID_AMOUNT_INPUT)));
+                    new Response<>(returnResponse)));
             throw new IllegalArgumentException("Invalid parameter: " + parameterName);
         }
-        return parameterValue;
     }
 }

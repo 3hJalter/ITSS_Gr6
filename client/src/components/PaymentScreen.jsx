@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography, TextField } from "@mui/material";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createInvoiceController } from "../controller/invoice.controller";
 import { BackButton, PayButton } from "./button/Button";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import {getDockById} from "../controller/dock.controller.js";
 
 function PaymentScreen() {
   const [cardNumber, setCardNumber] = useState(0);
@@ -83,6 +84,13 @@ function PaymentScreen() {
 
   const createInvoiceHandler = async () => {
     getActiveTransaction();
+
+    const dockData = await getDockById(dockId);
+    if (dockData.data.object == null) {
+      toast.error(dockData.data.message);
+      return;
+    }
+
     const data = {
       transactionId: activeTransaction.transaction.transactionId,
       dockId: dockId,

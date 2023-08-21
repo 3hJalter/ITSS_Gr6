@@ -7,6 +7,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import utils.SyntaxChecker;
+import utils.response.ResponseMessage;
+import utils.response.responseMessageImpl.SyntaxResponseMessage;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -28,6 +31,7 @@ public class APIInterbankHandlers {
      * @param amount     The amount of money to receive.
      */
     public static void receiveMoney(String cardNumber, double amount) {
+
         String receiveURL = baseReceiveURL + "?cardNumber=" + cardNumber + "&amount=" + amount;
 
         HttpPatch httpPatch = new HttpPatch(receiveURL);
@@ -68,7 +72,11 @@ public class APIInterbankHandlers {
      * @return A message indicating the status of the payment.
      */
     public static String payWithCard(String cardNumber, String cardholderName, String issueBank,
-                                     int month, int year, String securityCode, double amount) {
+                                     String month, String year, String securityCode, double amount) {
+        ResponseMessage responseMessage = checkCardSyntax(cardNumber, cardholderName, issueBank,
+                month, year, securityCode);
+        if (responseMessage != SyntaxResponseMessage.SUCCESSFUL)
+            return responseMessage.getMessage();
         String encodedCardholderName = urlEncode(cardholderName);
         String encodedIssueBank = urlEncode(issueBank);
         String payURL = basePayURL + "?cardNumber=" + cardNumber +
@@ -118,4 +126,20 @@ public class APIInterbankHandlers {
                 .replace("+", "%20");
     }
 
+    private static ResponseMessage checkCardSyntax(String cardNumber, String cardholderName, String issueBank,
+                                                   String month, String year, String securityCode){
+        ResponseMessage success = SyntaxResponseMessage.SUCCESSFUL;
+        ResponseMessage response = SyntaxChecker.isCardNumber(cardNumber);
+        if (response != success) return response;
+        response = SyntaxChecker.isValidName(cardholderName);
+        if (response != success) return SyntaxResponseMessage.INVALID_CARDHOLDER_NAME;
+        response = SyntaxChecker.isValidName(issueBank);
+        if (response != success) return SyntaxResponseMessage.INVALID_ISSUING_BANK;
+        response = SyntaxChecker.isMonth(month);
+        if (response != success) return response;
+        response = SyntaxChecker.isYear(year);
+        if (response != success) return response;
+        response = SyntaxChecker.isValidSecurityCode(securityCode);
+        return response;
+    }
 }

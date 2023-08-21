@@ -68,7 +68,7 @@ public class DockHandlers {
         public void handle(HttpExchange exchange) throws IOException {
             ControlAPI.setCorsHeaders(exchange);
             // Parse the query parameter "id"
-            String idStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "id");
+            String idStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "id");
             int id = Integer.parseInt(idStr);
             Object responseObject = DockController.getInstance().getDockById(id);
             String response = JsonFunction.convertToJson(responseObject);

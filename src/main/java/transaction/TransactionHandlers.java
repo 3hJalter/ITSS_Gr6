@@ -69,24 +69,23 @@ public class TransactionHandlers {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             ControlAPI.setCorsHeaders(exchange);
-            String customerIdStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "customerId");
+            // Transaction Info and Checking Syntax
+            String customerIdStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "customerId");
             String barcodeStr = SyntaxChecker.parseAndCheckUUIDParameter(exchange, "barcode");
             String transactionTypeStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "transactionType");
-            String cardNumber = SyntaxChecker.parseAndCheckCardNumberParameter(exchange, "cardNumber");
-            String cardholderName = SyntaxChecker.parseAndCheckCardHolderNameParameter(exchange, "cardholderName");
-            String issueBank = SyntaxChecker.parseAndCheckIssuingBankParameter(exchange, "issueBank");
-            String monthStr = SyntaxChecker.parseAndCheckMonthParameter(exchange, "month");
-            String yearStr = SyntaxChecker.parseAndCheckYearParameter(exchange, "year");
-            String securityCode = SyntaxChecker.parseAndCheckSecurityCodeParameter(exchange, "securityCode");
-
             int customerId = Integer.parseInt(customerIdStr);
             UUID barcode = UUID.fromString(barcodeStr);
-            int month = Integer.parseInt(monthStr);
-            int year = Integer.parseInt(yearStr);
+            // Credit Card Info
+            String cardNumber = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardNumber");
+            String cardholderName = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardholderName");
+            String issueBank = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "issueBank");
+            String monthStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "month");
+            String yearStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "year");
+            String securityCode = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "securityCode");
 
             // Call the createTransaction method from TransactionController
             Response<?> response = TransactionController.getInstance().createTransaction(customerId, barcode, transactionTypeStr,
-                    cardNumber, cardholderName, issueBank, month, year, securityCode);
+                    cardNumber, cardholderName, issueBank, monthStr, yearStr, securityCode);
 
             // Convert the response to JSON and send the response
             String jsonResponse = JsonFunction.convertToJson(response);
@@ -107,7 +106,7 @@ public class TransactionHandlers {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             ControlAPI.setCorsHeaders(exchange);
-            String bikeIdStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "bikeId");
+            String bikeIdStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "bikeId");
             int bikeId = Integer.parseInt(bikeIdStr);
             Response<?> response = TransactionController.getInstance().getDeposit(bikeId);
             String jsonResponse = JsonFunction.convertToJson(response);
@@ -128,7 +127,7 @@ public class TransactionHandlers {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             ControlAPI.setCorsHeaders(exchange);
-            String transactionIdStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "transactionId");
+            String transactionIdStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "transactionId");
             int transactionId = Integer.parseInt(transactionIdStr);
             Response<?> response = TransactionController.getInstance().pauseTransaction(transactionId);
             String jsonResponse = JsonFunction.convertToJson(response);
@@ -149,7 +148,7 @@ public class TransactionHandlers {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             ControlAPI.setCorsHeaders(exchange);
-            String transactionIdStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "transactionId");
+            String transactionIdStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "transactionId");
             int transactionId = Integer.parseInt(transactionIdStr);
             Response<?> response = TransactionController.getInstance().unPauseTransaction(transactionId);
             String jsonResponse = JsonFunction.convertToJson(response);

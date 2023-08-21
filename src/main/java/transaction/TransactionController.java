@@ -59,11 +59,14 @@ public class TransactionController {
      * @return A Response object containing the active transaction information and a response message.
      */
     public Response<ActiveTransaction> getActiveTransactionByCustomerId(Integer customerId) {
+        // Validate Customer
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != CustomerResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
+        // Check null Transaction
         Transaction transaction = transactionLayer.getActiveTransactionByCustomerId(customerId);
         if (transaction == null) return new Response<>(null, TransactionResponseMessage.TRANSACTION_NOT_EXIST);
+        // Get Active Transaction
         Long currentPrice = transaction.getTransactionType().equals("24h")
                 ? PriceMethod.get24hTotalPrice(transaction)
                 : PriceMethod.getTotalPrice(transaction);
@@ -88,34 +91,36 @@ public class TransactionController {
      */
     public Response<?> createTransaction(Integer customerId, UUID barcode, String transactionType
             , String cardNumber, String cardholderName
-            , String issueBank, int month, int year, String securityCode) {
-        // Transaction without credit card, need modify when have interbank subsystem
+            , String issueBank, String month, String year, String securityCode) {
+        // Validate Customer
         ResponseMessage validateMessage = CustomerValidation.validate(customerId);
         if (validateMessage != CustomerResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
+        // Validate if Transaction can create
         validateMessage = TransactionValidation.validateCreation(customerId);
         if (validateMessage != TransactionResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
+        // Validate Bike
         Bike bike = BikeLayer.getInstance().getBikeByBarcode(barcode);
         if (bike == null) return new Response<>(null, BikeResponseMessage.BIKE_NOT_EXIST);
         validateMessage = BikeValidation.validate(bike.getBikeId(), bike);
         if (validateMessage != BikeResponseMessage.SUCCESSFUL)
             return new Response<>(null, validateMessage);
-
-        // Call Interbank to pay deposit here
+        // Call Interbank to pay deposit
         long deposit = PriceMethod.getDeposit(bike.getBikeId());
         String message = APIInterbankHandlers.payWithCard(cardNumber, cardholderName, issueBank, month, year,
                 securityCode, deposit);
         if (!message.equals("Successful")) {
             return new Response<>(null, "501", message);
         }
-        // End here
+        // Create Transaction
         int newTransactionId = transactionLayer.createTransaction(customerId, bike.getBikeId(), transactionType);
         if (newTransactionId == -1) {
-            // Call Interbank to receive deposit here
+            // Call Interbank to receive deposit here if Transaction can not create
             APIInterbankHandlers.receiveMoney(cardNumber, deposit);
             return new Response<>(null, TransactionResponseMessage.CAN_NOT_CREATE_TRANSACTION);
         }
+        // Rent Bike
         BikeLayer.getInstance().rentBikeById(bike.getBikeId());
         return new Response<>(null, TransactionResponseMessage.SUCCESSFUL);
     }

@@ -89,25 +89,23 @@ public class InvoiceHandlers {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             ControlAPI.setCorsHeaders(exchange);
-            String transactionIdStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "transactionId");
-            String dockIdStr = SyntaxChecker.parseAndCheckIntegerParameter(exchange, "dockId");
+            String transactionIdStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "transactionId");
+            String dockIdStr = SyntaxChecker.parseAndCheckIdParameter(exchange, "dockId");
             // For credit card
-            String cardNumber = SyntaxChecker.parseAndCheckCardNumberParameter(exchange, "cardNumber");
-            String cardholderName = SyntaxChecker.parseAndCheckCardHolderNameParameter(exchange, "cardholderName");
-            String issueBank = SyntaxChecker.parseAndCheckIssuingBankParameter(exchange, "issueBank");
-            String monthStr = SyntaxChecker.parseAndCheckMonthParameter(exchange, "month");
-            String yearStr = SyntaxChecker.parseAndCheckYearParameter(exchange, "year");
-            String securityCode = SyntaxChecker.parseAndCheckSecurityCodeParameter(exchange, "securityCode");
+            String cardNumber = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardNumber");
+            String cardholderName = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardholderName");
+            String issueBank = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "issueBank");
+            String monthStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "month");
+            String yearStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "year");
+            String securityCode = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "securityCode");
             //
 
-            int month = Integer.parseInt(monthStr);
-            int year = Integer.parseInt(yearStr);
             int transactionId = Integer.parseInt(transactionIdStr);
             int dockId = Integer.parseInt(dockIdStr);
 
             // Call the createInvoice method from InvoiceController
             Response<?> response = InvoiceController.getInstance().createInvoice(transactionId, dockId,
-                    cardNumber, cardholderName, issueBank, month, year, securityCode);
+                    cardNumber, cardholderName, issueBank, monthStr, yearStr, securityCode);
 
             // Convert the response to JSON and send the response
             String jsonResponse = JsonFunction.convertToJson(response);

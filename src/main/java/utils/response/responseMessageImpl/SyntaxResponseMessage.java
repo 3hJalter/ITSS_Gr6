@@ -41,22 +41,27 @@ public enum SyntaxResponseMessage implements ResponseMessage {
     /**
      * Response message for the case of invalid cardholder name syntax.
      */
-    INVALID_CARDHOLDER_NAME("400_S5", "Invalid cardholder name"),
+    INVALID_NAME("400_S5", "Invalid name"),
+
+    /**
+     * Response message for the case of invalid cardholder name syntax.
+     */
+    INVALID_CARDHOLDER_NAME("400_S6", "Invalid cardholder name"),
 
     /**
      * Response message for the case of invalid issuing bank syntax.
      */
-    INVALID_ISSUING_BANK("400_S6", "Invalid issuing bank"),
+    INVALID_ISSUING_BANK("400_S7", "Invalid issuing bank"),
 
     /**
      * Response message for the case of invalid security code syntax.
      */
-    INVALID_SECURITY_CODE("400_S7", "Invalid security code"),
+    INVALID_SECURITY_CODE("400_S8", "Invalid security code"),
 
     /**
      * Response message for the case of invalid input amount syntax.
      */
-    INVALID_AMOUNT_INPUT("400_S8", "Invalid input amount");
+    INVALID_AMOUNT_INPUT("400_S9", "Invalid input amount");
 
     private final String code;
     private final String message;

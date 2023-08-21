@@ -3,7 +3,6 @@ package subsystem.interbank.creditCard;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import utils.JsonFunction;
-import utils.SyntaxChecker;
 import utils.api.ControlAPI;
 import utils.response.Response;
 
@@ -36,6 +35,8 @@ public class CreditCardHandlers {
             int month = Integer.parseInt(ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "month"));
             int year = Integer.parseInt(ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "year"));
             String securityCode = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "securityCode");
+
+
             Double amount = Double.parseDouble(ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "amount"));
 
             // Call CreditCardController's payViaCard method
@@ -62,8 +63,8 @@ public class CreditCardHandlers {
             ControlAPI.setCorsHeaders(exchange);
 
             // Parse request parameters
-            String cardNumber = SyntaxChecker.parseAndCheckCardNumberParameter(exchange, "cardNumber");
-            String amountStr = SyntaxChecker.parseAndCheckDoubleParameter(exchange, "amount");
+            String cardNumber = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardNumber");
+            String amountStr = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "amount");
 
             Double amount = Double.parseDouble(amountStr);
             // Call CreditCardController's receiveMoneyViaCard method
@@ -90,7 +91,7 @@ public class CreditCardHandlers {
             ControlAPI.setCorsHeaders(exchange);
 
             // Parse request parameters
-            String cardNumber = SyntaxChecker.parseAndCheckCardNumberParameter(exchange, "cardNumber");
+            String cardNumber = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardNumber");
 
             // Call CreditCardController's getBalanceFromCard method
             Response<Double> response = CreditCardController.getInstance().getBalanceFromCard(cardNumber);
@@ -116,7 +117,7 @@ public class CreditCardHandlers {
             ControlAPI.setCorsHeaders(exchange);
 
             // Parse request parameters
-            String cardNumber = SyntaxChecker.parseAndCheckCardNumberParameter(exchange, "cardNumber");
+            String cardNumber = ControlAPI.parseQueryString(exchange.getRequestURI().getQuery(), "cardNumber");
 
             // Call CreditCardController's resetCard method
             Response<?> response = CreditCardController.getInstance().resetCard(cardNumber);

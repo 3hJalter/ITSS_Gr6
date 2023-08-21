@@ -40,6 +40,13 @@ const BikesScreen = () => {
       return;
     }
     toast.success("Deposit successfully");
+
+    console.log(bikeData.dock);
+    if (bikeData.dock == null) {
+      toast.error("Bike is already rented")
+      return;
+    }
+
     navigate("/deposit", { state: bikeData });
   };
 
