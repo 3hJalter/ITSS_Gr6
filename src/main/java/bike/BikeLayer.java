@@ -48,7 +48,7 @@ public class BikeLayer extends BaseLayer {
     }
 
     /**
-     * Sets the JSON array with credit card data retrieved from the database.
+     * Sets the JSON array with bike data retrieved from the database.
      */
     private void setJsonArray() {
         try {
