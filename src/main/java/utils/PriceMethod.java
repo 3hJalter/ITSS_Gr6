@@ -74,7 +74,8 @@ public class PriceMethod {
             totalPrice = (long) (10000L * bike.getCategory().getPriceMultiple());
             return totalPrice;
         }
-        totalPrice = (long) ((10000 + (timeRentInMinutes - 30) * bike.getCategory().getRentPrice())
+        double rate = Math.ceil((float) (timeRentInMinutes - 30) / 15);
+        totalPrice = (long) ((10000 + rate * bike.getCategory().getRentPrice())
                 * bike.getCategory().getPriceMultiple());
         return totalPrice;
     }
@@ -91,7 +92,7 @@ public class PriceMethod {
         long totalPrice;
         if (timeRentInMinutes <= 720) { // 720 minutes = 12 hours
             // Calculate refund for returning the bike early
-            long refundAmount = Math.max((720 - timeRentInMinutes) * 10000L / 60, 0);
+            long refundAmount = Math.max((12 - timeRentInMinutes / 60) * 10000L, 0);
             totalPrice = 200000L - refundAmount;
         } else if (timeRentInMinutes >= 1440) {
             totalPrice = 200000L + calculateLateFees(timeRentInMinutes);
