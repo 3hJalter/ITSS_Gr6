@@ -51,15 +51,15 @@ function ActiveTransactionScreen() {
   const [activeTransaction, setActiveTransaction] = useState(
     initialTransactionData
   );
-  const [pauseButtonText, setPauseButtonText] = useState("Pause");
+  // const [pauseButtonText, setPauseButtonText] = useState("Pause");
 
   useEffect(() => {
-    getActiveTransaction();
+    getActiveTransactionHanlder();
     // pauseHandler();
     // resumeHandler();
   }, []);
 
-  const getActiveTransaction = async () => {
+  const getActiveTransactionHanlder = async () => {
     const response = await getActiveTransactionController();
     const transaction = response.data.object;
     if (response.data.message !== "Successful") {
@@ -69,20 +69,20 @@ function ActiveTransactionScreen() {
     setActiveTransaction(transaction);
   };
 
-  const pauseHandler = () => {
+  const pauseHandler = async () => {
     // activeTransaction.transaction.status = "paused";
-    setPauseButtonText("Resume");
+    // setPauseButtonText("Resume");
     const transactionId = activeTransaction.transaction.transactionId;
-    pauseTransactionController(transactionId);
-    getActiveTransaction();
+    await pauseTransactionController(transactionId);
+    getActiveTransactionHanlder();
   };
 
-  const resumeHandler = () => {
+  const resumeHandler = async () => {
     // activeTransaction.transaction.status = "active";
-    setPauseButtonText("Pause");
+    // setPauseButtonText("Pause");
     const transactionId = activeTransaction.transaction.transactionId;
-    resumeTransactionController(transactionId);
-    getActiveTransaction();
+    await resumeTransactionController(transactionId);
+    getActiveTransactionHanlder();
   };
 
   const payHandler = () => {
@@ -163,9 +163,9 @@ function ActiveTransactionScreen() {
         <div className="flex items-center justify-center w-full gap-20 mb-40">
           <CancelButton onClick={() => navigate("/docks")} />
           {activeTransaction.transaction.status === "active" ? (
-            <PauseButton onClick={pauseHandler} text={pauseButtonText} />
+            <PauseButton onClick={pauseHandler}/>
           ) : (
-            <ResumeButton onClick={resumeHandler} text={pauseButtonText} />
+            <ResumeButton onClick={resumeHandler}/>
           )}
           <PayButton onClick={payHandler} />
         </div>

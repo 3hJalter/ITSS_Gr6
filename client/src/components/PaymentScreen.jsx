@@ -139,7 +139,7 @@ function PaymentScreen() {
         {/* First div */}
         <div className=" flex flex-col shadow-3xl justify-center items-center rounded-xl">
           <div className="text-2xl font-semibold m-8">Invoice Information</div>
-          <div>
+          <div className="px-8">
             <img
               className="w-full"
               src={activeTransaction.transaction.bike.image}

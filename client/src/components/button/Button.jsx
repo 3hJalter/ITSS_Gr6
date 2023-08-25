@@ -54,26 +54,26 @@ export const BackButton = ({ onClick }) => {
   );
 };
 
-export const PauseButton = ({ onClick, text }) => {
+export const PauseButton = ({ onClick }) => {
   return (
     <StyledButton
       variant="outlined"
       startIcon={<PauseIcon />}
       onClick={onClick}
     >
-      {text}
+      Pause
     </StyledButton>
   );
 }
 
-export const ResumeButton = ({ onClick, text }) => {
+export const ResumeButton = ({ onClick }) => {
   return (
     <StyledButton
       variant="outlined"
       startIcon={<PlayArrowIcon />}
       onClick={onClick}
     >
-      {text}
+      Resume
     </StyledButton>
   );
 }
